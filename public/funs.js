@@ -6,8 +6,8 @@
       part1: (data) => {
         const elves = data.trim().split('\n\n').map(cals => cals.split('\n').map(Number));
         console.log(elves);
-        const sums = elves.reduce((acc, item, i) => {
-          acc.push(item.reduce((acc2, item2, i2) => {
+        const sums = elves.reduce((acc, item) => {
+          acc.push(item.reduce((acc2, item2) => {
             return acc2 + item2;
           }, 0));
           return acc;
@@ -25,8 +25,10 @@
             return acc2 + item2;
           }, 0));
           return acc;
+          // Sort and Take last 3
         }, []).sort((a, b) => a - b).slice(-3);
         console.log(sums);
+        // Sum:
         const sum = sums.reduce((a, b) => a + b, 0);
         console.log(sum);
         return sum;
