@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Travis's Advent of Code 2022 Stats</title>
+    <meta name="description" content="Travis's Advent of Code 2022 Stats">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#373fff">
+    <link rel="stylesheet" href="/style.css">
+    <style type='text/css'>
+      ol,li {display:block;margin:0 0 2em 0;padding:0;width:100%;list-style:none;font-size:12px;text-transform:capitalize;}
+      li li {font-size:11px;}
+      b {display:block;background:#99F;font-size:10px;line-height:21px;text-align:right;padding-right:0.5em;margin:2px 0;border-right:solid 1px #77D;border-bottom:solid 1px #77D;}
+      b+b {background:#F99;border-color:#D77;}
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="/" title="up">⬆</a> 
+      </nav>
+      <h1>
+        Travis's Advent of Code 2022 Stats
+      </h1>
+      <p>
+        Character and line counts.
+      </p>
+    </header>
+
+    <main>
+      {{0}}
+    </main>
+
+    <footer>
+      Made with <a href="//glitch.com">Glitch</a>!
+    </footer>
+
+    <div class="glitchButton"></div>
+    <script src="//button.glitch.me/button.js"></script>
+
+  </body>
+</html>
