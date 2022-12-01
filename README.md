@@ -2,7 +2,7 @@
 
 javascript 🎄 Advent of Code 2022 using 🎏 Glitch 🎏
 
-my 2022 solutions on glitch: [valiant-nervous-yoke](https://valiant-nervous-yoke.glitch.me/)
+my 2022 solutions on glitch: [graceful-blossom-animal](https://graceful-blossom-animal.glitch.me/)
 
 also on github: [dieseltravis/aoc2022](https://github.com/dieseltravis/aoc2022)
 
@@ -48,6 +48,12 @@ broken:
 -->
 
 ## previous years:
+
+### 2021
+
+my 2021 solutions on glitch: [valiant-nervous-yoke](https://valiant-nervous-yoke.glitch.me/)
+
+also on github: [dieseltravis/aoc2021](https://github.com/dieseltravis/aoc2021)
 
 ### 2020
 
