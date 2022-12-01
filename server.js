@@ -3,7 +3,7 @@ const path = require('path');
 const express = require('express');
 const app = express();
 const timeout = require('connect-timeout'); // express v4
-const RateLimit = require('express-rate-limit');
+const rateLimit = require('express-rate-limit');
 
 console.log(process.env.PROJECT_DOMAIN);
 const PROJECT_URL = `https://${process.env.PROJECT_DOMAIN}.glitch.me/`;
@@ -13,7 +13,7 @@ console.log(PROJECT_URL);
 const f = require('./public/funs');
 
 // set up rate limiter: maximum of 10 requests per 30 seconds
-const limiter = new RateLimit({
+const limiter = rateLimit({
   // 30 seconds
   windowMs: 30 * 1000,
   max: 10,

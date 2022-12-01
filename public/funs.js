@@ -4,15 +4,19 @@
   const all = {
     day1: {
       part1: (data) => {
-        const list = data.trim().split('\n').map(Number);
-        const length = list.length;
-        let increased = 0;
-        for (let i = 1; i < length; i++) {
-          if (list[i] > list[i - 1]) {
-            increased++;
-          }
-        }
-        return increased;
+        const elves = data.trim().split('\n\n').map(cals => cals.split('\n').map(Number));
+        console.log(elves);
+        const length = elves.length;
+        let sums = elves.reduce((acc, item, i) => {
+          acc.push(item.reduce((acc2, item2, i2) => {
+            return acc2 + item2;
+          }, 0));
+          return acc;
+        }, []);
+        console.log(sums);
+        let max = Math.max.apply(Math, sums);
+        console.log(max);
+        return max;
       },
       part2: (data) => {
         const list = data.trim().split('\n').map(Number);
