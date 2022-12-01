@@ -1,4 +1,4 @@
-dieseltravis/aoc2022 valiant-nervous-yoke Copyright 2022 Travis Hardiman (“Licensor”)
+dieseltravis/aoc2022 graceful-blossom-animal Copyright 2022 Travis Hardiman (“Licensor”)
 
 **HIPPOCRATIC LICENSE**
 

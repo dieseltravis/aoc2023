@@ -1,9 +1,9 @@
 {
-  "name": "valiant-nervous-yoke",
+  "name": "graceful-blossom-animal",
   "version": "2022.12.17",
   "description": "Travis's Advent of Code 2022",
   "author": "Travis Hardiman",
-  "homepage": "https://valiant-nervous-yoke.glitch.me/",
+  "homepage": "https://graceful-blossom-animal.glitch.me/",
   "main": "server.js",
   "scripts": {
     "test": "node --check server.js && semistandard && eslint server.js public/*.js",
@@ -21,7 +21,7 @@
     "standard-engine": "^15.0.0"
   },
   "repository": {
-    "url": "https://glitch.com/edit/#!/valiant-nervous-yoke"
+    "url": "https://glitch.com/edit/#!/graceful-blossom-animal"
   },
   "license": "Hippocratic-3.0",
   "keywords": [
