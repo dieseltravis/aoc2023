@@ -4,31 +4,34 @@
   const all = {
     day1: {
       part1: (data) => {
-        const list = data.trim().split('\n').map(Number);
-        const length = list.length;
-        let increased = 0;
-        for (let i = 1; i < length; i++) {
-          if (list[i] > list[i - 1]) {
-            increased++;
-          }
-        }
-        return increased;
+        const elves = data.trim().split('\n\n').map(cals => cals.split('\n').map(Number));
+        console.log(elves);
+        const length = elves.length;
+        let sums = elves.reduce((acc, item, i) => {
+          acc.push(item.reduce((acc2, item2, i2) => {
+            return acc2 + item2;
+          }, 0));
+          return acc;
+        }, []);
+        console.log(sums);
+        let max = Math.max.apply(Math, sums);
+        console.log(max);
+        return max;
       },
       part2: (data) => {
-        const list = data.trim().split('\n').map(Number);
-        const length = list.length;
-        const windows = [];
-        for (let i = 2; i < length; i++) {
-          windows.push(list[i] + list[i - 1] + list[i - 2]);
-        }
-        const windowLength = windows.length;
-        let increased = 0;
-        for (let i = 1; i < windowLength; i++) {
-          if (windows[i] > windows[i - 1]) {
-            increased++;
-          }
-        }
-        return increased;
+        const elves = data.trim().split('\n\n').map(cals => cals.split('\n').map(Number));
+        console.log(elves);
+        const length = elves.length;
+        let sums = elves.reduce((acc, item, i) => {
+          acc.push(item.reduce((acc2, item2, i2) => {
+            return acc2 + item2;
+          }, 0));
+          return acc;
+        }, []).sort((a, b) => a - b).slice(-3);
+        console.log(sums);
+        let sum = sums.reduce((a, b) => a + b, 0);
+        console.log(sum);
+        return sum;
       }
     },
     day2: {
