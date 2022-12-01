@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{{title}}</title>
+    <meta name="description" content="{{description}}">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#373fff">
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="{{prev_url}}" title="previous" rel="prev">⬅</a> 
+        <a href="/" title="up">⬆</a> 
+        <a href="{{next_url}}" title="next" rel="next">➡</a>
+      </nav>
+      <h1>
+        {{title}}
+      </h1>
+      <p>
+        <a href="//adventofcode.com/{{year}}/day/{{day_num}}">adventofcode.com/{{year}}/day/{{day_num}}</a>
+      </p>
+    </header>
+
+    <main>
+      <h2>
+        part 1
+      </h2>
+      <form method="POST" action="/day{{day}}part1">
+        <textarea id="input1" name="input" placeholder="puzzle input" cols="40" rows="5"></textarea>
+        <a href="//adventofcode.com/{{year}}/day/{{day_num}}/input" target="_blank" class="get-input">get input</a>
+        <code id="part1"></code>
+        <input id="button1" type="button" value="run in client" />
+        <input type="submit" value="run on server" />
+      </form>
+      
+      <hr />
+      
+      <h2>
+        part 2
+      </h2>
+      <form method="POST" action="/day{{day}}part2">
+        <textarea id="input2" name="input" placeholder="puzzle input" cols="40" rows="5"></textarea>
+        <a href="//adventofcode.com/{{year}}/day/{{day_num}}/input" target="_blank" class="get-input">get input</a>
+        <code id="part2"></code>
+        <input id="button2" type="button" value="run in client" />
+        <input type="submit" value="run on server" />
+      </form>
+    </main>
+
+    <footer>
+      Made with <a href="//glitch.com">Glitch</a>!
+    </footer>
+    
+    <script src="/funs.js"></script>
+    <script defer type="module">
+      import day from "/client.js";
+      day(funs, {{day_num}});
+    </script>
+
+    <div class="glitchButton"></div>
+    <script src="//button.glitch.me/button.js"></script>
+
+  </body>
+</html>

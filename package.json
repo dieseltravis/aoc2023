@@ -1,0 +1,40 @@
+{
+  "name": "valiant-nervous-yoke",
+  "version": "2022.12.17",
+  "description": "Travis's Advent of Code 2022",
+  "author": "Travis Hardiman",
+  "homepage": "https://valiant-nervous-yoke.glitch.me/",
+  "main": "server.js",
+  "scripts": {
+    "test": "node --check server.js && semistandard && eslint server.js public/*.js",
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": "^12.22.0 || ^14.17.0 || >=16.0.0"
+  },
+  "dependencies": {
+    "connect-timeout": "^1.9.0",
+    "eslint": "^8.28.0",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.7.0",
+    "semistandard": "^16.0.1",
+    "standard-engine": "^15.0.0"
+  },
+  "repository": {
+    "url": "https://glitch.com/edit/#!/valiant-nervous-yoke"
+  },
+  "license": "Hippocratic-3.0",
+  "keywords": [
+    "glitch",
+    "adventofcode",
+    "advent",
+    "advent-of-code",
+    "advent-of-code-2022"
+  ],
+  "browserslist": [
+    "defaults",
+    "not IE 11",
+    "supports es6-module",
+    "maintained node versions"
+  ]
+}
