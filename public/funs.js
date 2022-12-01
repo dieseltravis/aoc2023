@@ -20,8 +20,8 @@
       part2: (data) => {
         const elves = data.trim().split('\n\n').map(cals => cals.split('\n').map(Number));
         console.log(elves);
-        const sums = elves.reduce((acc, item, i) => {
-          acc.push(item.reduce((acc2, item2, i2) => {
+        const sums = elves.reduce((acc, item) => {
+          acc.push(item.reduce((acc2, item2) => {
             return acc2 + item2;
           }, 0));
           return acc;
