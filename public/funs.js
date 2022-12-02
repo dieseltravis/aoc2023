@@ -35,8 +35,56 @@
       }
     },
     day2: {
-      part1: () => {},
-      part2: () => {}
+      part1: (data) => {
+        const input = data.trim();
+        const scoring = [
+          { rx: /^A X$/mg, score: 1 + 3 },
+          { rx: /^A Y$/mg, score: 2 + 6 },
+          { rx: /^A Z$/mg, score: 3 + 0 },
+          { rx: /^B X$/mg, score: 1 + 0 },
+          { rx: /^B Y$/mg, score: 2 + 3 },
+          { rx: /^B Z$/mg, score: 3 + 6 },
+          { rx: /^C X$/mg, score: 1 + 6 },
+          { rx: /^C Y$/mg, score: 2 + 0 },
+          { rx: /^C Z$/mg, score: 3 + 3 }
+        ];
+        const total = scoring.reduce((sum, item) => {
+          const scored = input.match(item.rx);
+          if (scored) {
+            console.log(scored, item);
+            sum += (scored.length * item.score);
+          }
+          return sum;
+        }, 0);
+        console.log(total);
+        // 13334 is too high
+        // 12551 is too high
+        return total;
+      },
+      part2: (data) => {
+        const input = data.trim();
+        const scoring = [
+          { rx: /^A X$/mg, score: 3 + 0 },
+          { rx: /^A Y$/mg, score: 1 + 3 },
+          { rx: /^A Z$/mg, score: 2 + 6 },
+          { rx: /^B X$/mg, score: 1 + 0 },
+          { rx: /^B Y$/mg, score: 2 + 3 },
+          { rx: /^B Z$/mg, score: 3 + 6 },
+          { rx: /^C X$/mg, score: 2 + 0 },
+          { rx: /^C Y$/mg, score: 3 + 3 },
+          { rx: /^C Z$/mg, score: 1 + 6 }
+        ];
+        const total = scoring.reduce((sum, item) => {
+          const scored = input.match(item.rx);
+          if (scored) {
+            console.log(scored, item);
+            sum += (scored.length * item.score);
+          }
+          return sum;
+        }, 0);
+        console.log(total);
+        return total;
+      }
     },
     day3: {
       part1: () => {},
