@@ -49,7 +49,7 @@
           { rx: /^C Z$/mg, score: 3 + 3 }
         ];
         const total = scoring.reduce((sum, item) => {
-          let scored = input.match(item.rx);
+          const scored = input.match(item.rx);
           if (scored) {
             console.log(scored, item);
             sum += (scored.length * item.score);
@@ -75,7 +75,7 @@
           { rx: /^C Z$/mg, score: 1 + 6 }
         ];
         const total = scoring.reduce((sum, item) => {
-          let scored = input.match(item.rx);
+          const scored = input.match(item.rx);
           if (scored) {
             console.log(scored, item);
             sum += (scored.length * item.score);
