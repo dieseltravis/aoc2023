@@ -43,6 +43,7 @@ also on github: [dieseltravis/aoc2022](https://github.com/dieseltravis/aoc2022)
 -->
 
 ## previous years:
+[Glitch playlist of all years](https://glitch.com/@travishardiman/advent-of-code)
 
 ### 2021
 
@@ -74,4 +75,5 @@ also on github: [dieseltravis/aoc2018](https://github.com/dieseltravis/aoc2018)
 
 ## License
 [![Hippocratic License HL3-FULL](https://img.shields.io/static/v1?label=Hippocratic%20License&message=HL3-FULL&labelColor=5e2751&color=bc8c3d)](https://firstdonoharm.dev/version/3/0/full.html)
+
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fdieseltravis%2Faoc2022.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fdieseltravis%2Faoc2022?ref=badge_large)
