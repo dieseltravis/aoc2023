@@ -88,7 +88,6 @@
     },
     day3: {
       part1: (data) => {
-        console.log(data.length);
         const all = data.trim().split('\n');
         console.log(all.length);
         const rucks = all.map(pocket => {
@@ -116,14 +115,46 @@
         }
         console.log(scores);
         const result = rucks.reduce((sum, item) => {
-          
           return sum + scores[item];
         }, 0)
         // not 7763
         return result;
       },
       part2: (data) => {
-        
+        const all = data.trim().split('\n');
+        console.log(all.length);
+        const rucks = [];
+        for (let i = 0; i < all.length; i += 3) {
+          rucks.push(all.slice(i, i + 3));
+        }
+        console.log(rucks);
+        const common = rucks.reduce((comm, group) => {
+          const same = [];
+          for (let i of group[0]) {
+            if (group[1].includes(i)) {
+              same.push(i);
+            }
+          }
+          for (let i of same) {
+            if (group[2].includes(i)) {
+              comm.push(i);
+              break;
+            }
+          }
+          return comm;
+        }, []);
+        console.log(common);
+        const scores = {};
+        for (let l = 1; l <= 26; l++) {
+          // lowercase
+          scores[String.fromCharCode(l + 96)] = l;
+          // uppercase
+          scores[String.fromCharCode(l + 64)] = l + 26;
+        }
+        const result = common.reduce((sum, item) => {
+          return sum + scores[item];
+        }, 0)
+        return result;
       }
     },
     day4: {
