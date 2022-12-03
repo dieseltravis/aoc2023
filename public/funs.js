@@ -95,9 +95,9 @@
           const items = {
             left: pocket.substr(0, mid),
             right: pocket.substr(mid)
-          }
+          };
           const common = [];
-          for (let i of items.left) {
+          for (const i of items.left) {
             if (items.right.includes(i)) {
               common.push(i);
               break;
@@ -116,7 +116,7 @@
         console.log(scores);
         const result = rucks.reduce((sum, item) => {
           return sum + scores[item];
-        }, 0)
+        }, 0);
         // not 7763
         return result;
       },
@@ -130,12 +130,12 @@
         console.log(rucks);
         const common = rucks.reduce((comm, group) => {
           const same = [];
-          for (let i of group[0]) {
+          for (const i of group[0]) {
             if (group[1].includes(i)) {
               same.push(i);
             }
           }
-          for (let i of same) {
+          for (const i of same) {
             if (group[2].includes(i)) {
               comm.push(i);
               break;
@@ -153,7 +153,7 @@
         }
         const result = common.reduce((sum, item) => {
           return sum + scores[item];
-        }, 0)
+        }, 0);
         return result;
       }
     },
