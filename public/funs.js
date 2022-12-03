@@ -87,8 +87,44 @@
       }
     },
     day3: {
-      part1: () => {},
-      part2: () => {}
+      part1: (data) => {
+        console.log(data.length);
+        const all = data.trim().split('\n');
+        console.log(all.length);
+        const rucks = all.map(pocket => {
+          const mid = Math.floor(pocket.length / 2);
+          const items = {
+            left: pocket.substr(0, mid),
+            right: pocket.substr(mid)
+          }
+          const common = [];
+          for (let i of items.left) {
+            if (items.right.includes(i)) {
+              common.push(i);
+              break;
+            }
+          }
+          return common;
+        }).flat();
+        console.log(rucks);
+        const scores = {};
+        for (let l = 1; l <= 26; l++) {
+          // lowercase
+          scores[String.fromCharCode(l + 96)] = l;
+          // uppercase
+          scores[String.fromCharCode(l + 64)] = l + 26;
+        }
+        console.log(scores);
+        const result = rucks.reduce((sum, item) => {
+          
+          return sum + scores[item];
+        }, 0)
+        // not 7763
+        return result;
+      },
+      part2: (data) => {
+        
+      }
     },
     day4: {
       part1: () => {},
