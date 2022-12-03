@@ -6,7 +6,7 @@ my 2022 solutions on glitch: [graceful-blossom-animal](https://graceful-blossom-
 
 also on github: [dieseltravis/aoc2022](https://github.com/dieseltravis/aoc2022)
 
-[![Days completed in a row](https://img.shields.io/badge/⭐%20days%20in%20a%20row-2-blueviolet)](https://adventofcode.com/2022/) [![glitch](https://shields.io/badge/glitch-%F0%9F%91%8D%F0%9F%8E%8F-blue?logo=glitch&logoColor=violet)](https://glitch.com/)
+[![Days completed in a row](https://img.shields.io/badge/⭐%20days%20in%20a%20row-3-blueviolet)](https://adventofcode.com/2022/) [![glitch](https://shields.io/badge/glitch-%F0%9F%91%8D%F0%9F%8E%8F-blue?logo=glitch&logoColor=violet)](https://glitch.com/)
 
 [![Node.js CI](https://github.com/dieseltravis/aoc2022/actions/workflows/node.js.yml/badge.svg)](https://github.com/dieseltravis/aoc2022/actions/workflows/node.js.yml)
 
@@ -16,8 +16,8 @@ also on github: [dieseltravis/aoc2022](https://github.com/dieseltravis/aoc2022)
 
 1. [day one](https://graceful-blossom-animal.glitch.me/day/01)
 2. [day two](https://graceful-blossom-animal.glitch.me/day/02)
-<!-- 
 3. [day three](https://graceful-blossom-animal.glitch.me/day/03)
+<!-- 
 4. [day four](https://graceful-blossom-animal.glitch.me/day/04)
 5. [day five](https://graceful-blossom-animal.glitch.me/day/05)
 6. [day six](https://graceful-blossom-animal.glitch.me/day/06)

@@ -87,8 +87,75 @@
       }
     },
     day3: {
-      part1: () => {},
-      part2: () => {}
+      part1: (data) => {
+        const all = data.trim().split('\n');
+        console.log(all.length);
+        const rucks = all.map(pocket => {
+          const mid = Math.floor(pocket.length / 2);
+          const items = {
+            left: pocket.substr(0, mid),
+            right: pocket.substr(mid)
+          };
+          const common = [];
+          for (const i of items.left) {
+            if (items.right.includes(i)) {
+              common.push(i);
+              break;
+            }
+          }
+          return common;
+        }).flat();
+        console.log(rucks);
+        const scores = {};
+        for (let l = 1; l <= 26; l++) {
+          // lowercase
+          scores[String.fromCharCode(l + 96)] = l;
+          // uppercase
+          scores[String.fromCharCode(l + 64)] = l + 26;
+        }
+        console.log(scores);
+        const result = rucks.reduce((sum, item) => {
+          return sum + scores[item];
+        }, 0);
+        // not 7763
+        return result;
+      },
+      part2: (data) => {
+        const all = data.trim().split('\n');
+        console.log(all.length);
+        const rucks = [];
+        for (let i = 0; i < all.length; i += 3) {
+          rucks.push(all.slice(i, i + 3));
+        }
+        console.log(rucks);
+        const common = rucks.reduce((comm, group) => {
+          const same = [];
+          for (const i of group[0]) {
+            if (group[1].includes(i)) {
+              same.push(i);
+            }
+          }
+          for (const i of same) {
+            if (group[2].includes(i)) {
+              comm.push(i);
+              break;
+            }
+          }
+          return comm;
+        }, []);
+        console.log(common);
+        const scores = {};
+        for (let l = 1; l <= 26; l++) {
+          // lowercase
+          scores[String.fromCharCode(l + 96)] = l;
+          // uppercase
+          scores[String.fromCharCode(l + 64)] = l + 26;
+        }
+        const result = common.reduce((sum, item) => {
+          return sum + scores[item];
+        }, 0);
+        return result;
+      }
     },
     day4: {
       part1: () => {},

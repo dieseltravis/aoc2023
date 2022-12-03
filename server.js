@@ -121,7 +121,7 @@ fs.readFile(path.join(__dirname, 'public/funs.js'), function (err, content) {
   }
   funsJs = content.toString();
 
-  const funsJsLines = funsJs.split('\n').map(l => l.trim()).filter(l => l !== '' && !l.startsWith('\\\\'));
+  const funsJsLines = funsJs.split('\n').map(l => l.trim()).filter(l => l !== '' && !l.startsWith('\\\\') && !l.startsWith('console.'));
 
   let curDay = -1;
   let curPart = -1;
