@@ -192,7 +192,47 @@
         // not 603
         return result;
       },
-      part2: () => {}
+      part2: (data) => {
+        const pairs = data.trim().split('\n').map(row => {
+          const pair = row.split(',').map(pair => {
+            const range = pair.split('-').map(Number);
+            
+            return {
+              lo: Math.min(range[0], range[1]),
+              hi: Math.max(range[0], range[1]),
+              overlaps: []
+            }
+          });
+          return {
+            one: pair[0],
+            two: pair[1]
+          };
+        });
+        console.log(pairs);
+        
+        const len = pairs.length;
+        const hasOverlap = (left, right) => {
+          const is =  
+                // left lo is in range
+                (left.lo >= right.lo && left.lo <= right.hi) ||
+                // left hi is in range
+                (left.hi >= right.lo && left.hi <= right.hi) ||
+                // left contains right
+                (left.lo <= right.lo && left.hi >= right.hi);
+          return is;
+        };
+        const result = pairs.reduce((allOverlap, pair) => {
+          const one = pair.one;
+          const two = pair.two;
+          if (hasOverlap(one, two) || hasOverlap(two, one)) {
+            allOverlap++;
+          }
+          return allOverlap;
+        }, 0);
+        console.log(result);
+        // 791 is too low
+        return result;
+      }
     },
     day5: {
       part1: () => {},
