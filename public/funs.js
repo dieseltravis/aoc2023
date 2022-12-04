@@ -211,7 +211,7 @@
         console.log(pairs);
 
         const hasOverlap = (left, right) => {
-          const is =  
+          const is =
                 // left lo is in range
                 (left.lo >= right.lo && left.lo <= right.hi) ||
                 // left hi is in range
