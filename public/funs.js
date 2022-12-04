@@ -162,11 +162,11 @@
         const pairs = data.trim().split('\n').map(row => {
           const pair = row.split(',').map(pair => {
             const range = pair.split('-').map(Number);
-            
+
             return {
               lo: Math.min(range[0], range[1]),
               hi: Math.max(range[0], range[1])
-            }
+            };
           });
           return {
             one: pair[0],
@@ -174,7 +174,7 @@
           };
         });
         console.log(pairs);
-        
+
         const result = pairs.reduce((count, pair) => {
           const one = pair.one;
           const two = pair.two;
@@ -188,7 +188,7 @@
           return count;
         }, 0);
         console.log(result);
-        
+
         // not 603
         return result;
       },
@@ -196,12 +196,12 @@
         const pairs = data.trim().split('\n').map(row => {
           const pair = row.split(',').map(pair => {
             const range = pair.split('-').map(Number);
-            
+
             return {
               lo: Math.min(range[0], range[1]),
               hi: Math.max(range[0], range[1]),
               overlaps: []
-            }
+            };
           });
           return {
             one: pair[0],
@@ -209,8 +209,7 @@
           };
         });
         console.log(pairs);
-        
-        const len = pairs.length;
+
         const hasOverlap = (left, right) => {
           const is =  
                 // left lo is in range
