@@ -158,24 +158,39 @@ fs.readFile(path.join(__dirname, 'public/funs.js'), function (err, content) {
   }, { maxChars: 0, maxLines: 0 });
 
   if (funsJsCounts) {
-    const statHtml = Object.keys(funsJsCounts).reduce((a, k) => {
+    const statHtml = Object.keys(funsJsCounts).reduce((a, k, i) => {
       if (!k.startsWith('max') && funsJsCounts[k]) {
         const day = funsJsCounts[k];
         const key = k.replace(/\s/, '_');
         const p1 = day['part 1'];
         const p2 = day['part 2'];
-        a += "<li id='" + key + "'>" + k + "<ol><li id='" + key + "_part_1'>part 1 ";
-        if (p1) {
-          a += "<b id='" + key + "_part_1_chars' style='width:" + (100 * p1.charCount / funsJsCounts.maxChars) + "%' title='" + Math.round(100 * p1.charCount / funsJsCounts.maxChars) + "%'>" + p1.charCount + ' chars</b> ';
-          a += "<b id='" + key + "_part_1_lines' style='width:" + (100 * p1.lineCount / funsJsCounts.maxLines) + "%' title='" + Math.round(100 * p1.lineCount / funsJsCounts.maxLines) + "%'>" + p1.lineCount + ' lines</b>';
+        // part 2 adjustments
+        if (i < 25) {
+          p2.charCount -= 2;
+          p2.lineCount -= 1;
+        } else {
+          p2.charCount -= 76;
+          p2.lineCount -= 4;
         }
-        a += "</li><li id='" + key + "_part_2'>part 2 ";
-        if (p2) {
-          a += "<b id='" + key + "_part_2_chars' style='width:" + (100 * p2.charCount / funsJsCounts.maxChars) + "%' title='" + Math.round(100 * p2.charCount / funsJsCounts.maxChars) + "%'>" + p2.charCount + ' chars</b> ';
-          a += "<b id='" + key + "_part_2_lines' style='width:" + (100 * p2.lineCount / funsJsCounts.maxLines) + "%' title='" + Math.round(100 * p2.lineCount / funsJsCounts.maxLines) + "%'>" + p2.lineCount + ' lines</b>';
-        }
+        const hasPart1 = p1 && p1.charCount > 0 && p1.lineCount > 0;
+        const hasPart2 = p2 && p2.charCount > 0 && p2.lineCount > 0;
+        if (hasPart1 || hasPart2) {
+          a += "<li id='" + key + "'>" + k + "<ol><li id='" + key + "_part_1'>part 1 ";
 
-        a += '</li></ol></li>';
+          if (hasPart1) {
+            a += "<b id='" + key + "_part_1_chars' style='width:" + (100 * p1.charCount / funsJsCounts.maxChars) + "%' title='" + Math.round(100 * p1.charCount / funsJsCounts.maxChars) + "%'>" + p1.charCount + ' chars</b> ';
+            a += "<b id='" + key + "_part_1_lines' style='width:" + (100 * p1.lineCount / funsJsCounts.maxLines) + "%' title='" + Math.round(100 * p1.lineCount / funsJsCounts.maxLines) + "%'>" + p1.lineCount + ' lines</b>';
+          }
+
+          a += "</li><li id='" + key + "_part_2'>part 2 ";
+
+          if (hasPart2) {
+            a += "<b id='" + key + "_part_2_chars' style='width:" + (100 * p2.charCount / funsJsCounts.maxChars) + "%' title='" + Math.round(100 * p2.charCount / funsJsCounts.maxChars) + "%'>" + p2.charCount + ' chars</b> ';
+            a += "<b id='" + key + "_part_2_lines' style='width:" + (100 * p2.lineCount / funsJsCounts.maxLines) + "%' title='" + Math.round(100 * p2.lineCount / funsJsCounts.maxLines) + "%'>" + p2.lineCount + ' lines</b>';
+          }
+
+          a += '</li></ol></li>';
+        }
       }
       return a;
     }, '<ol>') + '</ol>';
