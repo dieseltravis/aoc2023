@@ -263,29 +263,23 @@
           return {
             amt: +match[1],
             src: match[2],
-            dst: match[3],
+            dst: match[3]
           };
         });
         console.log(instructions);
 
         instructions.forEach(instruct => {
-          //console.log(instruct);
           const srcCrate = crateInfo[instruct.src].crates;
           const dstCrate = crateInfo[instruct.dst].crates;
-          //console.log(srcCrate, dstCrate);
-          const newSrc = srcCrate.slice(0, -instruct.amt)
-          //console.log(newSrc);
+          const newSrc = srcCrate.slice(0, -instruct.amt);
           dstCrate.push(...srcCrate.slice(-instruct.amt).reverse());
-          //console.log(dstCrate);
           crateInfo[instruct.src].crates = newSrc;
-          //crateInfo[instruct.dst].crates = newDst;
         });
         console.log(crateInfo);
 
-        let result = "";
+        let result = '';
         for (const key in crateInfo) {
           const stack = crateInfo[key];
-          //console.log(stack);
           result += stack.crates.slice().reverse()[0];
         }
         return result;
@@ -327,13 +321,13 @@
         instructions.forEach(instruct => {
           const srcCrate = crateInfo[instruct.src].crates;
           const dstCrate = crateInfo[instruct.dst].crates;
-          const newSrc = srcCrate.slice(0, -instruct.amt)
+          const newSrc = srcCrate.slice(0, -instruct.amt);
           dstCrate.push(...srcCrate.slice(-instruct.amt));
           crateInfo[instruct.src].crates = newSrc;
         });
         console.log(crateInfo);
 
-        let result = "";
+        let result = '';
         for (const key in crateInfo) {
           const stack = crateInfo[key];
           result += stack.crates.slice().reverse()[0];
