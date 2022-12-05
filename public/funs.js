@@ -234,8 +234,106 @@
       }
     },
     day5: {
-      part1: () => {},
-      part2: () => {}
+      part1: (data) => {
+        const rx = /move (\d+) from (\d+) to (\d+)/;
+        const rxdigit = /\d/;
+        const rxupper = /[A-Z]/;
+        const input = data.split('\n\n');
+        const crates = input[0].split('\n').reverse().map(row => row.split(''));
+        const crateInfo = crates[0].reduce((acc, char, i) => {
+          if (rxdigit.test(char)) {
+            acc[char] = {
+              name: char,
+              crates: []
+            };
+            for (let x = 1; x < crates.length; x++) {
+              const crate = crates[x][i];
+              if (rxupper.test(crate)) {
+                acc[char].crates.push(crate);
+              } else {
+                break;
+              }
+            }
+          }
+          return acc;
+        }, {});
+        console.log(crateInfo);
+        const instructions = input[1].split('\n').map(row => {
+          const match = row.match(rx);
+          return {
+            amt: +match[1],
+            src: match[2],
+            dst: match[3]
+          };
+        });
+        console.log(instructions);
+
+        instructions.forEach(instruct => {
+          const srcCrate = crateInfo[instruct.src].crates;
+          const dstCrate = crateInfo[instruct.dst].crates;
+          const newSrc = srcCrate.slice(0, -instruct.amt);
+          dstCrate.push(...srcCrate.slice(-instruct.amt).reverse());
+          crateInfo[instruct.src].crates = newSrc;
+        });
+        console.log(crateInfo);
+
+        let result = '';
+        for (const key in crateInfo) {
+          const stack = crateInfo[key];
+          result += stack.crates.slice().reverse()[0];
+        }
+        return result;
+      },
+      part2: (data) => {
+        const rx = /move (\d+) from (\d+) to (\d+)/;
+        const rxdigit = /\d/;
+        const rxupper = /[A-Z]/;
+        const input = data.split('\n\n');
+        const crates = input[0].split('\n').reverse().map(row => row.split(''));
+        const crateInfo = crates[0].reduce((acc, char, i) => {
+          if (rxdigit.test(char)) {
+            acc[char] = {
+              name: char,
+              crates: []
+            };
+            for (let x = 1; x < crates.length; x++) {
+              const crate = crates[x][i];
+              if (rxupper.test(crate)) {
+                acc[char].crates.push(crate);
+              } else {
+                break;
+              }
+            }
+          }
+          return acc;
+        }, {});
+        console.log(crateInfo);
+        const instructions = input[1].split('\n').map(row => {
+          const match = row.match(rx);
+          return {
+            amt: +match[1],
+            src: match[2],
+            dst: match[3]
+          };
+        });
+        console.log(instructions);
+
+        instructions.forEach(instruct => {
+          const srcCrate = crateInfo[instruct.src].crates;
+          const dstCrate = crateInfo[instruct.dst].crates;
+          const newSrc = srcCrate.slice(0, -instruct.amt);
+          dstCrate.push(...srcCrate.slice(-instruct.amt));
+          crateInfo[instruct.src].crates = newSrc;
+        });
+        console.log(crateInfo);
+
+        let result = '';
+        for (const key in crateInfo) {
+          const stack = crateInfo[key];
+          result += stack.crates.slice().reverse()[0];
+        }
+        return result;
+      }
     },
     day6: {
       part1: () => {},
