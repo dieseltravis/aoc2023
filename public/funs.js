@@ -313,7 +313,7 @@
           return {
             amt: +match[1],
             src: match[2],
-            dst: match[3],
+            dst: match[3]
           };
         });
         console.log(instructions);
