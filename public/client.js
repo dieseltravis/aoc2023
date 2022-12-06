@@ -9,7 +9,7 @@ const process = function (funs, day, part) {
 
   getInput.addEventListener('click', async (ev) => {
     ev.preventDefault();
-    const local = await fetch('/input/' + day);
+    const local = await window.fetch('/input/' + day);
     const json = await local.json();
     input.value = json.input;
   });
