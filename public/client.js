@@ -6,11 +6,11 @@ const process = function (funs, day, part) {
   const getInput = document.querySelector('#input' + part + ' + .get-input');
   const answer = document.getElementById('part' + part);
   const button = document.getElementById('button' + part);
-  
+
   getInput.addEventListener('click', async (ev) => {
     ev.preventDefault();
-    let local = await fetch('/input/' + day);
-    let json = await local.json();
+    const local = await fetch('/input/' + day);
+    const json = await local.json();
     input.value = json.input;
   });
 
