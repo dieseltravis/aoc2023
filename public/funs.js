@@ -341,8 +341,8 @@
         let marker = [];
         let index = 0;
         for (let i = 4; i < buffer.length; i++) {
-          let slice = buffer.slice(i - 4, i);
-          let unique = [...new Set(slice)];
+          const slice = buffer.slice(i - 4, i);
+          const unique = [...new Set(slice)];
           if (unique.length === 4) {
             marker = unique;
             index = i;
@@ -358,8 +358,8 @@
         let index = 0;
         const len = 14;
         for (let i = len; i < buffer.length; i++) {
-          let slice = buffer.slice(i - len, i);
-          let unique = [...new Set(slice)];
+          const slice = buffer.slice(i - len, i);
+          const unique = [...new Set(slice)];
           if (unique.length === len) {
             marker = unique;
             index = i;
