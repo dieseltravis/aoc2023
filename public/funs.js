@@ -345,14 +345,30 @@
           let unique = [...new Set(slice)];
           if (unique.length === 4) {
             marker = unique;
-            index = i
+            index = i;
             break;
           }
         }
         console.log(marker, index);
         return index;
       },
-      part2: () => {}
+      part2: (data) => {
+        const buffer = data.trim().split('');
+        let marker = [];
+        let index = 0;
+        const len = 14;
+        for (let i = len; i < buffer.length; i++) {
+          let slice = buffer.slice(i - len, i);
+          let unique = [...new Set(slice)];
+          if (unique.length === len) {
+            marker = unique;
+            index = i;
+            break;
+          }
+        }
+        console.log(marker, index);
+        return index;
+      }
     },
     day7: {
       part1: () => {},
