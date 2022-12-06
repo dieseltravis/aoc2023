@@ -1,4 +1,5 @@
 const fs = require('fs');
+const https = require('https');
 const path = require('path');
 const express = require('express');
 const app = express();
@@ -89,6 +90,28 @@ for (let d = 1; d <= 25; d++) {
       year: year,
       day: day,
       day_num: dd
+    });
+  });
+  
+  app.get('/input/' + d, (req, retres) => {
+    const url = 'https://adventofcode.com/' + year + '/day/' + d + '/input';
+    console.log(url);
+    const options = {
+      headers: {
+        Cookie: 'session=' + process.env.SESSION
+      }
+    };
+    https.get(url, options, res => {
+      let rawData = '';
+
+      res.on('data', chunk => {
+        rawData += chunk;
+      });
+
+      res.on('end', () => {
+        //console.log(rawData);
+        retres.status(200).json({ input: rawData });
+      });
     });
   });
 
