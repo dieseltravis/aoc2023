@@ -336,7 +336,22 @@
       }
     },
     day6: {
-      part1: () => {},
+      part1: (data) => {
+        const buffer = data.trim().split('');
+        let marker = [];
+        let index = 0;
+        for (let i = 4; i < buffer.length; i++) {
+          let slice = buffer.slice(i - 4, i);
+          let unique = [...new Set(slice)];
+          if (unique.length === 4) {
+            marker = unique;
+            index = i
+            break;
+          }
+        }
+        console.log(marker, index);
+        return index;
+      },
       part2: () => {}
     },
     day7: {
