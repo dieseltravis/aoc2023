@@ -371,8 +371,213 @@
       }
     },
     day7: {
-      part1: () => {},
-      part2: () => {}
+      part1: (data) => {
+        const rxcmd = /^(cd|ls)\s?(\w+|\/|\.\.)?$/;
+        const rxls = /^(dir (\w+))|((\d+) (\w+\.?\w*))$/;
+        const path = [];
+        const folders = [{
+          type: 'dir',
+          sum: 0,
+          size: 0,
+          name: '/',
+          parentpath: path.slice(),
+          parentfolder: path.join('/'),
+          path: ['/'],
+          folder: ['/'].join('/'),
+          folders: [],
+          files: []
+        }];
+        const files = [];
+        const output = data.trim().split(/\$ /).filter(cmd => cmd).map(cmd => cmd.trim().split('\n').map((prog, i) => {
+          if (i === 0) {
+            // cmd
+            console.log(prog);
+            const matchcmd = prog.match(rxcmd);
+            const cmd = {
+              type: 'cmd',
+              cmd: matchcmd[1],
+              dir: matchcmd[2]
+            };
+            if (cmd.cmd === 'cd') {
+              if (cmd.dir === '..') {
+                path.pop();
+              } else {
+                path.push(cmd.dir);
+              }
+            }
+            cmd.path = path.slice();
+            cmd.folder = path.join('/');
+            return cmd;
+          } else {
+            const matchls = prog.match(rxls);
+            if (matchls[1]) {
+              const dir = {
+                type: 'dir',
+                sum: 0,
+                size: 0,
+                name: matchls[2],
+                parentpath: path.slice(),
+                parentfolder: path.join('/'),
+                path: path.slice(),
+                folder: path.join('/'),
+                folders: [],
+                files: []
+              };
+              dir.path.push(dir.name);
+              dir.folder += '/' + dir.name;
+              if (dir.name !== '/') {
+                console.log(dir, folders, folders.filter(folder => folder.folder === dir.parentfolder));
+                const parent = folders.filter(folder => folder.folder === dir.parentfolder)[0];
+                parent.folders.push(dir);
+              }
+              folders.push(dir);
+              return dir;
+            } else {
+              const file = {
+                type: 'file',
+                size: +matchls[4],
+                name: matchls[5],
+                parentpath: path.slice(),
+                parentfolder: path.join('/'),
+                path: path.slice(),
+                folder: path.join('/')
+              };
+              file.path.push(file.name);
+              file.folder += '/' + file.name;
+              const parent = folders.filter(folder => folder.folder === file.parentfolder)[0];
+              parent.size += file.size;
+              parent.files.push(file);
+              files.push(file);
+              return file;
+            }
+          }
+        }));
+        console.log(output, folders, files);
+        // at this point, immediate files are summed into the folders
+        const getSum = (folder) => {
+          if (folder.sum !== 0) {
+            return folder.sum;
+          } else {
+            let sum = folder.size;
+            for (let l = folder.folders.length; l--;) {
+              sum += getSum(folder.folders[l]);
+            }
+            folder.sum = sum;
+            return sum;
+          }
+        };
+        getSum(folders[0]);
+        console.log(folders);
+        const big = folders.filter(folder => folder.sum <= 100000);
+        console.log(big);
+        const bigSum = big.reduce((a, b) => a + b.sum, 0);
+        return bigSum;
+      },
+      part2: (data) => {
+        const rxcmd = /^(cd|ls)\s?(\w+|\/|\.\.)?$/;
+        const rxls = /^(dir (\w+))|((\d+) (\w+\.?\w*))$/;
+        const path = [];
+        const folders = [{
+          type: 'dir',
+          sum: 0,
+          size: 0,
+          name: '/',
+          parentpath: path.slice(),
+          parentfolder: path.join('/'),
+          path: ['/'],
+          folder: ['/'].join('/'),
+          folders: [],
+          files: []
+        }];
+        const files = [];
+        const output = data.trim().split(/\$ /).filter(cmd => cmd).map(cmd => cmd.trim().split('\n').map((prog, i) => {
+          if (i === 0) {
+            const matchcmd = prog.match(rxcmd);
+            const cmd = {
+              type: 'cmd',
+              cmd: matchcmd[1],
+              dir: matchcmd[2]
+            };
+            if (cmd.cmd === 'cd') {
+              if (cmd.dir === '..') {
+                path.pop();
+              } else {
+                path.push(cmd.dir);
+              }
+            }
+            cmd.path = path.slice();
+            cmd.folder = path.join('/');
+            return cmd;
+          } else {
+            const matchls = prog.match(rxls);
+            if (matchls[1]) {
+              const dir = {
+                type: 'dir',
+                sum: 0,
+                size: 0,
+                name: matchls[2],
+                parentpath: path.slice(),
+                parentfolder: path.join('/'),
+                path: path.slice(),
+                folder: path.join('/'),
+                folders: [],
+                files: []
+              };
+              dir.path.push(dir.name);
+              dir.folder += '/' + dir.name;
+              if (dir.name !== '/') {
+                const parent = folders.filter(folder => folder.folder === dir.parentfolder)[0];
+                parent.folders.push(dir);
+              }
+              folders.push(dir);
+              return dir;
+            } else {
+              const file = {
+                type: 'file',
+                size: +matchls[4],
+                name: matchls[5],
+                parentpath: path.slice(),
+                parentfolder: path.join('/'),
+                path: path.slice(),
+                folder: path.join('/')
+              };
+              file.path.push(file.name);
+              file.folder += '/' + file.name;
+              const parent = folders.filter(folder => folder.folder === file.parentfolder)[0];
+              parent.size += file.size;
+              parent.files.push(file);
+              files.push(file);
+              return file;
+            }
+          }
+        }));
+        console.log(output, folders, files);
+        // at this point, immediate files are summed into the folders
+        const getSum = (folder) => {
+          if (folder.sum !== 0) {
+            return folder.sum;
+          } else {
+            let sum = folder.size;
+            for (let l = folder.folders.length; l--;) {
+              sum += getSum(folder.folders[l]);
+            }
+            folder.sum = sum;
+            return sum;
+          }
+        };
+        getSum(folders[0]);
+        console.log(folders);
+        const total = 70000000;
+        const need = 30000000;
+        const current = total - folders[0].sum;
+        const min = need - current;
+        const big = folders.filter(folder => folder.sum >= min);
+        console.log(big);
+        const sorted = big.sort((a, b) => a.sum - b.sum);
+        console.log(sorted);
+        const bigSum = sorted[0].sum;
+        return bigSum;
+      }
     },
     day8: {
       part1: () => {},

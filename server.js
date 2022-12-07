@@ -93,23 +93,22 @@ for (let d = 1; d <= 25; d++) {
     });
   });
 
-  app.get('/input/' + d, (req, retres) => {
+  app.get('/input/' + d, (req, browserResponse) => {
     const url = 'https://adventofcode.com/' + year + '/day/' + d + '/input';
-    console.log(url);
     const options = {
       headers: {
         Cookie: 'session=' + process.env.SESSION
       }
     };
-    https.get(url, options, res => {
+    https.get(url, options, getResponse => {
       let rawData = '';
 
-      res.on('data', chunk => {
+      getResponse.on('data', chunk => {
         rawData += chunk;
       });
 
-      res.on('end', () => {
-        retres.status(200).json({ input: rawData });
+      getResponse.on('end', () => {
+        browserResponse.status(200).json({ input: rawData });
       });
     });
   });
