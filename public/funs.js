@@ -372,21 +372,21 @@
     },
     day7: {
       part1: (data) => {
-        const rxcmd = /^(cd|ls)\s?(\w+|\/|\.\.)?$/
-        const rxls = /^(dir (\w+))|((\d+) (\w+\.?\w*))$/
+        const rxcmd = /^(cd|ls)\s?(\w+|\/|\.\.)?$/;
+        const rxls = /^(dir (\w+))|((\d+) (\w+\.?\w*))$/;
         const path = [];
         const folders = [{
-                type: 'dir',
-                sum: 0,
-                size: 0,
-                name: '/',
-                parentpath: path.slice(),
-                parentfolder: path.join('/'),
-                path: ['/'],
-                folder: ['/'].join('/'),
-                folders: [],
-                files: []
-              }];
+          type: 'dir',
+          sum: 0,
+          size: 0,
+          name: '/',
+          parentpath: path.slice(),
+          parentfolder: path.join('/'),
+          path: ['/'],
+          folder: ['/'].join('/'),
+          folders: [],
+          files: []
+        }];
         const files = [];
         const output = data.trim().split(/\$ /).filter(cmd => cmd).map(cmd => cmd.trim().split('\n').map((prog, i) => {
           if (i === 0) {
@@ -433,14 +433,14 @@
               folders.push(dir);
               return dir;
             } else {
-              const file =  {
+              const file = {
                 type: 'file',
                 size: +matchls[4],
                 name: matchls[5],
                 parentpath: path.slice(),
                 parentfolder: path.join('/'),
                 path: path.slice(),
-                folder: path.join('/'),
+                folder: path.join('/')
               };
               file.path.push(file.name);
               file.folder += '/' + file.name;
@@ -474,21 +474,21 @@
         return bigSum;
       },
       part2: (data) => {
-        const rxcmd = /^(cd|ls)\s?(\w+|\/|\.\.)?$/
-        const rxls = /^(dir (\w+))|((\d+) (\w+\.?\w*))$/
+        const rxcmd = /^(cd|ls)\s?(\w+|\/|\.\.)?$/;
+        const rxls = /^(dir (\w+))|((\d+) (\w+\.?\w*))$/;
         const path = [];
         const folders = [{
-                type: 'dir',
-                sum: 0,
-                size: 0,
-                name: '/',
-                parentpath: path.slice(),
-                parentfolder: path.join('/'),
-                path: ['/'],
-                folder: ['/'].join('/'),
-                folders: [],
-                files: []
-              }];
+          type: 'dir',
+          sum: 0,
+          size: 0,
+          name: '/',
+          parentpath: path.slice(),
+          parentfolder: path.join('/'),
+          path: ['/'],
+          folder: ['/'].join('/'),
+          folders: [],
+          files: []
+        }];
         const files = [];
         const output = data.trim().split(/\$ /).filter(cmd => cmd).map(cmd => cmd.trim().split('\n').map((prog, i) => {
           if (i === 0) {
@@ -532,14 +532,14 @@
               folders.push(dir);
               return dir;
             } else {
-              const file =  {
+              const file = {
                 type: 'file',
                 size: +matchls[4],
                 name: matchls[5],
                 parentpath: path.slice(),
                 parentfolder: path.join('/'),
                 path: path.slice(),
-                folder: path.join('/'),
+                folder: path.join('/')
               };
               file.path.push(file.name);
               file.folder += '/' + file.name;
@@ -551,6 +551,7 @@
             }
           }
         }));
+        console.log(output, folders, files);
         // at this point, immediate files are summed into the folders
         const getSum = (folder) => {
           if (folder.sum !== 0) {
