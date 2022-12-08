@@ -637,7 +637,74 @@
         }
         return visible;
       },
-      part2: () => {}
+      part2: (data) => {
+        const forest = data.trim().split('\n').map(row => row.split('').map(cell => {
+          return {
+            height: +cell,
+            n: 0,
+            s: 0,
+            w: 0,
+            e: 0,
+            score: 0
+          };
+        }));
+        const ylen = forest.length;
+        const xlen = forest[0].length;
+        let maxScore = 0;
+        for (let y = 1; y < ylen - 1; y++) {
+          for (let x = 1; x < xlen - 1; x++) {
+            const tree = forest[y][x];
+            for (let n = y - 1; n >= 0; n--) {
+              const north = forest[n][x];
+              if (north.height <= tree.height) {
+                tree.n++;
+              }
+              if (north.height >= tree.height) {
+                break;
+              }
+            }
+            if (tree.n > 0) {
+              for (let s = y + 1; s < ylen; s++) {
+                const south = forest[s][x];
+                if (south.height <= tree.height) {
+                  tree.s++;
+                }
+                if (south.height >= tree.height) {
+                  break;
+                }
+              }
+              if (tree.s > 0) {
+                for (let w = x - 1; w >= 0; w--) {
+                  const west = forest[y][w];
+                  if (west.height <= tree.height) {
+                    tree.w++;
+                  }
+                  if (west.height >= tree.height) {
+                    break;
+                  }
+                }
+                if (tree.w > 0) {
+                  for (let e = x + 1; e < xlen; e++) {
+                    const east = forest[y][e];
+                    if (east.height < tree.height) {
+                      tree.e++;
+                    } else {
+                      tree.e++;
+                      break;
+                    }
+                  }
+                  if (tree.e > 0) {
+                    tree.score = tree.n * tree.s * tree.w * tree.e;
+                    maxScore = Math.max(maxScore, tree.score);
+                  }
+                }
+              }
+            }
+          }
+        }
+        console.log(forest);
+        return maxScore;
+      }
     },
     day9: {
       part1: () => {},
