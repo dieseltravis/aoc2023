@@ -709,22 +709,10 @@
     day9: {
       part1: (data) => {
         const DIR = {
-          U: {
-            ax: 'y',
-            inc: 1
-          },
-          D: {
-            ax: 'y',
-            inc: -1
-          },
-          R: {
-            ax: 'x',
-            inc: 1
-          },
-          L: {
-            ax: 'x',
-            inc: -1
-          }
+          U: { ax: 'y', inc: 1 },
+          D: { ax: 'y', inc: -1 },
+          R: { ax: 'x', inc: 1 },
+          L: { ax: 'x', inc: -1 }
         };
         const motions = data.trim().split('\n').map(motion => motion.split(' ')).map(motion => {
           const dir = DIR[motion[0]];
@@ -735,19 +723,11 @@
           };
         });
         const rope = {
-          head: {
-            y: 0,
-            x: 0,
-            history: [{x: 0, y: 0}]
-          },
-          tail: {
-            y: 0,
-            x: 0,
-            history: [{x: 0, y: 0}]
-          }
+          head: { y: 0, x: 0, history: [{ x: 0, y: 0 }] },
+          tail: { y: 0, x: 0, history: [{ x: 0, y: 0 }] }
         };
         console.log(motions);
-        
+
         const isNear = (h, t) => {
           return Math.abs(h.y - t.y) <= 1 && Math.abs(h.x - t.x) <= 1;
         };
@@ -764,8 +744,8 @@
           }
         });
         console.log(rope);
-        
-        const distinct = new Set(rope.tail.history.map(pos => pos.y +"," + pos.x));
+
+        const distinct = new Set(rope.tail.history.map(pos => pos.y + ',' + pos.x));
         console.log(distinct);
         return distinct.size;
       },
