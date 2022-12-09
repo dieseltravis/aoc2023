@@ -749,7 +749,54 @@
         console.log(distinct);
         return distinct.size;
       },
-      part2: () => {}
+      part2: (data) => {
+        const DIR = {
+          U: { ax: 'y', inc: 1 },
+          D: { ax: 'y', inc: -1 },
+          R: { ax: 'x', inc: 1 },
+          L: { ax: 'x', inc: -1 }
+        };
+        const motions = data.trim().split('\n').map(motion => motion.split(' ')).map(motion => {
+          const dir = DIR[motion[0]];
+          return {
+            ax: dir.ax,
+            inc: dir.inc,
+            val: +motion[1]
+          };
+        });
+        const rope = [];
+        const length = 10;
+        for (let i = 0; i < length; i++) {
+          rope.push({ y: 0, x: 0, history: [{ x: 0, y: 0 }] });
+        }
+        console.log(motions);
+
+        const isNear = (h, t) => {
+          return Math.abs(h.y - t.y) <= 1 && Math.abs(h.x - t.x) <= 1;
+        };
+        motions.forEach(motion => {
+          for (let i = 0; i < motion.val; i++) {
+            rope[0][motion.ax] += motion.inc;
+            rope[0].history.push({ y: rope[0].y, x: rope[0].x });
+            for (let k = 1; k < length; k++) {
+              const prev = rope[k - 1];
+              const knot = rope[k];
+              if (!isNear(prev, knot)) {
+                // -2 since item added
+                const previousHead = prev.history.slice(-2)[0];
+                knot.y = previousHead.y;
+                knot.x = previousHead.x;
+              }
+              knot.history.push({ y: knot.y, x: knot.x });
+            }
+          }
+        });
+        console.log(rope);
+
+        const distinct = new Set(rope.slice(-1)[0].history.map(pos => pos.y + ',' + pos.x));
+        console.log(distinct);
+        return distinct.size;
+      }
     },
     day10: {
       part1: () => {},
