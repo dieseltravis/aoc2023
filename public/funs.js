@@ -707,7 +707,68 @@
       }
     },
     day9: {
-      part1: () => {},
+      part1: (data) => {
+        const DIR = {
+          U: {
+            ax: 'y',
+            inc: 1
+          },
+          D: {
+            ax: 'y',
+            inc: -1
+          },
+          R: {
+            ax: 'x',
+            inc: 1
+          },
+          L: {
+            ax: 'x',
+            inc: -1
+          }
+        };
+        const motions = data.trim().split('\n').map(motion => motion.split(' ')).map(motion => {
+          const dir = DIR[motion[0]];
+          return {
+            ax: dir.ax,
+            inc: dir.inc,
+            val: +motion[1]
+          };
+        });
+        const rope = {
+          head: {
+            y: 0,
+            x: 0,
+            history: [{x: 0, y: 0}]
+          },
+          tail: {
+            y: 0,
+            x: 0,
+            history: [{x: 0, y: 0}]
+          }
+        };
+        console.log(motions);
+        
+        const isNear = (h, t) => {
+          return Math.abs(h.y - t.y) <= 1 && Math.abs(h.x - t.x) <= 1;
+        };
+        motions.forEach(motion => {
+          for (let i = 0; i < motion.val; i++) {
+            rope.head[motion.ax] += motion.inc;
+            if (!isNear(rope.head, rope.tail)) {
+              const previousHead = rope.head.history.slice(-1)[0];
+              rope.tail.y = previousHead.y;
+              rope.tail.x = previousHead.x;
+            }
+            rope.head.history.push({ y: rope.head.y, x: rope.head.x });
+            rope.tail.history.push({ y: rope.tail.y, x: rope.tail.x });
+          }
+        });
+        console.log(rope);
+        
+        const distinct = new Set(rope.tail.history.map(pos => pos.y +"," + pos.x));
+        console.log(distinct);
+        return distinct.size;
+      },
       part2: () => {}
     },
     day10: {
