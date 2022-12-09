@@ -774,24 +774,38 @@
         const isNear = (h, t) => {
           return Math.abs(h.y - t.y) <= 1 && Math.abs(h.x - t.x) <= 1;
         };
+        const graph = [];
+        for (let i = 0; i < 30; i++) {
+          graph[i] = new Array(30).fill('.', 0, 30);
+        }
+        const plot = (y, x, c) => {
+          y += 6;
+          x += 6;
+          y = 30 - y;
+          graph[y][x] = c;
+        };
         motions.forEach(motion => {
           for (let i = 0; i < motion.val; i++) {
             rope[0][motion.ax] += motion.inc;
+            plot(rope[0].y, rope[0].x, 'H');
             rope[0].history.push({ y: rope[0].y, x: rope[0].x });
             for (let k = 1; k < length; k++) {
               const prev = rope[k - 1];
               const knot = rope[k];
               if (!isNear(prev, knot)) {
-                // -2 since item added
+                // -2 since item added before
                 const previousHead = prev.history.slice(-2)[0];
                 knot.y = previousHead.y;
                 knot.x = previousHead.x;
               }
+              plot(knot.y, knot.x, k);
               knot.history.push({ y: knot.y, x: knot.x });
             }
           }
+          console.log(graph.map(row => row.map(cell => !cell ? '.' : cell).join('')).join('\n'));
         });
         console.log(rope);
+        console.log(graph.map(row => row.map(cell => !cell ? '.' : cell).join('')).join('\n'));
 
         const distinct = new Set(rope.slice(-1)[0].history.map(pos => pos.y + ',' + pos.x));
         console.log(distinct);
