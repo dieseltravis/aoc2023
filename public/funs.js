@@ -835,7 +835,7 @@
           // console.log(show());
         });
         console.log(rope);
-        // console.log(show());
+        console.log(show());
 
         const distinct = new Set(rope.slice(-1)[0].history.map(pos => pos.y + ',' + pos.x));
         console.log(distinct);
