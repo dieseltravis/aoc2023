@@ -898,7 +898,7 @@
           return crt + pixel + (((i + 1) % 40 === 0) ? '\n' : '');
         }, '');
         console.log(output);
-        return "look in console";
+        return 'look in console';
       }
     },
     day11: {
