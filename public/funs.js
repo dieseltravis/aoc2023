@@ -774,38 +774,68 @@
         const isNear = (h, t) => {
           return Math.abs(h.y - t.y) <= 1 && Math.abs(h.x - t.x) <= 1;
         };
-        const graph = [];
-        for (let i = 0; i < 30; i++) {
-          graph[i] = new Array(30).fill('.', 0, 30);
-        }
-        const plot = (y, x, c) => {
-          y += 6;
-          x += 6;
-          y = 30 - y;
-          graph[y][x] = c;
+
+        const show = () => {
+          const limits = rope.reduce((values, knot) => {
+            values.minY = Math.min(values.minY, knot.y);
+            values.maxY = Math.max(values.maxY, knot.y);
+            values.minX = Math.min(values.minX, knot.x);
+            values.maxX = Math.max(values.maxX, knot.x);
+            return values;
+          }, {
+            minY: 0,
+            maxY: 1,
+            minX: 0,
+            maxX: 1
+          });
+          const points = rope.reduceRight((values, knot, i) => {
+            values[knot.y + ',' + knot.x] = (i > 0) ? i : 'H';
+            return values;
+          }, {});
+          let plot = '';
+          for (let y = limits.maxY + 1; y >= limits.minY - 1; y--) {
+            for (let x = limits.minX - 1; x <= limits.maxX + 1; x++) {
+              if (points[y + ',' + x]) {
+                plot += points[y + ',' + x];
+              } else {
+                plot += '.';
+              }
+            }
+            plot += '\n';
+          }
+          return plot;
         };
+
         motions.forEach(motion => {
           for (let i = 0; i < motion.val; i++) {
             rope[0][motion.ax] += motion.inc;
-            plot(rope[0].y, rope[0].x, 'H');
             rope[0].history.push({ y: rope[0].y, x: rope[0].x });
             for (let k = 1; k < length; k++) {
               const prev = rope[k - 1];
               const knot = rope[k];
+              //console.log('k' + k + isNear(prev, knot), 'prev', prev, 'knot', knot);
               if (!isNear(prev, knot)) {
-                // -2 since item added before
-                const previousHead = prev.history.slice(-2)[0];
-                knot.y = previousHead.y;
-                knot.x = previousHead.x;
+                // if in row/col, move directly, else move diagonally
+                if (prev.y === knot.y) {
+                  knot.x += (prev.x > knot.x) ? 1 : -1;
+                } else if (prev.x === knot.x) {
+                  knot.y += (prev.y > knot.y) ? 1 : -1;
+                } else {
+                  // diagonal
+                  const dx = prev.x - knot.x;
+                  const dy = prev.y - knot.y;
+                  knot.x += (dx > 0) ? 1 : -1;
+                  knot.y += (dy > 0) ? 1 : -1;
+                }
               }
-              plot(knot.y, knot.x, k);
               knot.history.push({ y: knot.y, x: knot.x });
             }
+            //console.log(show());
           }
-          console.log(graph.map(row => row.map(cell => !cell ? '.' : cell).join('')).join('\n'));
+          //console.log(show());
         });
         console.log(rope);
-        console.log(graph.map(row => row.map(cell => !cell ? '.' : cell).join('')).join('\n'));
+        console.log(show());
 
         const distinct = new Set(rope.slice(-1)[0].history.map(pos => pos.y + ',' + pos.x));
         console.log(distinct);
