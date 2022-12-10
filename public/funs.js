@@ -707,8 +707,140 @@
       }
     },
     day9: {
-      part1: () => {},
-      part2: () => {}
+      part1: (data) => {
+        const DIR = {
+          U: { ax: 'y', inc: 1 },
+          D: { ax: 'y', inc: -1 },
+          R: { ax: 'x', inc: 1 },
+          L: { ax: 'x', inc: -1 }
+        };
+        const motions = data.trim().split('\n').map(motion => motion.split(' ')).map(motion => {
+          const dir = DIR[motion[0]];
+          return {
+            ax: dir.ax,
+            inc: dir.inc,
+            val: +motion[1]
+          };
+        });
+        const rope = {
+          head: { y: 0, x: 0, history: [{ x: 0, y: 0 }] },
+          tail: { y: 0, x: 0, history: [{ x: 0, y: 0 }] }
+        };
+        console.log(motions);
+
+        const isNear = (h, t) => {
+          return Math.abs(h.y - t.y) <= 1 && Math.abs(h.x - t.x) <= 1;
+        };
+        motions.forEach(motion => {
+          for (let i = 0; i < motion.val; i++) {
+            rope.head[motion.ax] += motion.inc;
+            if (!isNear(rope.head, rope.tail)) {
+              const previousHead = rope.head.history.slice(-1)[0];
+              rope.tail.y = previousHead.y;
+              rope.tail.x = previousHead.x;
+            }
+            rope.head.history.push({ y: rope.head.y, x: rope.head.x });
+            rope.tail.history.push({ y: rope.tail.y, x: rope.tail.x });
+          }
+        });
+        console.log(rope);
+
+        const distinct = new Set(rope.tail.history.map(pos => pos.y + ',' + pos.x));
+        console.log(distinct);
+        return distinct.size;
+      },
+      part2: (data) => {
+        const DIR = {
+          U: { ax: 'y', inc: 1 },
+          D: { ax: 'y', inc: -1 },
+          R: { ax: 'x', inc: 1 },
+          L: { ax: 'x', inc: -1 }
+        };
+        const motions = data.trim().split('\n').map(motion => motion.split(' ')).map(motion => {
+          const dir = DIR[motion[0]];
+          return {
+            ax: dir.ax,
+            inc: dir.inc,
+            val: +motion[1]
+          };
+        });
+        const rope = [];
+        const length = 10;
+        for (let i = 0; i < length; i++) {
+          rope.push({ y: 0, x: 0, history: [{ x: 0, y: 0 }] });
+        }
+        console.log(motions);
+
+        const isNear = (h, t) => {
+          return Math.abs(h.y - t.y) <= 1 && Math.abs(h.x - t.x) <= 1;
+        };
+
+        const show = () => {
+          const limits = rope.reduce((values, knot) => {
+            values.minY = Math.min(values.minY, knot.y);
+            values.maxY = Math.max(values.maxY, knot.y);
+            values.minX = Math.min(values.minX, knot.x);
+            values.maxX = Math.max(values.maxX, knot.x);
+            return values;
+          }, {
+            minY: 0,
+            maxY: 1,
+            minX: 0,
+            maxX: 1
+          });
+          const points = rope.reduceRight((values, knot, i) => {
+            values[knot.y + ',' + knot.x] = (i > 0) ? i : 'H';
+            return values;
+          }, {});
+          let plot = '';
+          for (let y = limits.maxY + 1; y >= limits.minY - 1; y--) {
+            for (let x = limits.minX - 1; x <= limits.maxX + 1; x++) {
+              if (points[y + ',' + x]) {
+                plot += points[y + ',' + x];
+              } else {
+                plot += '.';
+              }
+            }
+            plot += '\n';
+          }
+          return plot;
+        };
+
+        motions.forEach(motion => {
+          for (let i = 0; i < motion.val; i++) {
+            rope[0][motion.ax] += motion.inc;
+            rope[0].history.push({ y: rope[0].y, x: rope[0].x });
+            for (let k = 1; k < length; k++) {
+              const prev = rope[k - 1];
+              const knot = rope[k];
+              // console.log('k' + k + isNear(prev, knot), 'prev', prev, 'knot', knot);
+              if (!isNear(prev, knot)) {
+                // if in row/col, move directly, else move diagonally
+                if (prev.y === knot.y) {
+                  knot.x += (prev.x > knot.x) ? 1 : -1;
+                } else if (prev.x === knot.x) {
+                  knot.y += (prev.y > knot.y) ? 1 : -1;
+                } else {
+                  // diagonal
+                  const dx = prev.x - knot.x;
+                  const dy = prev.y - knot.y;
+                  knot.x += (dx > 0) ? 1 : -1;
+                  knot.y += (dy > 0) ? 1 : -1;
+                }
+              }
+              knot.history.push({ y: knot.y, x: knot.x });
+            }
+            // console.log(show());
+          }
+          // console.log(show());
+        });
+        console.log(rope);
+        console.log(show());
+
+        const distinct = new Set(rope.slice(-1)[0].history.map(pos => pos.y + ',' + pos.x));
+        console.log(distinct);
+        return distinct.size;
+      }
     },
     day10: {
       part1: () => {},
