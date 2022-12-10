@@ -850,7 +850,7 @@
           return {
             cmd: params[0],
             val: (params.length > 1) ? +params[1] : null
-          }
+          };
         });
         let x = 1;
         let c = 1;
@@ -874,7 +874,32 @@
         console.log(results);
         return results.reduce((a, b) => a + b, 0);
       },
-      part2: () => {}
+      part2: (data) => {
+        const cmds = data.trim().split('\n').map(cmd => {
+          const params = cmd.split(' ');
+          return {
+            cmd: params[0],
+            val: (params.length > 1) ? +params[1] : null
+          };
+        });
+        let x = 1;
+        let c = 1;
+        const results = [];
+        cmds.forEach(cmd => {
+          results.push((Math.abs(x + 1 - c % 40) <= 1) ? '#' : '.');
+          if (cmd.cmd === 'addx') {
+            c++;
+            results.push((Math.abs(x + 1 - c % 40) <= 1) ? '#' : '.');
+            x += cmd.val;
+          }
+          c++;
+        });
+        const output = results.reduce((crt, pixel, i) => {
+          return crt + pixel + (((i + 1) % 40 === 0) ? '\n' : '');
+        }, '');
+        console.log(output);
+        return "look in console";
+      }
     },
     day11: {
       part1: () => {},
