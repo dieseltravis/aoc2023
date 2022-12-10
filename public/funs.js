@@ -843,8 +843,63 @@
       }
     },
     day10: {
-      part1: () => {},
-      part2: () => {}
+      part1: (data) => {
+        const signals = [20, 60, 100, 140, 180, 220];
+        const cmds = data.trim().split('\n').map(cmd => {
+          const params = cmd.split(' ');
+          return {
+            cmd: params[0],
+            val: (params.length > 1) ? +params[1] : null
+          };
+        });
+        let x = 1;
+        let c = 1;
+        const results = [];
+        cmds.forEach(cmd => {
+          if (signals.includes(c)) {
+            results.push(c * x);
+            console.log(c, x);
+          }
+          if (cmd.cmd === 'addx') {
+            c++;
+            if (signals.includes(c)) {
+              results.push(c * x);
+              console.log(c, x, cmd.val);
+            }
+            x += cmd.val;
+            console.log(c, x, cmd.val);
+          }
+          c++;
+        });
+        console.log(results);
+        return results.reduce((a, b) => a + b, 0);
+      },
+      part2: (data) => {
+        const cmds = data.trim().split('\n').map(cmd => {
+          const params = cmd.split(' ');
+          return {
+            cmd: params[0],
+            val: (params.length > 1) ? +params[1] : null
+          };
+        });
+        let x = 1;
+        let c = 1;
+        const results = [];
+        cmds.forEach(cmd => {
+          results.push((Math.abs(x + 1 - c % 40) <= 1) ? '#' : '.');
+          if (cmd.cmd === 'addx') {
+            c++;
+            results.push((Math.abs(x + 1 - c % 40) <= 1) ? '#' : '.');
+            x += cmd.val;
+          }
+          c++;
+        });
+        const output = results.reduce((crt, pixel, i) => {
+          return crt + pixel + (((i + 1) % 40 === 0) ? '\n' : '');
+        }, '');
+        console.log(output);
+        return 'look in console';
+      }
     },
     day11: {
       part1: () => {},
