@@ -813,7 +813,7 @@
             for (let k = 1; k < length; k++) {
               const prev = rope[k - 1];
               const knot = rope[k];
-              //console.log('k' + k + isNear(prev, knot), 'prev', prev, 'knot', knot);
+              // console.log('k' + k + isNear(prev, knot), 'prev', prev, 'knot', knot);
               if (!isNear(prev, knot)) {
                 // if in row/col, move directly, else move diagonally
                 if (prev.y === knot.y) {
@@ -830,12 +830,12 @@
               }
               knot.history.push({ y: knot.y, x: knot.x });
             }
-            //console.log(show());
+            // console.log(show());
           }
-          //console.log(show());
+          // console.log(show());
         });
         console.log(rope);
-        console.log(show());
+        // console.log(show());
 
         const distinct = new Set(rope.slice(-1)[0].history.map(pos => pos.y + ',' + pos.x));
         console.log(distinct);
