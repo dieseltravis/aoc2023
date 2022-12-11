@@ -902,7 +902,53 @@
       }
     },
     day11: {
-      part1: () => {},
+      part1: (data) => {
+        const ops = {
+          '+': (a, b) => a + b,
+          '*': (a, b) => a * b,
+          'o+': (a) => a + a,
+          'o*': (a) => a * a
+        };
+        const monkeys = data.trim().split('\n\n').map(monkey => {
+          const info = monkey.split('\n').map(item => item.split(':'));
+          const start = info[1][1].split(',').map(num => +(num.trim()));
+          const op = info[2][1].split('=').map(val => val.trim().split(' '))[1].slice(-2);
+          const div = +info[3][1].split(' ').slice(-1)[0];
+          const t = +info[4][1].split(' ').slice(-1)[0];
+          const f = +info[5][1].split(' ').slice(-1)[0];
+          const m = { start, div, t, f };
+          console.log(op);
+          if (op[1] === 'old') {
+            m.op = ops['o' + op[0]];
+            m.opval = 0;
+          } else {
+            m.op = ops[op[0]];
+            m.opval = +op[1];
+          }
+          return m;
+        });
+        const inspected = new Array(monkeys.length).fill(0);
+        const rounds = 20;
+        console.log(monkeys, inspected, rounds);
+        for (let r = 0; r < rounds; r++) {
+          monkeys.forEach((monkey, i) => {
+            const q = monkey.start.slice();
+            monkey.start = [];
+            q.forEach(item => {
+              const v = Math.floor(monkey.op(item, monkey.opval) / 3);
+              if (v % monkey.div === 0) {
+                monkeys[monkey.t].start.push(v);
+              } else {
+                monkeys[monkey.f].start.push(v);
+              }
+              inspected[i]++;
+            });
+          });
+        }
+        console.log(monkeys, inspected);
+        const active2 = inspected.sort((a, b) => a - b).slice(-2);
+        return active2[0] * active2[1];
+      },
       part2: () => {}
     },
     day12: {
