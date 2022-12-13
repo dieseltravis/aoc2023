@@ -1022,18 +1022,23 @@
       part1: (data) => {
         const start = { y: -1, x: -1, z: 0 };
         const end = { y: -1, x: -1, z: 25 };
+        let k = 0;
         const map = data.trim().split('\n').map((row, y) => row.split('').map((cell, x) => {
+          let z = -1;
           if (cell === 'S') {
+            start.k = k;
             start.y = y;
             start.x = x;
-            return 0;
-          } else if (cell === 'e') {
+            z = start.z;;
+          } else if (cell === 'E') {
+            end.k = k;
             end.y = y;
             end.x = x;
-            return 25;
+            z = end.z;
           } else {
-            return cell.charCodeAt(0) - 97;
+            z = cell.charCodeAt(0) - 97;
           }
+          return { k: k++, y, x, z };
         }));
         console.log(start, end, map);
         const maxY = map.length - 1;
@@ -1045,27 +1050,54 @@
             const hiY = Math.min(y + 1, maxY);
             const loX = Math.max(x - 1, 0);
             const hiX = Math.min(x + 1, maxX);
-            const maxN = n + 1;
+            const maxN = n.z + 1;
             for (let yy = loY; yy <= hiY; yy++) {
-              if (yy !== y && map[yy][x] <= maxN) {
-                c.push({ y: yy, x });
+              if (yy !== y && map[yy][x].z <= maxN) {
+                c.push(map[yy][x].k);
               }
             }
             for (let xx = loX; xx <= hiX; xx++) {
-              if (xx !== x && map[y][xx] <= maxN) {
-                c.push({ y, x: xx });
+              if (xx !== x && map[y][xx].z <= maxN) {
+                c.push(map[y][xx].k);
               }
             }
-            acc.push({
-              y,
-              x,
-              z: n,
-              c
-            });
+            n.c = c;
+            acc[n.k] = n;
           });
           return acc;
-        }, []);
+        }, {});
         console.log(nodes);
+        //
+        const q = [ start.k ];
+        const v = [ k ];
+        let pre = {};
+        let tail = 0;
+        let safety = 10000;
+        while (tail < q.length && safety--) {
+          let u = q[tail++];
+          //console.log('u', u);
+          let neighbors = nodes[u].c;
+          for (let i = 0; i < neighbors.length; ++i) {
+            const visit = neighbors[i];
+            if (v.includes(visit)) {
+              continue;
+            }
+            v.push(visit);
+            if (visit === end.k) {
+              let path = [ visit ];
+              while (u !== start.k) {
+                path.push(u);
+                u = pre[u];          
+              }
+              path.push(u);
+              path.reverse();
+              console.log(path.join(' > '));
+              return path.length - 1;
+            }
+            pre[visit] = u;
+            q.push(visit);
+          }
+        }
       },
       part2: () => {}
     },
