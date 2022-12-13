@@ -1099,7 +1099,92 @@
           }
         }
       },
-      part2: () => {}
+      part2: (data) => {
+        const starts = [];
+        const end = { y: -1, x: -1, z: 25 };
+        let k = 0;
+        const map = data.trim().split('\n').map((row, y) => row.split('').map((cell, x) => {
+          let z = -1;
+          if (cell === 'S') {
+            z = 0;
+          } else if (cell === 'E') {
+            end.k = k;
+            end.y = y;
+            end.x = x;
+            z = end.z;
+          } else {
+            z = cell.charCodeAt(0) - 97;
+          }
+          if (z === 0) {
+            starts.push(k);
+          }
+          return { k: k++, y, x, z };
+        }));
+        console.log(starts, end, map);
+        const maxY = map.length - 1;
+        const maxX = map[0].length - 1;
+        const nodes = map.reduce((acc, row, y) => {
+          row.forEach((n, x) => {
+            const c = [];
+            const loY = Math.max(y - 1, 0);
+            const hiY = Math.min(y + 1, maxY);
+            const loX = Math.max(x - 1, 0);
+            const hiX = Math.min(x + 1, maxX);
+            const maxN = n.z + 1;
+            for (let yy = loY; yy <= hiY; yy++) {
+              if (yy !== y && map[yy][x].z <= maxN && map[yy][x].z > 0) {
+                c.push(map[yy][x].k);
+              }
+            }
+            for (let xx = loX; xx <= hiX; xx++) {
+              if (xx !== x && map[y][xx].z <= maxN && map[y][xx].z > 0) {
+                c.push(map[y][xx].k);
+              }
+            }
+            n.c = c;
+            acc[n.k] = n;
+          });
+          return acc;
+        }, {});
+        console.log(nodes);
+        let shortest = Infinity;
+        starts.forEach(start => {
+          const q = [ start ];
+          const v = [ k ];
+          let pre = {};
+          let tail = 0;
+          let safety = 10000;
+          while (tail < q.length) {
+            let u = q[tail++];
+            //console.log('u', u);
+            let neighbors = nodes[u].c;
+            for (let i = 0; i < neighbors.length; ++i) {
+              const visit = neighbors[i];
+              if (v.includes(visit)) {
+                continue;
+              }
+              v.push(visit);
+              if (visit === end.k) {
+                let path = [ visit ];
+                while (u !== start) {
+                  path.push(u);
+                  u = pre[u];          
+                }
+                shortest = Math.min(shortest, path.length);
+                //return;
+              }
+              pre[visit] = u;
+              q.push(visit);
+            }
+            if (safety-- <= 0) {
+              tail = q.length + 1;
+              console.warn('safety');
+            }
+          }
+        });
+        // 457 too high
+        return shortest;
+      }
     },
     day13: {
       part1: () => {},
