@@ -902,12 +902,285 @@
       }
     },
     day11: {
-      part1: () => {},
-      part2: () => {}
+      part1: (data) => {
+        const ops = {
+          '+': (a, b) => a + b,
+          '*': (a, b) => a * b,
+          'o+': (a) => a + a,
+          'o*': (a) => a * a
+        };
+        const monkeys = data.trim().split('\n\n').map(monkey => {
+          const info = monkey.split('\n').map(item => item.split(':'));
+          const start = info[1][1].split(',').map(num => +(num.trim()));
+          const op = info[2][1].split('=').map(val => val.trim().split(' '))[1].slice(-2);
+          const div = +info[3][1].split(' ').slice(-1)[0];
+          const t = +info[4][1].split(' ').slice(-1)[0];
+          const f = +info[5][1].split(' ').slice(-1)[0];
+          const m = { start, div, t, f };
+          console.log(op);
+          if (op[1] === 'old') {
+            m.op = ops['o' + op[0]];
+            m.opval = 0;
+          } else {
+            m.op = ops[op[0]];
+            m.opval = +op[1];
+          }
+          return m;
+        });
+        const inspected = new Array(monkeys.length).fill(0);
+        const rounds = 20;
+        console.log(monkeys, inspected, rounds);
+        for (let r = 0; r < rounds; r++) {
+          monkeys.forEach((monkey, i) => {
+            const q = monkey.start.slice();
+            monkey.start = [];
+            q.forEach(item => {
+              const v = Math.floor(monkey.op(item, monkey.opval) / 3);
+              if (v % monkey.div === 0) {
+                monkeys[monkey.t].start.push(v);
+              } else {
+                monkeys[monkey.f].start.push(v);
+              }
+              inspected[i]++;
+            });
+          });
+        }
+        console.log(monkeys, inspected);
+        const active2 = inspected.sort((a, b) => a - b).slice(-2);
+        return active2[0] * active2[1];
+      },
+      part2: (data) => {
+        const ops = {
+          '+': (a, b) => a + b,
+          '*': (a, b) => a * b,
+          'o+': (a) => a + a,
+          'o*': (a) => a * a
+        };
+        const monkeys = data.trim().split('\n\n').map(monkey => {
+          const info = monkey.split('\n').map(item => item.split(':'));
+          const start = info[1][1].split(',').map(num => BigInt(num.trim()));
+          const op = info[2][1].split('=').map(val => val.trim().split(' '))[1].slice(-2);
+          const div = BigInt(info[3][1].split(' ').slice(-1)[0]);
+          const t = +info[4][1].split(' ').slice(-1)[0];
+          const f = +info[5][1].split(' ').slice(-1)[0];
+          const m = { start, div, t, f };
+          console.log(op);
+          if (op[1] === 'old') {
+            m.op = ops['o' + op[0]];
+            m.opval = 0;
+          } else {
+            m.op = ops[op[0]];
+            m.opval = BigInt(op[1]);
+          }
+          return m;
+        });
+        const inspected = new Array(monkeys.length).fill(0);
+        const rounds = 1000;
+        const bigZero = BigInt(0);
+        // shit's broken
+        // let previous = new Array(monkeys.length).fill(0);
+        // const counts = {};
+        for (let r = 0; r < rounds; r++) {
+          monkeys.forEach((monkey, i) => {
+            const q = monkey.start.slice();
+            monkey.start = [];
+            q.forEach(item => {
+              const v = monkey.op(item, monkey.opval);
+              if (v % monkey.div === bigZero) {
+                monkeys[monkey.t].start.push(v);
+              } else {
+                monkeys[monkey.f].start.push(v);
+              }
+              inspected[i]++;
+            });
+          });
+          /*
+          console.log(r, inspected.slice(), previous.reduce((arr, num, i) => {
+            arr[i] = inspected[i] - num;
+            return arr;
+          }, []), previous.reduce((sum, num, i) => {
+            sum += inspected[i] - num;
+            return sum;
+          }, 0), inspected.reduce((arr, num) => {
+            arr.push(r / num);
+            return arr;
+          }, []));
+          const code = previous.reduce((str, num, i) => str + (inspected[i] - num), '');
+          if (!counts[code]) {
+            counts[code] = 0;
+          }
+          counts[code]++;
+          console.log(code, counts[code], counts);
+          previous = inspected.slice();
+          */
+        }
+        console.log(monkeys, inspected);
+        const active2 = inspected.sort((a, b) => a - b).slice(-2);
+        return active2[0] * active2[1];
+      }
     },
     day12: {
-      part1: () => {},
-      part2: () => {}
+      part1: (data) => {
+        const start = { y: -1, x: -1, z: 0 };
+        const end = { y: -1, x: -1, z: 25 };
+        let k = 0;
+        const map = data.trim().split('\n').map((row, y) => row.split('').map((cell, x) => {
+          let z = -1;
+          if (cell === 'S') {
+            start.k = k;
+            start.y = y;
+            start.x = x;
+            z = start.z;
+          } else if (cell === 'E') {
+            end.k = k;
+            end.y = y;
+            end.x = x;
+            z = end.z;
+          } else {
+            z = cell.charCodeAt(0) - 97;
+          }
+          return { k: k++, y, x, z };
+        }));
+        console.log(start, end, map);
+        const maxY = map.length - 1;
+        const maxX = map[0].length - 1;
+        const nodes = map.reduce((acc, row, y) => {
+          row.forEach((n, x) => {
+            const c = [];
+            const loY = Math.max(y - 1, 0);
+            const hiY = Math.min(y + 1, maxY);
+            const loX = Math.max(x - 1, 0);
+            const hiX = Math.min(x + 1, maxX);
+            const maxN = n.z + 1;
+            for (let yy = loY; yy <= hiY; yy++) {
+              if (yy !== y && map[yy][x].z <= maxN) {
+                c.push(map[yy][x].k);
+              }
+            }
+            for (let xx = loX; xx <= hiX; xx++) {
+              if (xx !== x && map[y][xx].z <= maxN) {
+                c.push(map[y][xx].k);
+              }
+            }
+            n.c = c;
+            acc[n.k] = n;
+          });
+          return acc;
+        }, {});
+        console.log(nodes);
+        const q = [start.k];
+        const v = [start.k];
+        const pre = {};
+        let tail = 0;
+        let safety = 10000;
+        while (tail < q.length && safety--) {
+          let u = q[tail++];
+          // console.log('u', u);
+          const neighbors = nodes[u].c;
+          for (let i = 0; i < neighbors.length; ++i) {
+            const visit = neighbors[i];
+            if (v.includes(visit)) {
+              continue;
+            }
+            v.push(visit);
+            if (visit === end.k) {
+              const path = [visit];
+              while (u !== start.k) {
+                path.push(u);
+                u = pre[u];
+              }
+              return path.length;
+            }
+            pre[visit] = u;
+            q.push(visit);
+          }
+        }
+      },
+      part2: (data) => {
+        const starts = [];
+        const end = { y: -1, x: -1, z: 25 };
+        let k = 0;
+        const map = data.trim().split('\n').map((row, y) => row.split('').map((cell, x) => {
+          let z = -1;
+          if (cell === 'S') {
+            z = 0;
+          } else if (cell === 'E') {
+            end.k = k;
+            end.y = y;
+            end.x = x;
+            z = end.z;
+          } else {
+            z = cell.charCodeAt(0) - 97;
+          }
+          if (z === 0) {
+            starts.push(k);
+          }
+          return { k: k++, y, x, z };
+        }));
+        console.log(starts, end, map);
+        const maxY = map.length - 1;
+        const maxX = map[0].length - 1;
+        const nodes = map.reduce((acc, row, y) => {
+          row.forEach((n, x) => {
+            const c = [];
+            const loY = Math.max(y - 1, 0);
+            const hiY = Math.min(y + 1, maxY);
+            const loX = Math.max(x - 1, 0);
+            const hiX = Math.min(x + 1, maxX);
+            const maxN = n.z + 1;
+            for (let yy = loY; yy <= hiY; yy++) {
+              if (yy !== y && map[yy][x].z <= maxN && map[yy][x].z > 0) {
+                c.push(map[yy][x].k);
+              }
+            }
+            for (let xx = loX; xx <= hiX; xx++) {
+              if (xx !== x && map[y][xx].z <= maxN && map[y][xx].z > 0) {
+                c.push(map[y][xx].k);
+              }
+            }
+            n.c = c;
+            acc[n.k] = n;
+          });
+          return acc;
+        }, {});
+        console.log(nodes);
+        let shortest = Infinity;
+        starts.forEach(start => {
+          const q = [start];
+          const v = [start];
+          const pre = {};
+          let tail = 0;
+          let safety = 10000;
+          while (tail < q.length) {
+            let u = q[tail++];
+            // console.log('u', u);
+            const neighbors = nodes[u].c;
+            for (let i = 0; i < neighbors.length; ++i) {
+              const visit = neighbors[i];
+              if (v.includes(visit)) {
+                continue;
+              }
+              v.push(visit);
+              if (visit === end.k) {
+                const path = [visit];
+                while (u !== start) {
+                  path.push(u);
+                  u = pre[u];
+                }
+                shortest = Math.min(shortest, path.length);
+              }
+              pre[visit] = u;
+              q.push(visit);
+            }
+            if (safety-- <= 0) {
+              tail = q.length + 1;
+              console.warn('safety');
+            }
+          }
+        });
+        // 457 too high
+        return shortest;
+      }
     },
     day13: {
       part1: () => {},
