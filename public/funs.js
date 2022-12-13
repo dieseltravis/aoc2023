@@ -1029,7 +1029,7 @@
             start.k = k;
             start.y = y;
             start.x = x;
-            z = start.z;;
+            z = start.z;
           } else if (cell === 'E') {
             end.k = k;
             end.y = y;
@@ -1067,16 +1067,15 @@
           return acc;
         }, {});
         console.log(nodes);
-        //
-        const q = [ start.k ];
-        const v = [ k ];
-        let pre = {};
+        const q = [start.k];
+        const v = [start.k];
+        const pre = {};
         let tail = 0;
         let safety = 10000;
         while (tail < q.length && safety--) {
           let u = q[tail++];
-          //console.log('u', u);
-          let neighbors = nodes[u].c;
+          // console.log('u', u);
+          const neighbors = nodes[u].c;
           for (let i = 0; i < neighbors.length; ++i) {
             const visit = neighbors[i];
             if (v.includes(visit)) {
@@ -1084,15 +1083,12 @@
             }
             v.push(visit);
             if (visit === end.k) {
-              let path = [ visit ];
+              const path = [visit];
               while (u !== start.k) {
                 path.push(u);
-                u = pre[u];          
+                u = pre[u];
               }
-              path.push(u);
-              path.reverse();
-              console.log(path.join(' > '));
-              return path.length - 1;
+              return path.length;
             }
             pre[visit] = u;
             q.push(visit);
@@ -1149,15 +1145,15 @@
         console.log(nodes);
         let shortest = Infinity;
         starts.forEach(start => {
-          const q = [ start ];
-          const v = [ k ];
-          let pre = {};
+          const q = [start];
+          const v = [start];
+          const pre = {};
           let tail = 0;
           let safety = 10000;
           while (tail < q.length) {
             let u = q[tail++];
-            //console.log('u', u);
-            let neighbors = nodes[u].c;
+            // console.log('u', u);
+            const neighbors = nodes[u].c;
             for (let i = 0; i < neighbors.length; ++i) {
               const visit = neighbors[i];
               if (v.includes(visit)) {
@@ -1165,13 +1161,12 @@
               }
               v.push(visit);
               if (visit === end.k) {
-                let path = [ visit ];
+                const path = [visit];
                 while (u !== start) {
                   path.push(u);
-                  u = pre[u];          
+                  u = pre[u];
                 }
                 shortest = Math.min(shortest, path.length);
-                //return;
               }
               pre[visit] = u;
               q.push(visit);
