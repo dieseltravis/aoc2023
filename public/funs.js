@@ -975,15 +975,17 @@
           return m;
         });
         const inspected = new Array(monkeys.length).fill(0);
-        const rounds = 10000;
-        console.log(monkeys, inspected, rounds);
+        const rounds = 1000;
+        const bigZero = BigInt(0);
+        let previous = new Array(monkeys.length).fill(0);
+        const counts = {};
         for (let r = 0; r < rounds; r++) {
           monkeys.forEach((monkey, i) => {
             const q = monkey.start.slice();
             monkey.start = [];
             q.forEach(item => {
               const v = monkey.op(item, monkey.opval);
-              if (v % monkey.div === 0) {
+              if (v % monkey.div === bigZero) {
                 monkeys[monkey.t].start.push(v);
               } else {
                 monkeys[monkey.f].start.push(v);
@@ -991,7 +993,25 @@
               inspected[i]++;
             });
           });
-          //console.log(inspected.slice());
+          /*
+          console.log(r, inspected.slice(), previous.reduce((arr, num, i) => {
+            arr[i] = inspected[i] - num;
+            return arr;
+          }, []), previous.reduce((sum, num, i) => {
+            sum += inspected[i] - num;
+            return sum;
+          }, 0), inspected.reduce((arr, num) => {
+            arr.push(r / num);
+            return arr;
+          }, []));
+          const code = previous.reduce((str, num, i) => str + (inspected[i] - num), '');
+          if (!counts[code]) {
+            counts[code] = 0;
+          }
+          counts[code]++;
+          console.log(code, counts[code], counts);
+          previous = inspected.slice();
+          */
         }
         console.log(monkeys, inspected);
         const active2 = inspected.sort((a, b) => a - b).slice(-2);
@@ -999,7 +1019,54 @@
       }
     },
     day12: {
-      part1: () => {},
+      part1: (data) => {
+        const start = { y: -1, x: -1, z: 0 };
+        const end = { y: -1, x: -1, z: 25 };
+        const map = data.trim().split('\n').map((row, y) => row.split('').map((cell, x) => {
+          if (cell === 'S') {
+            start.y = y;
+            start.x = x;
+            return 0;
+          } else if (cell === 'e') {
+            end.y = y;
+            end.x = x;
+            return 25;
+          } else {
+            return cell.charCodeAt(0) - 97;
+          }
+        }));
+        console.log(start, end, map);
+        const maxY = map.length - 1;
+        const maxX = map[0].length - 1;
+        const nodes = map.reduce((acc, row, y) => {
+          row.forEach((n, x) => {
+            const c = [];
+            const loY = Math.max(y - 1, 0);
+            const hiY = Math.min(y + 1, maxY);
+            const loX = Math.max(x - 1, 0);
+            const hiX = Math.min(x + 1, maxX);
+            const maxN = n + 1;
+            for (let yy = loY; yy <= hiY; yy++) {
+              if (yy !== y && map[yy][x] <= maxN) {
+                c.push({ y: yy, x });
+              }
+            }
+            for (let xx = loX; xx <= hiX; xx++) {
+              if (xx !== x && map[y][xx] <= maxN) {
+                c.push({ y, x: xx });
+              }
+            }
+            acc.push({
+              y,
+              x,
+              z: n,
+              c
+            });
+          });
+          return acc;
+        }, []);
+        console.log(nodes);
+      },
       part2: () => {}
     },
     day13: {
