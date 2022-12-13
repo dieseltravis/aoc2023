@@ -977,8 +977,9 @@
         const inspected = new Array(monkeys.length).fill(0);
         const rounds = 1000;
         const bigZero = BigInt(0);
-        let previous = new Array(monkeys.length).fill(0);
-        const counts = {};
+        // shit's broken
+        // let previous = new Array(monkeys.length).fill(0);
+        // const counts = {};
         for (let r = 0; r < rounds; r++) {
           monkeys.forEach((monkey, i) => {
             const q = monkey.start.slice();
