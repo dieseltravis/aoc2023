@@ -1213,7 +1213,7 @@
               const nest = compare(al, ar);
               if (nest !== 0) {
                 return nest;
-              } 
+              }
             }
           }
           if (left.length < right.length) {
@@ -1270,7 +1270,7 @@
               const nest = compare(al, ar);
               if (nest !== 0) {
                 return nest;
-              } 
+              }
             }
           }
           if (left.length < right.length) {
