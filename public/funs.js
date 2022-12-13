@@ -1183,8 +1183,110 @@
       }
     },
     day13: {
-      part1: () => {},
-      part2: () => {}
+      part1: (data) => {
+        const packets = data.trim().split('\n\n').map(group => group.split('\n').map(pack => JSON.parse(pack)));
+        console.log(packets);
+        const compare = (left, right) => {
+          for (let i = 0; i < left.length; i++) {
+            const l = left[i];
+            const r = right[i];
+            if (typeof r === 'undefined') {
+              return -1;
+            }
+            const isLNum = typeof l === 'number';
+            const isRNum = typeof r === 'number';
+            if (isLNum && isRNum) {
+              if (l < r) {
+                return 1;
+              } else if (l > r) {
+                return -1;
+              }
+            } else {
+              let al = l;
+              if (isLNum) {
+                al = [l];
+              }
+              let ar = r;
+              if (isRNum) {
+                ar = [r];
+              }
+              const nest = compare(al, ar);
+              if (nest !== 0) {
+                return nest;
+              }
+            }
+          }
+          if (left.length < right.length) {
+            return 1;
+          }
+          return 0;
+        };
+        const good = [];
+        const bad = [];
+        packets.forEach((pair, i) => {
+          const left = pair[0];
+          const right = pair[1];
+          const order = compare(left, right);
+          if (order > 0) {
+            good.push(i + 1);
+          } else if (order < 0) {
+            bad.push(i + 1);
+          }
+        });
+        console.log(good, bad);
+        return good.reduce((sum, index) => sum + index, 0);
+      },
+      part2: (data) => {
+        const packets = data.trim().replace(/\n\n/g, '\n').split('\n').map(pack => JSON.parse(pack));
+        const divider1 = [[2]];
+        const divider2 = [[6]];
+        packets.push(divider1);
+        packets.push(divider2);
+        console.log(packets);
+        const compare = (left, right) => {
+          for (let i = 0; i < left.length; i++) {
+            const l = left[i];
+            const r = right[i];
+            if (typeof r === 'undefined') {
+              return -1;
+            }
+            const isLNum = typeof l === 'number';
+            const isRNum = typeof r === 'number';
+            if (isLNum && isRNum) {
+              if (l < r) {
+                return 1;
+              } else if (l > r) {
+                return -1;
+              }
+            } else {
+              let al = l;
+              if (isLNum) {
+                al = [l];
+              }
+              let ar = r;
+              if (isRNum) {
+                ar = [r];
+              }
+              const nest = compare(al, ar);
+              if (nest !== 0) {
+                return nest;
+              }
+            }
+          }
+          if (left.length < right.length) {
+            return 1;
+          }
+          return 0;
+        };
+        const sorted = packets.sort(compare).reverse();
+        console.log(sorted);
+        const stringed = sorted.map(arr => JSON.stringify(arr));
+        console.log(stringed);
+        const key1 = stringed.indexOf(JSON.stringify(divider1)) + 1;
+        const key2 = stringed.indexOf(JSON.stringify(divider2)) + 1;
+        console.log(key1, key2);
+        return key1 * key2;
+      }
     },
     day14: {
       part1: () => {},
