@@ -956,15 +956,18 @@
           'o+': (a) => a + a,
           'o*': (a) => a * a
         };
+        const gcd = (a, b) => !b ? a : gcd(b, a % b);
+        const lcm = (a, b) => (a * b) / gcd(a, b);
+        const divs = [];
         const monkeys = data.trim().split('\n\n').map(monkey => {
           const info = monkey.split('\n').map(item => item.split(':'));
           const start = info[1][1].split(',').map(num => BigInt(num.trim()));
           const op = info[2][1].split('=').map(val => val.trim().split(' '))[1].slice(-2);
-          const div = BigInt(info[3][1].split(' ').slice(-1)[0]);
+          const div = info[3][1].split(' ').slice(-1)[0];
+          divs.push(div);
           const t = +info[4][1].split(' ').slice(-1)[0];
           const f = +info[5][1].split(' ').slice(-1)[0];
-          const m = { start, div, t, f };
-          console.log(op);
+          const m = { start, div: BigInt(div), t, f };
           if (op[1] === 'old') {
             m.op = ops['o' + op[0]];
             m.opval = 0;
@@ -974,18 +977,19 @@
           }
           return m;
         });
+        console.log(divs);
+        const least = BigInt(divs.reduce((multiple, factor) => lcm(multiple, factor), Math.min(...divs)));
+        console.log(least);
         const inspected = new Array(monkeys.length).fill(0);
-        const rounds = 1000;
+        const rounds = 10000;
         const bigZero = BigInt(0);
-        // shit's broken
-        // let previous = new Array(monkeys.length).fill(0);
-        // const counts = {};
         for (let r = 0; r < rounds; r++) {
           monkeys.forEach((monkey, i) => {
             const q = monkey.start.slice();
             monkey.start = [];
             q.forEach(item => {
-              const v = monkey.op(item, monkey.opval);
+              let v = monkey.op(item, monkey.opval);
+              v = v % least;
               if (v % monkey.div === bigZero) {
                 monkeys[monkey.t].start.push(v);
               } else {
@@ -994,25 +998,6 @@
               inspected[i]++;
             });
           });
-          /*
-          console.log(r, inspected.slice(), previous.reduce((arr, num, i) => {
-            arr[i] = inspected[i] - num;
-            return arr;
-          }, []), previous.reduce((sum, num, i) => {
-            sum += inspected[i] - num;
-            return sum;
-          }, 0), inspected.reduce((arr, num) => {
-            arr.push(r / num);
-            return arr;
-          }, []));
-          const code = previous.reduce((str, num, i) => str + (inspected[i] - num), '');
-          if (!counts[code]) {
-            counts[code] = 0;
-          }
-          counts[code]++;
-          console.log(code, counts[code], counts);
-          previous = inspected.slice();
-          */
         }
         console.log(monkeys, inspected);
         const active2 = inspected.sort((a, b) => a - b).slice(-2);
