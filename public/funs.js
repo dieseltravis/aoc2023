@@ -1274,7 +1274,96 @@
       }
     },
     day14: {
-      part1: () => {},
+      part1: (data) => {
+        const source = { x: 500, y: 0 };
+        const rock = data.trim().split('\n').map(row => row.split(' -> ').map(cell => {
+          const solid = cell.split(',');
+          return {
+            x: +solid[0],
+            y: +solid[1]
+          };
+        }));
+        console.log(rock);
+        const graph = [];
+        rock.forEach(points => {
+          for (let i = 1; i < points.length; i++) {
+            const a = points[i - 1];
+            const b = points[i];
+            const axis = ((a.y - b.y) === 0) ? 'x' : 'y';
+            const stable = (axis === 'x') ? 'y' : 'x';
+            for (let p = Math.min(a[axis], b[axis]); p <= Math.max(a[axis], b[axis]); p++) {
+              const point = {};
+              point[stable] = a[stable];
+              point[axis] = p;
+              if (!graph.some(g => g.y === point.y && g.x === point.x)) {
+                graph.push(point);
+              }
+            }
+          }
+        });
+        console.log(graph);
+        const range = graph.reduce((r, p) => {
+          ['min', 'max'].forEach(m => ['x', 'y'].forEach(d => r[m][d] = Math[m](r[m][d], p[d])));
+          return r;
+        }, {
+          min: {
+            x: source.x,
+            y: source.y
+          },
+          max: {
+            x: source.x,
+            y: source.y
+          }
+        });
+        console.log(range);
+        const sand = [];
+        let prevSand = -1;
+        let newSand = 0
+        const inRange = (g) => {
+          const inX = range.min.x <= g.x && g.x <= range.max.x;
+          const inY = range.min.y <= g.y && g.y <= range.max.y;
+          return inX && inY;
+        };
+        const fall = (g) => {
+          const possible = [
+            { x: g.x, y: g.y + 1 },
+            { x: g.x - 1, y: g.y + 1 },
+            { x: g.x + 1, y: g.y + 1 }
+          ];
+          possible.forEach(pg => {
+            pg.inRange = inRange(pg);
+            pg.rockExist = graph.some(r => r.x === pg.x && r.y === pg.y);
+            pg.sandExist = sand.some(s => s.x === pg.x && s.y === pg.y);
+          });
+          if (possible.every(p => !p.inRange)) {
+            // fell out
+            return null;
+          }
+          const newPoint = possible.find(pg => !pg.rockExist && !pg.sandExist);
+          if (typeof newPoint === 'undefined') {
+            // g hit bottom
+            return g;
+          } else {
+            // keep falling
+            return fall(newPoint);
+          }
+        };
+        let safety = 1000;
+        while (newSand !== prevSand && safety--) {
+          prevSand = sand.length;
+          const grain = { x: source.x, y: source.y };
+          const fallen = fall(grain);
+          if (fallen !== null) {
+            sand.push(fallen);
+          }
+          newSand = sand.length;
+        }
+        if (safety <= 0) {
+          console.warn('safety hit');
+        }
+        console.log(sand);
+        return sand.length;
+      },
       part2: () => {}
     },
     day15: {
