@@ -6,7 +6,7 @@ my 2022 solutions on glitch: [graceful-blossom-animal](https://graceful-blossom-
 
 also on github: [dieseltravis/aoc2022](https://github.com/dieseltravis/aoc2022)
 
-[![Days completed in a row](https://img.shields.io/badge/⭐%20days%20in%20a%20row-13-blueviolet)](https://adventofcode.com/2022/) [![glitch](https://shields.io/badge/glitch-%F0%9F%91%8D%F0%9F%8E%8F-blue?logo=glitch&logoColor=violet)](https://glitch.com/)
+[![Days completed in a row](https://img.shields.io/badge/⭐%20days%20in%20a%20row-14-blueviolet)](https://adventofcode.com/2022/) [![glitch](https://shields.io/badge/glitch-%F0%9F%91%8D%F0%9F%8E%8F-blue?logo=glitch&logoColor=violet)](https://glitch.com/)
 
 [![Node.js CI](https://github.com/dieseltravis/aoc2022/actions/workflows/node.js.yml/badge.svg)](https://github.com/dieseltravis/aoc2022/actions/workflows/node.js.yml) [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fdieseltravis%2Faoc2022.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fdieseltravis%2Faoc2022?ref=badge_shield) [![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg?logo=javascript)](https://github.com/standard/semistandard)
 
@@ -25,8 +25,8 @@ also on github: [dieseltravis/aoc2022](https://github.com/dieseltravis/aoc2022)
 11. [day eleven](https://graceful-blossom-animal.glitch.me/day/11)
 12. [day twelve](https://graceful-blossom-animal.glitch.me/day/12)
 13. [day thirteen](https://graceful-blossom-animal.glitch.me/day/13)
-<!--
 14. [day fourteen](https://graceful-blossom-animal.glitch.me/day/14)
+<!--
 15. [day fifteen](https://graceful-blossom-animal.glitch.me/day/15)
 16. [day sixteen](https://graceful-blossom-animal.glitch.me/day/16)
 17. [day seventeen](https://graceful-blossom-animal.glitch.me/day/17)
