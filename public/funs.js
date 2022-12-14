@@ -1405,11 +1405,7 @@
             { x: g.x - 1, y: g.y + 1 },
             { x: g.x + 1, y: g.y + 1 }
           ];
-          possible.forEach(pg => {
-            pg.rockExist = graph.some(r => r.x === pg.x && r.y === pg.y) || pg.y >= maxY;
-            pg.sandExist = sand.some(s => s.x === pg.x && s.y === pg.y);
-          });
-          const newPoint = possible.find(pg => !pg.rockExist && !pg.sandExist);
+          const newPoint = possible.find(pg => !(pg.y >= maxY || graph.some(r => r.x === pg.x && r.y === pg.y)) && !sand.some(s => s.x === pg.x && s.y === pg.y));
           if (typeof newPoint === 'undefined') {
             // g hit bottom
             return g;
