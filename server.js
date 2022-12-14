@@ -5,6 +5,7 @@ const express = require('express');
 const app = express();
 const timeout = require('connect-timeout'); // express v4
 const rateLimit = require('express-rate-limit');
+const { JSHINT } = require('jshint');
 
 console.log(process.env.PROJECT_DOMAIN);
 const PROJECT_URL = `https://${process.env.PROJECT_DOMAIN}.glitch.me/`;
@@ -68,6 +69,7 @@ app.engine('ntl', (filePath, options, callback) => { // define the template engi
 app.set('views', './views'); // specify the views directory
 app.set('view engine', 'ntl'); // register the template engine
 
+const dayStats = [];
 // bind 25 days of html files, and post functions for both parts of each
 for (let d = 1; d <= 25; d++) {
   const digit = d;
@@ -112,17 +114,19 @@ for (let d = 1; d <= 25; d++) {
       });
     });
   });
-
+  const partStats = [];
   for (let p = 1; p <= 2; p++) {
     // string part
     const part = '' + p;
+    const fun = f.funs(dd, part);
+    partStats.push(fun.toString());
     app.post('/day' + day + 'part' + p, function (request, response) {
       // name of the timer
       const timer = 'day ' + dd + ', part ' + part;
       console.time(timer);
 
       // pass in string of day number and part, and send the request body's imput param to that function
-      const answer = f.funs(dd, part)(request.body.input);
+      const answer = fun(request.body.input);
 
       console.log(answer);
       console.timeEnd(timer);
@@ -131,102 +135,74 @@ for (let d = 1; d <= 25; d++) {
       response.status(200).json({ output: answer });
     });
   }
+  dayStats.push(partStats);
 }
 
 // secret page of /stats
-let funsJs = '';
-let funsJsCounts = null;
-fs.readFile(path.join(__dirname, 'public/funs.js'), function (err, content) {
+fs.readFile(path.join(__dirname, 'views/stats.ntl'), function (err, content) {
   if (err) {
     console.log(err);
   }
-  funsJs = content.toString();
+  let maxChars = 0;
+  let maxLines = 0;
+  let maxComplex = 0;
+  const jsStats = dayStats.reduce((a, d) => {
+    const day = d.reduce((aa, p) => {
+      JSHINT('const f = ' + p + ';', {
+        esversion: 6,
+        strict: 'implied',
+        undef: true,
+        devel: true
+      }, {});
+      const part = {
+        charCount: p.length - 8,
+        lineCount: p.split('\n').length,
+        complex: JSHINT.data().functions[0].metrics.complexity
+      };
+      aa.push(part);
+      maxChars = Math.max(maxChars, part.charCount);
+      maxLines = Math.max(maxLines, part.lineCount);
+      maxComplex = Math.max(maxComplex, part.complex);
+      return aa;
+    }, []);
 
-  const funsJsLines = funsJs.split('\n').map(l => l.trim()).filter(l => l !== '' && !l.startsWith('\\\\') && !l.startsWith('console.'));
+    a.push(day);
+    return a;
+  }, []);
+  const statHtml = jsStats.reduce((a, d, i) => {
+    const key = 'day_' + (i + 1);
+    const p1 = d[0];
+    const p2 = d[1];
+    const hasPart1 = p1 && p1.charCount > 0 && p1.lineCount > 0;
+    const hasPart2 = p2 && p2.charCount > 0 && p2.lineCount > 0;
+    if (hasPart1 || hasPart2) {
+      a += "<li id='" + key + "'><strong>day " + (i + 1) + "</strong><ol><li id='" + key + "_part_1'>part 1 ";
 
-  let curDay = -1;
-  let curPart = -1;
-  const rxDay = /^day(\d+):/;
-  const rxPart = /^part(\d):/;
-  funsJsCounts = funsJsLines.reduce((a, l) => {
-    const mDay = l.match(rxDay);
-    if (mDay) {
-      curDay = +mDay[1];
-      curPart = -1;
-    }
-    const mPart = l.match(rxPart);
-    if (mPart) {
-      curPart = +mPart[1];
-    } else if (curDay > 0 && curPart > 0) {
-      const dk = 'day ' + curDay;
-      const pk = 'part ' + curPart;
-      if (!a[dk]) {
-        a[dk] = {};
+      if (hasPart1) {
+        a += "<b id='" + key + "_part_1_chars' style='width:" + (100 * p1.charCount / maxChars) + "%' title='" + Math.round(100 * p1.charCount / maxChars) + "%'>" + p1.charCount + ' chars</b> ';
+        a += "<b id='" + key + "_part_1_lines' style='width:" + (100 * p1.lineCount / maxLines) + "%' title='" + Math.round(100 * p1.lineCount / maxLines) + "%'>" + p1.lineCount + ' lines</b>';
+        a += "<b id='" + key + "_part_1_complex' style='width:" + (100 * p1.complex / maxComplex) + "%' title='" + Math.round(100 * p1.complex / maxComplex) + "%'>" + p1.complex + ' complexity</b>';
       }
-      if (!a[dk][pk]) {
-        a[dk][pk] = {
-          charCount: 0,
-          lineCount: 0
-        };
+
+      a += "</li><li id='" + key + "_part_2'>part 2 ";
+
+      if (hasPart2) {
+        a += "<b id='" + key + "_part_2_chars' style='width:" + (100 * p2.charCount / maxChars) + "%' title='" + Math.round(100 * p2.charCount / maxChars) + "%'>" + p2.charCount + ' chars</b> ';
+        a += "<b id='" + key + "_part_2_lines' style='width:" + (100 * p2.lineCount / maxLines) + "%' title='" + Math.round(100 * p2.lineCount / maxLines) + "%'>" + p2.lineCount + ' lines</b>';
+        a += "<b id='" + key + "_part_2_complex' style='width:" + (100 * p2.complex / maxComplex) + "%' title='" + Math.round(100 * p2.complex / maxComplex) + "%'>" + p2.complex + ' complexity</b>';
       }
-      a[dk][pk].charCount += l.length;
-      a[dk][pk].lineCount++;
-      a.maxChars = Math.max(a.maxChars, a[dk][pk].charCount);
-      a.maxLines = Math.max(a.maxLines, a[dk][pk].lineCount);
+
+      a += '</li></ol></li>';
     }
 
     return a;
-  }, { maxChars: 0, maxLines: 0 });
+  }, '<ol>') + '</ol>';
 
-  if (funsJsCounts) {
-    const statHtml = Object.keys(funsJsCounts).reduce((a, k, i) => {
-      if (!k.startsWith('max') && funsJsCounts[k]) {
-        const day = funsJsCounts[k];
-        const key = k.replace(/\s/, '_');
-        const p1 = day['part 1'];
-        const p2 = day['part 2'];
-        // part 2 adjustments
-        if (i < 25) {
-          p2.charCount -= 2;
-          p2.lineCount -= 1;
-        } else {
-          p2.charCount -= 76;
-          p2.lineCount -= 4;
-        }
-        const hasPart1 = p1 && p1.charCount > 0 && p1.lineCount > 0;
-        const hasPart2 = p2 && p2.charCount > 0 && p2.lineCount > 0;
-        if (hasPart1 || hasPart2) {
-          a += "<li id='" + key + "'>" + k + "<ol><li id='" + key + "_part_1'>part 1 ";
-
-          if (hasPart1) {
-            a += "<b id='" + key + "_part_1_chars' style='width:" + (100 * p1.charCount / funsJsCounts.maxChars) + "%' title='" + Math.round(100 * p1.charCount / funsJsCounts.maxChars) + "%'>" + p1.charCount + ' chars</b> ';
-            a += "<b id='" + key + "_part_1_lines' style='width:" + (100 * p1.lineCount / funsJsCounts.maxLines) + "%' title='" + Math.round(100 * p1.lineCount / funsJsCounts.maxLines) + "%'>" + p1.lineCount + ' lines</b>';
-          }
-
-          a += "</li><li id='" + key + "_part_2'>part 2 ";
-
-          if (hasPart2) {
-            a += "<b id='" + key + "_part_2_chars' style='width:" + (100 * p2.charCount / funsJsCounts.maxChars) + "%' title='" + Math.round(100 * p2.charCount / funsJsCounts.maxChars) + "%'>" + p2.charCount + ' chars</b> ';
-            a += "<b id='" + key + "_part_2_lines' style='width:" + (100 * p2.lineCount / funsJsCounts.maxLines) + "%' title='" + Math.round(100 * p2.lineCount / funsJsCounts.maxLines) + "%'>" + p2.lineCount + ' lines</b>';
-          }
-
-          a += '</li></ol></li>';
-        }
-      }
-      return a;
-    }, '<ol>') + '</ol>';
-
-    fs.readFile(path.join(__dirname, 'views/stats.ntl'), function (err, content) {
-      if (err) {
-        console.log(err);
-      }
-      const htmlTemplate = content.toString();
-      const html = GetFormattedString(htmlTemplate, { 0: statHtml });
-      app.get('/stats', function (request, response) {
-        response.send(html);
-      });
-    });
-  }
+  const htmlTemplate = content.toString();
+  const html = GetFormattedString(htmlTemplate, { 0: statHtml });
+  app.get('/stats', function (request, response) {
+    response.send(html);
+  });
 });
 
 // listen for requests :)
