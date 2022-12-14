@@ -162,7 +162,7 @@ fs.readFile(path.join(__dirname, 'views/stats.ntl'), function (err, content) {
       aa.push(part);
       maxChars = Math.max(maxChars, part.charCount);
       maxLines = Math.max(maxLines, part.lineCount);
-      maxComplex = Math.max(maxComplex, part.complex);    
+      maxComplex = Math.max(maxComplex, part.complex);
       return aa;
     }, []);
 
