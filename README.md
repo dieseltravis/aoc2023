@@ -26,8 +26,8 @@ also on github: [dieseltravis/aoc2022](https://github.com/dieseltravis/aoc2022)
 12. [day twelve](https://graceful-blossom-animal.glitch.me/day/12)
 13. [day thirteen](https://graceful-blossom-animal.glitch.me/day/13)
 14. [day fourteen](https://graceful-blossom-animal.glitch.me/day/14)
-<!--
 15. [day fifteen](https://graceful-blossom-animal.glitch.me/day/15)
+<!--
 16. [day sixteen](https://graceful-blossom-animal.glitch.me/day/16)
 17. [day seventeen](https://graceful-blossom-animal.glitch.me/day/17)
 18. [day eighteen](https://graceful-blossom-animal.glitch.me/day/18)

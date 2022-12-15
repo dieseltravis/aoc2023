@@ -1432,7 +1432,48 @@
       }
     },
     day15: {
-      part1: () => {},
+      part1: (data) => {
+        const limits = {
+          minY: Infinity,
+          minX: Infinity,
+          maxY: 0,
+          maxX: 0
+        };
+        const pairs = data.trim().split('\n').map(line => line.split(':').map(half => half.match(/x=(-?\d+), y=(-?\d+)/).slice(-2).map(Number))).map(sb => {
+          const points = { s: { x: sb[0][0], y: sb[0][1] }, b: { x: sb[1][0], y: sb[1][1] } };
+          points.range = Math.abs(points.b.y - points.s.y) + Math.abs(points.b.x - points.s.x);
+          limits.minY = Math.min(limits.minY, points.s.y, points.b.y);
+          limits.maxY = Math.max(limits.maxY, points.s.y, points.b.y);
+          limits.minX = Math.min(limits.minX, points.s.x, points.b.x);
+          limits.maxX = Math.max(limits.maxX, points.s.x, points.b.x);
+          return points;
+        });
+        limits.oy = 0 - limits.minY;
+        limits.ox = 0 - limits.minX;
+        const grid = [];
+        for (let y = limits.minY; y <= limits.maxY; y++) {
+          const row = new Array(limits.maxX - limits.minX + 1).fill('.');
+          grid.push(row);
+        }
+        pairs.forEach(pair => {
+          grid[pair.s.y + limits.oy][pair.s.x + limits.ox] = 'S';
+          grid[pair.b.y + limits.oy][pair.b.x + limits.ox] = 'B';
+          for (let y = Math.max(pair.s.y - pair.range + limits.oy, 0); y <= Math.min(pair.s.y + pair.range + limits.oy, grid.length - 1); y++) {
+            const xr = pair.range - Math.abs(pair.s.y - y);
+            for (let x = Math.max(pair.s.x - xr + limits.ox, 0); x <= Math.min(pair.s.x + xr + limits.ox, grid[0].length - 1); x++) {
+              if (grid[y][x] === '.') {
+                grid[y][x] = '#';
+              }
+            }
+          }
+        });
+        console.log(pairs, limits, grid);
+        let display = grid.map(row => row.join('')).join('\n');
+        console.log(display);
+        //const target = 10;
+        const target = 2000000;
+        return grid[target + limits.oy].filter(c => c === '#').length;
+      },
       part2: () => {}
     },
     day16: {
