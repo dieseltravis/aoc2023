@@ -1433,21 +1433,60 @@
     },
     day15: {
       part1: (data) => {
+        //const target = 10;
+        const target = 2000000;
+        /*
         const limits = {
           minY: Infinity,
           minX: Infinity,
           maxY: 0,
           maxX: 0
         };
-        const pairs = data.trim().split('\n').map(line => line.split(':').map(half => half.match(/x=(-?\d+), y=(-?\d+)/).slice(-2).map(Number))).map(sb => {
-          const points = { s: { x: sb[0][0], y: sb[0][1] }, b: { x: sb[1][0], y: sb[1][1] } };
-          points.range = Math.abs(points.b.y - points.s.y) + Math.abs(points.b.x - points.s.x);
+        */
+        const points = data.trim().split('\n').map(line => line.split(':').map(half => half.match(/x=(-?\d+), y=(-?\d+)/).slice(-2).map(Number))).reduce((arr, sb) => {
+          const s = { c: 'S', x: sb[0][0], y: sb[0][1] };
+          const b = { c: 'B', x: sb[1][0], y: sb[1][1] };
+          s.r = Math.abs(b.y - s.y) + Math.abs(b.x - s.x);
+          s.hitRow = (s.y + s.r) >= target && (s.y - s.r) <= target;
+          /*
           limits.minY = Math.min(limits.minY, points.s.y, points.b.y);
           limits.maxY = Math.max(limits.maxY, points.s.y, points.b.y);
           limits.minX = Math.min(limits.minX, points.s.x, points.b.x);
           limits.maxX = Math.max(limits.maxX, points.s.x, points.b.x);
-          return points;
+          */
+          
+          arr.push(s, b);
+          return arr;
+        }, []);
+        points.sort((a, b) => a.x - b.x).sort((a, b) => a.y - b.y);
+        console.log(points);
+        // count up until no change
+        const targetRow = {};
+        const pointsOnRow = points.filter(p => p.y === target);
+        pointsOnRow.forEach(point => {
+          if (!targetRow[point.x]) {
+            targetRow[point.x] = point.c;
+          }
         });
+        console.log(targetRow);
+        //let lastLen = 0;
+        //do {} while (lastLen <= targetRow.length);
+        const signalReach = points.filter(p => p.c === 'S' && p.hitRow)
+        console.log(signalReach);
+        let targetCount = 0;
+        signalReach.forEach(point => {
+          const xr = point.r - Math.abs(target - point.y);
+          //console.log(point, xr);
+          for (let x = point.x - xr; x <= point.x + xr; x++) {
+            if (!targetRow[x]) {
+              targetRow[x] = '#';
+              targetCount++;
+            }
+          }
+        });
+        // 5589545 is too high
+        return targetCount;
+        /*
         limits.oy = 0 - limits.minY;
         limits.ox = 0 - limits.minX;
         const grid = [];
@@ -1455,6 +1494,9 @@
           const row = new Array(limits.maxX - limits.minX + 1).fill('.');
           grid.push(row);
         }
+        */
+        //pairs.sort((a, b) => a.s.x - b.s.x).sort((a, b) => a.s.y - b.s.y);
+        /*
         pairs.forEach(pair => {
           grid[pair.s.y + limits.oy][pair.s.x + limits.ox] = 'S';
           grid[pair.b.y + limits.oy][pair.b.x + limits.ox] = 'B';
@@ -1467,12 +1509,11 @@
             }
           }
         });
-        console.log(pairs, limits, grid);
-        let display = grid.map(row => row.join('')).join('\n');
-        console.log(display);
-        //const target = 10;
-        const target = 2000000;
-        return grid[target + limits.oy].filter(c => c === '#').length;
+        */
+        //console.log(pairs, limits);
+        //let display = grid.map(row => row.join('')).join('\n');
+        //console.log(display);
+        //return grid[target + limits.oy].filter(c => c === '#').length;
       },
       part2: () => {}
     },
