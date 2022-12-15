@@ -1433,7 +1433,7 @@
     },
     day15: {
       part1: (data) => {
-        //const target = 10;
+        // const target = 10;
         const target = 2000000;
         const points = data.trim().split('\n').map(line => line.split(':').map(half => half.match(/x=(-?\d+), y=(-?\d+)/).slice(-2).map(Number))).reduce((arr, sb) => {
           const s = { c: 'S', x: sb[0][0], y: sb[0][1] };
@@ -1455,12 +1455,11 @@
         });
         console.log(targetRow);
 
-        const signalReach = points.filter(p => p.c === 'S' && p.hitRow)
+        const signalReach = points.filter(p => p.c === 'S' && p.hitRow);
         console.log(signalReach);
         let targetCount = 0;
         signalReach.forEach(point => {
           const xr = point.r - Math.abs(target - point.y);
-          //console.log(point, xr);
           for (let x = point.x - xr; x <= point.x + xr; x++) {
             if (!targetRow[x]) {
               targetRow[x] = '#';
