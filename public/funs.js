@@ -1502,7 +1502,11 @@
         const signals = points.filter(p => p.c === 'S');
         console.log(signals.length);
         // this is way too slow
-        let y, x, l, sl, answer = -1;
+        let y = -1;
+        let x = -1;
+        let l = 1;
+        let sl = -1;
+        let answer = -1;
         for (y = br.lo; y < br.hi; y++) {
           const signalReach = signals.filter(p => p.hitRow(y));
           sl = signalReach.length;
@@ -1540,7 +1544,7 @@
             v: match[1],
             r: +match[2],
             t: match[3].split(',').map(t => t.trim())
-          }
+          };
         });
         console.log(input);
       },
