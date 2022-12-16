@@ -1471,7 +1471,45 @@
         // 5589545 is too high
         return targetCount;
       },
-      part2: () => {}
+      part2: (data) => {
+        const tf = 4000000;
+        const br = {
+          lo: 0, 
+          hi: 4000000
+          //hi: 20
+        };
+        const points = data.trim().split('\n').map(line => line.split(':').map(half => half.match(/x=(-?\d+), y=(-?\d+)/).slice(-2).map(Number))).reduce((arr, sb) => {
+          const s = { c: 'S', x: sb[0][0], y: sb[0][1] };
+          const b = { c: 'B', x: sb[1][0], y: sb[1][1] };
+          s.r = Math.abs(b.y - s.y) + Math.abs(b.x - s.x);
+          s.hitRow = target => ((s.y + s.r) >= target && (s.y - s.r) <= target);
+          s.xr = {};
+          for (let i = s.y - s.r; i <= s.y + s.r; i++) {
+            const xr = s.r - Math.abs(i - s.y);
+            s.xr[i] = {
+              lox: s.x - xr,
+              hix: s.x + xr
+            };
+          }
+          s.inRange = (y, x) => {
+            const r = s.xr[y];
+            return r.lox <= x && x <= r.hix;
+          };
+          arr.push(s, b);
+          return arr;
+        }, []);
+        points.sort((a, b) => a.x - b.x).sort((a, b) => a.y - b.y);
+        const signals = points.filter(p => p.c === 'S');
+        // found x * tf + y
+        for (let y = br.lo; y < br.hi; y++) {
+          const signalReach = signals.filter(p => p.hitRow(y));
+          for (let x = br.lo; x < br.hi; x++) {
+            if (!signalReach.some(p => p.inRange(y, x))) {
+              return (x * tf) + y;
+            }
+          }
+        }
+      }
     },
     day16: {
       part1: () => {},
