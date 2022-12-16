@@ -1502,18 +1502,48 @@
         const signals = points.filter(p => p.c === 'S');
         console.log(signals.length);
         // this is way too slow
-        for (let y = br.lo; y < br.hi; y++) {
+        let y, x, l, sl, answer = -1;
+        for (y = br.lo; y < br.hi; y++) {
           const signalReach = signals.filter(p => p.hitRow(y));
-          for (let x = br.lo; x < br.hi; x++) {
-            if (!signalReach.some(p => p.inRange(y, x))) {
-              return (x * tf) + y;
+          sl = signalReach.length;
+          for (x = br.lo; x < br.hi; x++) {
+            let all = true;
+            for (l = sl; l--;) {
+              const p = signalReach[l];
+              if (p.inRange(y, x)) {
+                all = false;
+                // skip ahead to edge
+                x = p.xr[y].hix;
+                break;
+              } else {
+                all = all & true;
+              }
+            }
+            if (all) {
+              answer = (x * tf) + y;
+              console.log(y, x, answer);
+              x = br.hi + 1;
+              y = br.hi + 1;
+              break;
             }
           }
         }
+        return answer;
       }
     },
     day16: {
-      part1: () => {},
+      part1: (data) => {
+        const rx = /Valve (\w+) has flow rate=(\d+); tunnels? leads? to valves? ([A-Z, ]+)/;
+        const input = data.trim().split('\n').map(row => {
+          const match = row.match(rx);
+          return {
+            v: match[1],
+            r: +match[2],
+            t: match[3].split(',').map(t => t.trim())
+          }
+        });
+        console.log(input);
+      },
       part2: () => {}
     },
     day17: {
