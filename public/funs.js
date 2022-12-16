@@ -1500,7 +1500,8 @@
         }, []);
         points.sort((a, b) => a.x - b.x).sort((a, b) => a.y - b.y);
         const signals = points.filter(p => p.c === 'S');
-        // found x * tf + y
+        console.log(signals.length);
+        // this is way too slow
         for (let y = br.lo; y < br.hi; y++) {
           const signalReach = signals.filter(p => p.hitRow(y));
           for (let x = br.lo; x < br.hi; x++) {
