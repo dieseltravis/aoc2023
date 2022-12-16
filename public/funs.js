@@ -1474,9 +1474,9 @@
       part2: (data) => {
         const tf = 4000000;
         const br = {
-          lo: 0, 
+          lo: 0,
           hi: 4000000
-          //hi: 20
+          // hi: 20
         };
         const points = data.trim().split('\n').map(line => line.split(':').map(half => half.match(/x=(-?\d+), y=(-?\d+)/).slice(-2).map(Number))).reduce((arr, sb) => {
           const s = { c: 'S', x: sb[0][0], y: sb[0][1] };
