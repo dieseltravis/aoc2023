@@ -1551,7 +1551,32 @@
       part2: () => {}
     },
     day17: {
-      part1: () => {},
+      part1: (data) => {
+        const shapes = [
+          [[1, 1, 1, 1]],
+          [
+            [0, 1, 0],
+            [1, 1, 1],
+            [0, 1, 0]
+          ],
+          [
+            [0, 0, 1],
+            [0, 0, 1],
+            [1, 1, 1]
+          ],
+          [
+            [1],
+            [1],
+            [1],
+            [1]
+          ],
+          [
+            [1, 1],
+            [1, 1]
+          ]
+        ];
+        const jets = data.trim().split('').map(j => j === '<' ? -1 : 1);
+      },
       part2: () => {}
     },
     day18: {
@@ -1563,11 +1588,63 @@
       part2: () => {}
     },
     day20: {
-      part1: () => {},
+      part1: (data) => {
+        const input = data.trim().split('\n').map(Number);
+      },
       part2: () => {}
     },
     day21: {
-      part1: () => {},
+      part1: (data) => {
+        const rx = /(\d+)|(\w+) ([+\-\/\*]) (\w+)/;
+        const op = {
+          '+': (m1, m2) => m1 + m2,
+          '-': (m1, m2) => m1 - m2,
+          '*': (m1, m2) => m1 * m2,
+          '/': (m1, m2) => m1 / m2
+        };
+        const monkeys = data.trim().split('\n').map(line => line.split(':').map(side => side.trim())).map(pair => {
+          const monkey = {
+            name: pair[0],
+            isDone: false
+          };
+          const match = pair[1].match(rx);
+          if (typeof match[1] === 'undefined') {
+            monkey.m1 = match[2],
+            monkey.op = op[match[3]];
+            monkey.m2 = match[4];
+          } else {
+            monkey.num = +match[1];
+          }
+          return monkey;
+        });
+        const numonks = monkeys.filter(m => typeof m.num !== 'undefined');
+        const fumonks = monkeys.filter(m => typeof m.num === 'undefined');
+        let safety = 1000;
+        const monlen = monkeys.length;
+        let numlen = numonks.length;
+        while (monlen > numlen && safety--) {
+          numonks.filter(n => !n.isDone).forEach(n => {
+            fumonks.filter(f => f.m1 === n.name).forEach(f => {
+              f.n1 = n.num;
+            });
+            fumonks.filter(f => f.m2 === n.name).forEach(f => {
+              f.n2 = n.num;
+            });
+            n.isDone = true;
+          });
+          fumonks.filter(f => typeof f.n1 !== 'undefined' && typeof f.n2 !== 'undefined' && !f.isDone).forEach(f => {
+            f.num = f.op(f.n1, f.n2);
+            numonks.push(f);
+          });
+          numlen = numonks.length;
+        }
+        if (safety <= 0) {
+          console.warn('safety hit!');
+        }
+        
+        console.log(numonks, fumonks);
+        return (monkeys.find(m => m.name === 'root').num);
+      },
       part2: () => {}
     },
     day22: {
