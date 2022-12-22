@@ -1576,6 +1576,7 @@
           ]
         ];
         const jets = data.trim().split('').map(j => j === '<' ? -1 : 1);
+        console.log(shapes, jets);
       },
       part2: () => {}
     },
@@ -1590,6 +1591,7 @@
     day20: {
       part1: (data) => {
         const input = data.trim().split('\n').map(Number);
+        console.log(input);
       },
       part2: () => {}
     },
