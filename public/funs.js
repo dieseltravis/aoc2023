@@ -1581,11 +1581,35 @@
       part2: () => {}
     },
     day18: {
-      part1: () => {},
+      part1: (data) => {
+        const cubes = data.trim().split('\n').map(c => c.split(',').map(Number)).map(c => {
+          return {
+            x: c[0],
+            y: c[1],
+            z: c[2]
+          };
+        });
+        console.log(cubes);
+      },
       part2: () => {}
     },
     day19: {
-      part1: () => {},
+      part1: (data) => {
+        const rx = /^Blueprint (\d+): Each ore robot costs (\d+) ore\. Each clay robot costs (\d+) ore\. Each obsidian robot costs (\d+) ore and (\d+) clay\. Each geode robot costs (\d+) ore and (\d+) obsidian\.$/;
+        const blueprints = data.trim().split('\n').map(b => {
+          const match = b.match(rx);
+          return {
+            bp: +match[1],
+            ore: +match[2],
+            clay: +match[3],
+            obsidian1: +match[4],
+            obsidian2: +match[5],
+            geode1: +match[6],
+            geode2: +match[7]
+          };
+        });
+        console.log(blueprints);
+      },
       part2: () => {}
     },
     day20: {
@@ -1728,7 +1752,7 @@
             console.warn('safety2 hit!');
           }
           return monkeys;
-        }
+        };
         console.log(funk(1, monkeys));
 
         return (monkeys.find(m => m.name === 'root').n1);
