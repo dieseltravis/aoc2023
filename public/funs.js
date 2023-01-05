@@ -1551,24 +1551,212 @@
       part2: () => {}
     },
     day17: {
-      part1: () => {},
+      part1: (data) => {
+        const shapes = [
+          [[1, 1, 1, 1]],
+          [
+            [0, 1, 0],
+            [1, 1, 1],
+            [0, 1, 0]
+          ],
+          [
+            [0, 0, 1],
+            [0, 0, 1],
+            [1, 1, 1]
+          ],
+          [
+            [1],
+            [1],
+            [1],
+            [1]
+          ],
+          [
+            [1, 1],
+            [1, 1]
+          ]
+        ];
+        const jets = data.trim().split('').map(j => j === '<' ? -1 : 1);
+        console.log(shapes, jets);
+      },
       part2: () => {}
     },
     day18: {
-      part1: () => {},
+      part1: (data) => {
+        const cubes = data.trim().split('\n').map(c => c.split(',').map(Number)).map(c => {
+          return {
+            x: c[0],
+            y: c[1],
+            z: c[2]
+          };
+        });
+        console.log(cubes);
+      },
       part2: () => {}
     },
     day19: {
-      part1: () => {},
+      part1: (data) => {
+        const rx = /^Blueprint (\d+): Each ore robot costs (\d+) ore\. Each clay robot costs (\d+) ore\. Each obsidian robot costs (\d+) ore and (\d+) clay\. Each geode robot costs (\d+) ore and (\d+) obsidian\.$/;
+        const blueprints = data.trim().split('\n').map(b => {
+          const match = b.match(rx);
+          return {
+            bp: +match[1],
+            ore: +match[2],
+            clay: +match[3],
+            obsidian1: +match[4],
+            obsidian2: +match[5],
+            geode1: +match[6],
+            geode2: +match[7]
+          };
+        });
+        console.log(blueprints);
+      },
       part2: () => {}
     },
     day20: {
-      part1: () => {},
+      part1: (data) => {
+        const input = data.trim().split('\n').map(Number);
+        console.log(input);
+      },
       part2: () => {}
     },
     day21: {
-      part1: () => {},
-      part2: () => {}
+      part1: (data) => {
+        const rx = /(\d+)|(\w+) ([+\-/*]) (\w+)/;
+        const op = {
+          '+': (m1, m2) => m1 + m2,
+          '-': (m1, m2) => m1 - m2,
+          '*': (m1, m2) => m1 * m2,
+          '/': (m1, m2) => m1 / m2
+        };
+        const monkeys = data.trim().split('\n').map(line => line.split(':').map(side => side.trim())).map(pair => {
+          const monkey = {
+            name: pair[0],
+            isDone: false
+          };
+          const match = pair[1].match(rx);
+          if (typeof match[1] === 'undefined') {
+            monkey.m1 = match[2];
+            monkey.op = op[match[3]];
+            monkey.m2 = match[4];
+          } else {
+            monkey.num = +match[1];
+          }
+          return monkey;
+        });
+        const numonks = monkeys.filter(m => typeof m.num !== 'undefined');
+        const fumonks = monkeys.filter(m => typeof m.num === 'undefined');
+        let safety = 1000;
+        const monlen = monkeys.length;
+        let numlen = numonks.length;
+        while (monlen > numlen && safety--) {
+          numonks.filter(n => !n.isDone).forEach(n => {
+            fumonks.filter(f => f.m1 === n.name).forEach(f => {
+              f.n1 = n.num;
+            });
+            fumonks.filter(f => f.m2 === n.name).forEach(f => {
+              f.n2 = n.num;
+            });
+            n.isDone = true;
+          });
+          fumonks.filter(f => typeof f.n1 !== 'undefined' && typeof f.n2 !== 'undefined' && !f.isDone).forEach(f => {
+            f.num = f.op(f.n1, f.n2);
+            numonks.push(f);
+          });
+          numlen = numonks.length;
+        }
+        if (safety <= 0) {
+          console.warn('safety hit!');
+        }
+
+        console.log(numonks, fumonks);
+        return (monkeys.find(m => m.name === 'root').num);
+      },
+      part2: (data) => {
+        const rx = /(\d+)|(\w+) ([+\-/*]) (\w+)/;
+        const op = {
+          '+': (m1, m2) => m1 + m2,
+          '-': (m1, m2) => m1 - m2,
+          '*': (m1, m2) => m1 * m2,
+          '/': (m1, m2) => m1 / m2
+        };
+        const monkeys = data.trim().split('\n').map(line => line.split(':').map(side => side.trim())).map(pair => {
+          const monkey = {
+            name: pair[0],
+            isDone: false
+          };
+          const match = pair[1].match(rx);
+          if (typeof match[1] === 'undefined') {
+            monkey.m1 = match[2];
+            monkey.op = op[match[3]];
+            monkey.m2 = match[4];
+          } else if (monkey.name !== 'humn') {
+            monkey.num = +match[1];
+          }
+          if (monkey.name === 'root') {
+            monkey.op = (m1, m2) => m1 === m2;
+          }
+          return monkey;
+        });
+        const numonks = monkeys.filter(m => typeof m.num !== 'undefined');
+        const fumonks = monkeys.filter(m => typeof m.num === 'undefined');
+        let safety1 = 1000;
+        let lastlen = -1;
+        let numlen = numonks.length;
+        while (lastlen !== numlen && safety1--) {
+          numonks.filter(n => !n.isDone).forEach(n => {
+            fumonks.filter(f => f.m1 === n.name).forEach(f => {
+              f.n1 = n.num;
+            });
+            fumonks.filter(f => f.m2 === n.name).forEach(f => {
+              f.n2 = n.num;
+            });
+            n.isDone = true;
+          });
+          fumonks.filter(f => typeof f.n1 !== 'undefined' && typeof f.n2 !== 'undefined' && !f.isDone).forEach(f => {
+            f.num = f.op(f.n1, f.n2);
+            numonks.push(f);
+          });
+          lastlen = numlen;
+          numlen = numonks.length;
+        }
+        if (safety1 <= 0) {
+          console.warn('safety1 hit!');
+        }
+        console.log(numonks, fumonks);
+
+        let safety2 = 1000;
+        const monlen = monkeys.length;
+        const funk = (h, m) => {
+          const monkeys = m.slice();
+          const numonks = monkeys.filter(m => typeof m.num !== 'undefined');
+          const fumonks = monkeys.filter(m => typeof m.num === 'undefined');
+
+          while (monlen > numlen && safety2--) {
+            numonks.filter(n => !n.isDone).forEach(n => {
+              fumonks.filter(f => f.m1 === n.name).forEach(f => {
+                f.n1 = n.num;
+              });
+              fumonks.filter(f => f.m2 === n.name).forEach(f => {
+                f.n2 = n.num;
+              });
+              n.isDone = true;
+            });
+            fumonks.filter(f => typeof f.n1 !== 'undefined' && typeof f.n2 !== 'undefined' && !f.isDone).forEach(f => {
+              f.num = f.op(f.n1, f.n2);
+              numonks.push(f);
+            });
+            numlen = numonks.length;
+          }
+          if (safety2 <= 0) {
+            // true
+            console.warn('safety2 hit!');
+          }
+          return monkeys;
+        };
+        console.log(funk(1, monkeys));
+
+        return (monkeys.find(m => m.name === 'root').n1);
+      }
     },
     day22: {
       part1: () => {},
