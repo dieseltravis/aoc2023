@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Create a report to help me improve
 title: ''
 labels: bug
 assignees: dieseltravis
@@ -8,7 +8,7 @@ assignees: dieseltravis
 ---
 
 **Describe the bug**
-A clear and concise description of what the bug is.
+A clear and concise description of what the bug is. The rest of the info here is optional but at least tell me what day it happens on.
 
 **To Reproduce**
 Steps to reproduce the behavior:
