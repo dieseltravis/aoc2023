@@ -1,9 +1,9 @@
 {
-  "name": "graceful-blossom-animal",
-  "version": "2022.12.15",
-  "description": "Travis's Advent of Code 2022",
+  "name": "branch-three-oviraptor",
+  "version": "2023.12.01",
+  "description": "Travis's Advent of Code 2023",
   "author": "Travis Hardiman",
-  "homepage": "https://graceful-blossom-animal.glitch.me/",
+  "homepage": "https://branch-three-oviraptor.glitch.me/",
   "main": "server.js",
   "scripts": {
     "test": "node --check server.js && semistandard && eslint server.js public/*.js",
@@ -22,7 +22,7 @@
     "jshint": "^2.13.6"
   },
   "repository": {
-    "url": "https://glitch.com/edit/#!/graceful-blossom-animal"
+    "url": "https://glitch.com/edit/#!/branch-three-oviraptor"
   },
   "license": "Hippocratic-3.0",
   "keywords": [
@@ -30,7 +30,7 @@
     "adventofcode",
     "advent",
     "advent-of-code",
-    "advent-of-code-2022"
+    "advent-of-code-2023"
   ],
   "browserslist": [
     "defaults",

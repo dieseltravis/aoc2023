@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Travis's Advent of Code 2022 Stats</title>
-    <meta name="description" content="Travis's Advent of Code 2022 Stats">
+    <title>Travis's Advent of Code 2023 Stats</title>
+    <meta name="description" content="Travis's Advent of Code 2023 Stats">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,7 +22,7 @@
         <a href="/" title="up">⬆</a> 
       </nav>
       <h1>
-        Travis's Advent of Code 2022 Stats
+        Travis's Advent of Code 2023 Stats
       </h1>
       <p>
         Character and line counts.
