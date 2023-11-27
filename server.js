@@ -22,7 +22,8 @@ const limiter = rateLimit({
   // Return rate limit info in the `RateLimit-*` headers
   standardHeaders: true,
   // Disable the `X-RateLimit-*` headers
-  legacyHeaders: false
+  legacyHeaders: false,
+  validate: { xForwardedForHeader: false }
 });
 
 app.use(timeout(1200000));
@@ -89,8 +90,8 @@ for (let d = 1; d <= 25; d++) {
       description: 'AOC ' + year + ', day ' + days[digit],
       prev_url: digit <= 1 ? '/' : '/day/' + ('' + (digit - 1)).padStart(2, '0'),
       next_url: digit >= 25 ? '/' : '/day/' + ('' + (digit + 1)).padStart(2, '0'),
-      year: year,
-      day: day,
+      year,
+      day,
       day_num: dd
     });
   });

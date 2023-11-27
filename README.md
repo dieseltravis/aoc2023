@@ -13,6 +13,7 @@ also on github: [dieseltravis/aoc2023](https://github.com/dieseltravis/aoc2023)
 ## solutions:
 
 1. [day one](https://branch-three-oviraptor.glitch.me/day/01)
+<!--
 2. [day two](https://branch-three-oviraptor.glitch.me/day/02)
 3. [day three](https://branch-three-oviraptor.glitch.me/day/03)
 4. [day four](https://branch-three-oviraptor.glitch.me/day/04)
@@ -27,8 +28,7 @@ also on github: [dieseltravis/aoc2023](https://github.com/dieseltravis/aoc2023)
 13. [day thirteen](https://branch-three-oviraptor.glitch.me/day/13)
 14. [day fourteen](https://branch-three-oviraptor.glitch.me/day/14)
 15. [day fifteen](https://branch-three-oviraptor.glitch.me/day/15)
-16. [day sixteen](https://branch-three-oviraptor.glitch.me/day/16) (doesn't work yet)
-<!--
+16. [day sixteen](https://branch-three-oviraptor.glitch.me/day/16)
 17. [day seventeen](https://branch-three-oviraptor.glitch.me/day/17)
 18. [day eighteen](https://branch-three-oviraptor.glitch.me/day/18)
 19. [day nineteen](https://branch-three-oviraptor.glitch.me/day/19)
@@ -44,6 +44,12 @@ also on github: [dieseltravis/aoc2023](https://github.com/dieseltravis/aoc2023)
 
 [Glitch playlist of all years](https://glitch.com/@travishardiman/advent-of-code)
 [Github list of all projects](https://github.com/stars/dieseltravis/lists/advent-of-code)
+
+### 2022
+
+my 2022 solutions on glitch: [graceful-blossom-animal](https://graceful-blossom-animal.glitch.me/)
+
+also on github: [dieseltravis/aoc2022](https://github.com/dieseltravis/aoc2022)
 
 ### 2021
 
