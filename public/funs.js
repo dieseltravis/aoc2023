@@ -9,6 +9,7 @@
         return elves;
       },
       part2: (data) => {
+        console.log(data);
         return data;
       }
     },
