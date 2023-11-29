@@ -122,3 +122,16 @@ div.glitchButton {
   top: 20px;
   right: 20px;
 }
+
+/* don't waste paper */
+@media print {
+  *,
+  *::before,
+  *::after {
+    display: none !important;
+    page-break-after: always !important;
+    page-break-before: always !important;
+    break-after: always !important;
+    break-before: always !important;
+  }
+}
