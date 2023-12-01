@@ -17,15 +17,15 @@
       part2: (data) => {
         const matchD = /one|two|three|four|five|six|seven|eight|nine/g;
         const digitVal = { 'one':1, 'two':2, 'three':3, 'four':4, 'five':5, 'six':6, 'seven':7, 'eight':8, 'nine':9 };
-        data = data.trim().replace(matchD, m => digitVal[m]);
-        console.log(data);
-        const left = /^\D*?(\d)/;
-        const right = /(\d)\D*?$/;
-        const elves = data.split('\n').map(cals => {
+        const left = /^\D*(\d)/;
+        const right = /(\d)\D*$/;
+        const elves = data.trim().split('\n').map(cals => {
+          cals = cals.replace(matchD, m => digitVal[m]);
           return cals.match(left)[1] + '' + cals.match(right)[1];
         }).map(Number);
         console.log(elves);
         // 54558 is too low
+        // 54558
         return elves.reduce((acc, item) => {
             return acc + item;
           }, 0);
