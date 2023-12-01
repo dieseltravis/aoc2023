@@ -11,12 +11,12 @@
         }).map(Number);
         console.log(elves);
         return elves.reduce((acc, item) => {
-            return acc + item;
-          }, 0);
+          return acc + item;
+        }, 0);
       },
       part2: (data) => {
         const matchD = /one|two|three|four|five|six|seven|eight|nine/g;
-        const digitVal = { 'one':1, 'two':2, 'three':3, 'four':4, 'five':5, 'six':6, 'seven':7, 'eight':8, 'nine':9 };
+        const digitVal = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9 };
         const left = /^\D*(\d)/;
         const right = /(\d)\D*$/;
         const elves = data.trim().split('\n').map(cals => {
@@ -27,8 +27,8 @@
         // 54558 is too low
         // 54558
         return elves.reduce((acc, item) => {
-            return acc + item;
-          }, 0);
+          return acc + item;
+        }, 0);
       }
     },
     day2: {
