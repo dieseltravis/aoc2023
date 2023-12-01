@@ -4,13 +4,31 @@
   const all = {
     day1: {
       part1: (data) => {
-        const elves = data.trim().split('\n\n').map(cals => cals.split('\n').map(Number));
+        const left = /^\D*?(\d)/;
+        const right = /(\d)\D*?$/;
+        const elves = data.trim().split('\n').map(cals => {
+          return cals.match(left)[1] + '' + cals.match(right)[1];
+        }).map(Number);
         console.log(elves);
-        return elves;
+        return elves.reduce((acc, item) => {
+            return acc + item;
+          }, 0);
       },
       part2: (data) => {
+        const matchD = /one|two|three|four|five|six|seven|eight|nine/g;
+        const digitVal = { 'one':1, 'two':2, 'three':3, 'four':4, 'five':5, 'six':6, 'seven':7, 'eight':8, 'nine':9 };
+        data = data.trim().replace(matchD, m => digitVal[m]);
         console.log(data);
-        return data;
+        const left = /^\D*?(\d)/;
+        const right = /(\d)\D*?$/;
+        const elves = data.split('\n').map(cals => {
+          return cals.match(left)[1] + '' + cals.match(right)[1];
+        }).map(Number);
+        console.log(elves);
+        // 54558 is too low
+        return elves.reduce((acc, item) => {
+            return acc + item;
+          }, 0);
       }
     },
     day2: {
