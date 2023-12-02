@@ -12,8 +12,8 @@ also on github: [dieseltravis/aoc2023](https://github.com/dieseltravis/aoc2023)
 
 ## solutions:
 1. [day one](https://branch-three-oviraptor.glitch.me/day/01)
-<!--
 2. [day two](https://branch-three-oviraptor.glitch.me/day/02)
+<!--
 3. [day three](https://branch-three-oviraptor.glitch.me/day/03)
 4. [day four](https://branch-three-oviraptor.glitch.me/day/04)
 5. [day five](https://branch-three-oviraptor.glitch.me/day/05)
