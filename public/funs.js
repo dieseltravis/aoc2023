@@ -37,9 +37,9 @@
     },
     day2: {
       part1: (data) => {
-        //Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
+        // Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
         const gn = /^Game (\d+): /;
-        const gs = /(\d+)\s([rgb])/
+        const gs = /(\d+)\s([rgb])/;
         let possible = 0;
         data.trim().split('\n').forEach(g => {
           const gameNum = +g.match(gn)[1];
@@ -73,7 +73,7 @@
       },
       part2: (data) => {
         const gn = /^Game (\d+): /;
-        const gs = /(\d+)\s([rgb])/
+        const gs = /(\d+)\s([rgb])/;
         let sum = 0;
         data.trim().split('\n').forEach(g => {
           const gameNum = +g.match(gn)[1];
