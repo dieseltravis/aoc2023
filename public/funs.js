@@ -15,18 +15,22 @@
         }, 0);
       },
       part2: (data) => {
-        const matchD = /one|two|three|four|five|six|seven|eight|nine/g;
+        const matchD = /one|two|three|four|five|six|seven|eight|nine|\d/;
+        const matchD2 = /enin|thgie|neves|xis|evif|ruof|eerht|owt|eno|\d/;
         const digitVal = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9 };
-        const left = /^\D*(\d)/;
-        const right = /(\d)\D*$/;
+        for (let i = 1; i <= 9; i++) {
+          digitVal['' + i] = i;
+        }
         const elves = data.trim().split('\n').map(cals => {
-          cals = cals.replace(matchD, m => digitVal[m]);
-          return cals.match(left)[1] + '' + cals.match(right)[1];
-        }).map(Number);
+          const slac = cals.split('').reverse().join('');
+          const num = cals.match(matchD)[0].replace(matchD, m => digitVal[m]) + '' + slac.match(matchD2)[0].split('').reverse().join('').replace(matchD, m => digitVal[m]);
+          return num;
+        });
         console.log(elves);
         // 54558 is too low
-        // 54558
-        return elves.reduce((acc, item) => {
+        // 54490 is too low
+        const elves2 = elves.map(Number);
+        return elves2.reduce((acc, item) => {
           return acc + item;
         }, 0);
       }
