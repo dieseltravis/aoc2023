@@ -14,11 +14,11 @@ console.log(PROJECT_URL);
 // run the same functions on the front & back
 const f = require('./public/funs');
 
-// set up rate limiter: maximum of 10 requests per 30 seconds
+// set up rate limiter: maximum of 100 requests per 30 seconds
 const limiter = rateLimit({
   // 30 seconds
   windowMs: 30 * 1000,
-  max: 10,
+  max: 100,
   // Return rate limit info in the `RateLimit-*` headers
   standardHeaders: true,
   // Disable the `X-RateLimit-*` headers
