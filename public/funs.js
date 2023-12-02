@@ -37,10 +37,65 @@
     },
     day2: {
       part1: (data) => {
-        return data;
+        // Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
+        const gn = /^Game (\d+): /;
+        const gs = /(\d+)\s([rgb])/;
+        let possible = 0;
+        data.trim().split('\n').forEach(g => {
+          const gameNum = +g.match(gn)[1];
+          const right = g.split(':')[1].trim();
+          const game = {
+            gameNum,
+            r: 0,
+            g: 0,
+            b: 0,
+            d: 0,
+            dd: 0,
+            p: 0
+          };
+          right.split(';').forEach(s => {
+            game.d++;
+            s.split(',').forEach(c => {
+              const cube = c.match(gs);
+              game.dd++;
+              game[cube[2]] = Math.max(+cube[1], game[cube[2]]);
+            });
+          });
+          // 12 red cubes, 13 green cubes, and 14 blue cubes
+          if (game.r <= 12 && game.g <= 13 && game.b <= 14) {
+            possible += gameNum;
+            game.p = 1;
+          }
+          console.log(game);
+        });
+        // not 234
+        return possible;
       },
       part2: (data) => {
-        return data;
+        const gn = /^Game (\d+): /;
+        const gs = /(\d+)\s([rgb])/;
+        let sum = 0;
+        data.trim().split('\n').forEach(g => {
+          const gameNum = +g.match(gn)[1];
+          const right = g.split(':')[1].trim();
+          const game = {
+            gameNum,
+            r: 0,
+            g: 0,
+            b: 0,
+            s: 0
+          };
+          right.split(';').forEach(s => {
+            s.split(',').forEach(c => {
+              const cube = c.match(gs);
+              game[cube[2]] = Math.max(+cube[1], game[cube[2]]);
+            });
+          });
+          game.s = game.r * game.g * game.b;
+          sum += game.s;
+          console.log(game);
+        });
+        return sum;
       }
     },
     day3: {
