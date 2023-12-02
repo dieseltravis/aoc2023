@@ -72,7 +72,30 @@
         return possible;
       },
       part2: (data) => {
-        return data;
+        const gn = /^Game (\d+): /;
+        const gs = /(\d+)\s([rgb])/
+        let sum = 0;
+        data.trim().split('\n').forEach(g => {
+          const gameNum = +g.match(gn)[1];
+          const right = g.split(':')[1].trim();
+          const game = {
+            gameNum,
+            r: 0,
+            g: 0,
+            b: 0,
+            s: 0
+          };
+          right.split(';').forEach(s => {
+            s.split(',').forEach(c => {
+              const cube = c.match(gs);
+              game[cube[2]] = Math.max(+cube[1], game[cube[2]]);
+            });
+          });
+          game.s = game.r * game.g * game.b;
+          sum += game.s;
+          console.log(game);
+        });
+        return sum;
       }
     },
     day3: {
