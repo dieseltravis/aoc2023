@@ -110,7 +110,7 @@
             len: cals.length
           };
         });
-        
+
         for (let y = 0; y < elves.length; y++) {
           console.log(elves[y].matches);
           for (const m of elves[y].matches) {
@@ -120,13 +120,13 @@
             console.log(val, low, hi);
             let isClean = true;
             let char = '';
-            if (y > 0) { //look prev if not first
+            if (y > 0) { // look prev if not first
               for (let x = low; x <= hi; x++) {
                 if (sym.test(elves[y - 1].row[x])) {
                   char = elves[y - 1].row[x];
                   isClean = false;
                   break;
-                } 
+                }
               }
             }
             // need to test left & right
@@ -145,7 +145,7 @@
                   char = elves[y + 1].row[x];
                   isClean = false;
                   break;
-                } 
+                }
               }
             }
             if (!isClean) {
@@ -175,7 +175,7 @@
             len: cals.length
           };
         });
-        
+
         for (let y = 0; y < elves.length; y++) {
           for (const m of elves[y].matches) {
             const low = Math.max(0, m.index - 1);
@@ -185,7 +185,7 @@
             let char = '';
             let charx = -1;
             let chary = -1;
-            if (y > 0) { //look prev if not first
+            if (y > 0) { // look prev if not first
               for (let x = low; x <= hi; x++) {
                 if (sym.test(elves[y - 1].row[x])) {
                   char = elves[y - 1].row[x];
@@ -193,7 +193,7 @@
                   charx = x;
                   isClean = false;
                   break;
-                } 
+                }
               }
             }
             // need to test left & right
@@ -218,7 +218,7 @@
                   charx = x;
                   isClean = false;
                   break;
-                } 
+                }
               }
             }
             if (!isClean && char === '*') {
