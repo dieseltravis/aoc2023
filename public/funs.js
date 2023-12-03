@@ -100,7 +100,68 @@
     },
     day3: {
       part1: (data) => {
-        return data;
+        const nums = /(\d+)/g;
+        const sym = /[^0-9.]/;
+        const parts = [];
+        const elves = data.trim().split('\n').map(cals => {
+          return {
+            matches: [...cals.matchAll(nums)],
+            row: cals.split(''),
+            len: cals.length
+          };
+        });
+        
+        for (let y = 0; y < elves.length; y++) {
+          console.log(elves[y].matches);
+          for (const m of elves[y].matches) {
+            const low = Math.max(0, m.index - 1);
+            const val = m[1];
+            const hi = Math.min(elves[y].len - 1, m.index + m[0].length);
+            console.log(val, low, hi);
+            let isClean = true;
+            let char = '';
+            if (y > 0) { //look prev if not first
+              for (let x = low; x <= hi; x++) {
+                if (sym.test(elves[y - 1].row[x])) {
+                  char = elves[y - 1].row[x];
+                  isClean = false;
+                  break;
+                } 
+              }
+            }
+            // need to test left & right
+            if (isClean && sym.test(elves[y].row[low])) {
+              char = elves[y].row[low];
+              isClean = false;
+            }
+            if (isClean && sym.test(elves[y].row[hi])) {
+              char = elves[y].row[hi];
+              isClean = false;
+            }
+            if (isClean && y < (elves.length - 1)) {
+              // look next
+              for (let x = low; x <= hi; x++) {
+                if (sym.test(elves[y + 1].row[x])) {
+                  char = elves[y + 1].row[x];
+                  isClean = false;
+                  break;
+                } 
+              }
+            }
+            if (!isClean) {
+              parts.push({
+                val: +val,
+                ch: char
+              });
+            }
+          }
+        }
+        console.log('parts', parts);
+        // 533578 is too high
+        // 530940 is too high
+        return parts.reduce((acc, item) => {
+          return acc + item.val;
+        }, 0);
       },
       part2: (data) => {
         return data;

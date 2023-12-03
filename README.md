@@ -2,7 +2,7 @@
 
 javascript 🎄 Advent of Code 2023 using 🎏 Glitch 🎏
 
-my 2023 solutions on glitch: [branch-three-oviraptor](https://branch-three-oviraptor.glitch.me/)
+my 2023 solutions on glitch: [branch-three-oviraptor](https://branch-three-oviraptor.glitch.me/), specifically all the solutions are in [funs.js](https://github.com/dieseltravis/aoc2023/blob/main/public/funs.js).
 
 also on github: [dieseltravis/aoc2023](https://github.com/dieseltravis/aoc2023)
 
@@ -13,8 +13,8 @@ also on github: [dieseltravis/aoc2023](https://github.com/dieseltravis/aoc2023)
 ## solutions:
 1. [day one](https://branch-three-oviraptor.glitch.me/day/01)
 2. [day two](https://branch-three-oviraptor.glitch.me/day/02)
-<!--
 3. [day three](https://branch-three-oviraptor.glitch.me/day/03)
+<!--
 4. [day four](https://branch-three-oviraptor.glitch.me/day/04)
 5. [day five](https://branch-three-oviraptor.glitch.me/day/05)
 6. [day six](https://branch-three-oviraptor.glitch.me/day/06)
