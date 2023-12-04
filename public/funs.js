@@ -244,7 +244,6 @@
         const lotto = data.trim().split('\n').map(cals => {
           const line = cals.split('|');
           const card = line[0].split(':');
-          const num = +card[0].match(/d+/)[0];
           const values = card[1].trim().split(/\s+/).map(Number);
           const winner = line[1].trim().split(/\s+/).map(Number);
           const good = values.filter(n => winner.includes(n));
@@ -257,7 +256,28 @@
         return lotto.reduce((acc, item) => acc + item, 0);
       },
       part2: (data) => {
-        return data;
+        const copies = {};
+        const lotto = data.trim().split('\n').map(cals => {
+          const line = cals.split('|');
+          const card = line[0].split(':');
+          const num = +card[0].match(/\d+/)[0];
+          const values = card[1].trim().split(/\s+/).map(Number);
+          const winner = line[1].trim().split(/\s+/).map(Number);
+          const good = values.filter(n => winner.includes(n));
+          let score = good.length;
+          if (score > 0) {
+            let inc = 1 + (copies[num] || 0);
+            for (let i = num + 1; i <= num + score; i++) {
+              if (!copies[i]) {
+                copies[i] = 0;
+              }
+              copies[i] += inc;
+            }
+          }
+          return score;
+        });
+        console.log(lotto, copies);
+        return lotto.length + Object.values(copies).reduce((acc, item) => acc + item, 0);
       }
     },
     day5: {
