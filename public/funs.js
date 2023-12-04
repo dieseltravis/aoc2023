@@ -264,9 +264,9 @@
           const values = card[1].trim().split(/\s+/).map(Number);
           const winner = line[1].trim().split(/\s+/).map(Number);
           const good = values.filter(n => winner.includes(n));
-          let score = good.length;
+          const score = good.length;
           if (score > 0) {
-            let inc = 1 + (copies[num] || 0);
+            const inc = 1 + (copies[num] || 0);
             for (let i = num + 1; i <= num + score; i++) {
               if (!copies[i]) {
                 copies[i] = 0;
