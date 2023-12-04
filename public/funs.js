@@ -241,7 +241,20 @@
     },
     day4: {
       part1: (data) => {
-        return data;
+        const lotto = data.trim().split('\n').map(cals => {
+          const line = cals.split('|');
+          const card = line[0].split(':');
+          const num = +card[0].match(/d+/)[0];
+          const values = card[1].trim().split(/\s+/).map(Number);
+          const winner = line[1].trim().split(/\s+/).map(Number);
+          const good = values.filter(n => winner.includes(n));
+          let score = good.length;
+          if (score > 0) {
+            score = 2 ** (score - 1);
+          }
+          return score;
+        });
+        return lotto.reduce((acc, item) => acc + item, 0);
       },
       part2: (data) => {
         return data;
