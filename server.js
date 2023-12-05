@@ -3,7 +3,7 @@ const https = require('https');
 const path = require('path');
 const express = require('express');
 const app = express();
-const timeout = require('connect-timeout'); // express v4
+const timeout = require('connect-timeout');
 const rateLimit = require('express-rate-limit');
 const { JSHINT } = require('jshint');
 
@@ -70,7 +70,9 @@ app.engine('ntl', (filePath, options, callback) => { // define the template engi
 app.set('views', './views'); // specify the views directory
 app.set('view engine', 'ntl'); // register the template engine
 
+// store stats for each day
 const dayStats = [];
+
 // bind 25 days of html files, and post functions for both parts of each
 for (let d = 1; d <= 25; d++) {
   const digit = d;
@@ -136,6 +138,7 @@ for (let d = 1; d <= 25; d++) {
       response.status(200).json({ output: answer });
     });
   }
+  // store strings of functions for stats below
   dayStats.push(partStats);
 }
 
@@ -156,7 +159,9 @@ fs.readFile(path.join(__dirname, 'views/stats.ntl'), function (err, content) {
         devel: true
       }, {});
       const part = {
+        // subtract the name and brackets
         charCount: p.length - 8,
+        // number of newlines
         lineCount: p.split('\n').length,
         complex: JSHINT.data().functions[0].metrics.complexity
       };

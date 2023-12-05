@@ -282,7 +282,56 @@
     },
     day5: {
       part1: (data) => {
-        return data;
+        const almanac = data.trim().split('\n\n');
+        const seeds = almanac[0].split(':')[1].trim().split(' ').map(Number);
+        const maps = almanac.slice(1).map(m => {
+          const lines = m.split('\n');
+          const matchName = /(\w+)-to-(\w+)/;
+          const matched = lines[0].match(matchName);
+          const source = matched[1];
+          const dest = matched[2];
+          const routes = lines.slice(1).map(l => {
+            const nums = l.split(' ').map(Number);
+            return {
+              s1: nums[1],
+              s2: nums[1] + nums[2],
+              d1: nums[0],
+              d2: nums[0] + nums[2],
+              r: nums[2]
+            };
+          });
+          return {
+            source,
+            dest,
+            routes
+          };
+        });
+        console.log(seeds, maps);
+        const paths = seeds.reduce((acc, s) => {
+          acc.push({ seed: s });
+          return acc;
+        }, []);
+        let step = 'seed';
+        maps.forEach(m => {
+          const next = m.dest;
+          paths.forEach(p => {
+            const val = p[step];
+            let isMapped = false;
+            for (let i = 0; i < m.routes.length; i++) {
+              if (val >= m.routes[i].s1 && val <= m.routes[i].s2) {
+                p[next] = (val - m.routes[i].s1) + m.routes[i].d1;
+                isMapped = true;
+                break;
+              }
+            }
+            if (!isMapped) {
+              p[next] = val;
+            }
+          });
+          step = next;
+        });
+        console.log(paths)
+        return Math.min(...paths.map(p => p.location));
       },
       part2: (data) => {
         return data;
@@ -407,20 +456,20 @@
       }
     },
     day22: {
-      part1: () => {},
-      part2: () => {}
+      part1: (d) => { return d; },
+      part2: (d) => { return d; }
     },
     day23: {
-      part1: () => {},
-      part2: () => {}
+      part1: (d) => { return d; },
+      part2: (d) => { return d; }
     },
     day24: {
-      part1: () => {},
-      part2: () => {}
+      part1: (d) => { return d; },
+      part2: (d) => { return d; }
     },
     day25: {
-      part1: () => {},
-      part2: () => {}
+      part1: (d) => { return d; },
+      part2: (d) => { return d; }
     }
   };
 
