@@ -330,19 +330,15 @@
           });
           step = next;
         });
-        console.log(paths)
+        console.log(paths);
         return Math.min(...paths.map(p => p.location));
       },
       part2: (data) => {
         const almanac = data.trim().split('\n\n');
         const seedRanges = almanac[0].split(':')[1].trim().split(' ').map(Number);
-        const seeds = [];
+        const seedPairs = {};
         for (let i = 0; i < seedRanges.length; i+= 2) {
-          const s = seedRanges[i];
-          const r = seedRanges[i + 1];
-          for (let j = s; j < s + r; j++) {
-            seeds.push(j);
-          }
+          seedPairs[seedRanges[i]] = seedRanges[i + 1];
         }
         const maps = almanac.slice(1).map(m => {
           const lines = m.split('\n');
@@ -355,9 +351,7 @@
             return {
               s1: nums[1],
               s2: nums[1] + nums[2],
-              d1: nums[0],
-              d2: nums[0] + nums[2],
-              r: nums[2]
+              d1: nums[0]
             };
           });
           return {
@@ -366,32 +360,31 @@
             routes
           };
         });
-        console.log(seeds, maps);
-        const paths = seeds.reduce((acc, s) => {
-          acc.push({ seed: s });
-          return acc;
-        }, []);
-        let step = 'seed';
-        maps.forEach(m => {
-          const next = m.dest;
-          paths.forEach(p => {
-            const val = p[step];
-            let isMapped = false;
-            for (let i = 0; i < m.routes.length; i++) {
-              if (val >= m.routes[i].s1 && val <= m.routes[i].s2) {
-                p[next] = (val - m.routes[i].s1) + m.routes[i].d1;
-                isMapped = true;
-                break;
+        console.log(seedPairs, maps);
+        const ml = maps.length;
+        let minnest = Infinity;
+        Object.keys(seedPairs).forEach(ss => {
+          const sr = seedPairs[ss];
+          const su = +ss + sr;
+          console.log(+ss, sr, su);
+          for (let seed = ss; seed < su; seed++) {
+            let last = seed;
+            for (let n = 0; n < ml; n++) {
+              const rs = maps[n].routes;
+              const rl = rs.length;
+              for (let i = 0; i < rl; i++) {
+                const r = rs[i];
+                if (last >= r.s1 && last <= r.s2) {
+                  last = (last - r.s1) + r.d1;
+                  break;
+                }
               }
             }
-            if (!isMapped) {
-              p[next] = val;
-            }
-          });
-          step = next;
+            minnest = Math.min(minnest, last);
+          }
         });
-        console.log(paths)
-        return Math.min(...paths.map(p => p.location));
+        console.log(minnest);
+        return minnest;
       }
     },
     day6: {
