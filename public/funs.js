@@ -362,7 +362,7 @@
         });
         const routes = maps.map(m => m.routes);
         console.log(Object.keys(seedPairs).length, routes);
-        
+
         let smallest = Infinity;
         let seedGroup = 0;
         Object.keys(seedPairs).forEach(seedKey => {
@@ -370,18 +370,18 @@
           const seedRange = seedPairs[seedKey];
           const seedEnd = seedStart + seedRange;
           console.log(++seedGroup, seedStart, seedRange, seedEnd);
-          
+
           for (let seed = seedStart; seed <= seedEnd; seed++) {
             const last = routes.reduce((seedPos, routeList) => {
               const newRoute = routeList.find(route => seedPos >= route.sourceStart && seedPos <= route.sourceEnd);
               const newPos = newRoute ? (seedPos - newRoute.sourceStart) + newRoute.dest : seedPos;
               return newPos;
             }, seed);
-            
+
             smallest = Math.min(smallest, last);
           }
         });
-        
+
         console.log(smallest);
         // 28580590
         // 28580590
