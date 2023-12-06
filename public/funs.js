@@ -413,7 +413,19 @@
         return Object.values(actual).reduce((acc, a) => acc * a.length, 1);
       },
       part2: (data) => {
-        return data;
+        const input = data.trim().split('\n').map(l => l.split(':')[1].trim().split(/\s+/).join('')).map(Number);
+        const time = input[0];
+        const dist = input[1];
+        console.log(time, dist);
+        let wins = 0;
+        for (let b = 0; b <= time; b++) {
+          const race = b * (time - b);
+          if (race > dist) {
+            wins++;
+          }
+        }
+        console.log(wins);
+        return wins;
       }
     },
     day7: {
