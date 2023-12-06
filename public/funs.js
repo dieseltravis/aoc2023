@@ -337,54 +337,58 @@
         const almanac = data.trim().split('\n\n');
         const seedRanges = almanac[0].split(':')[1].trim().split(' ').map(Number);
         const seedPairs = {};
-        for (let i = 0; i < seedRanges.length; i+= 2) {
+        for (let i = 0; i < seedRanges.length; i += 2) {
           seedPairs[seedRanges[i]] = seedRanges[i + 1];
         }
         const maps = almanac.slice(1).map(m => {
           const lines = m.split('\n');
           const matchName = /(\w+)-to-(\w+)/;
           const matched = lines[0].match(matchName);
-          const source = matched[1];
-          const dest = matched[2];
+          const sourceName = matched[1];
+          const destName = matched[2];
           const routes = lines.slice(1).map(l => {
             const nums = l.split(' ').map(Number);
             return {
-              s1: nums[1],
-              s2: nums[1] + nums[2],
-              d1: nums[0]
+              sourceStart: nums[1],
+              sourceEnd: nums[1] + nums[2],
+              dest: nums[0]
             };
           });
           return {
-            source,
-            dest,
+            sourceName,
+            destName,
             routes
           };
         });
-        console.log(seedPairs, maps);
-        const ml = maps.length;
-        let minnest = Infinity;
-        Object.keys(seedPairs).forEach(ss => {
-          const sr = seedPairs[ss];
-          const su = +ss + sr;
-          console.log(+ss, sr, su);
-          for (let seed = ss; seed < su; seed++) {
-            let last = seed;
-            for (let n = 0; n < ml; n++) {
-              const rs = maps[n].routes;
-              const rl = rs.length;
-              for (let i = 0; i < rl; i++) {
-                const r = rs[i];
-                if (last >= r.s1 && last <= r.s2) {
-                  last = (last - r.s1) + r.d1;
-                  break;
-                }
-              }
-            }
-            minnest = Math.min(minnest, last);
+        const routes = maps.map(m => m.routes);
+        console.log(Object.keys(seedPairs).length, routes);
+        
+        let smallest = Infinity;
+        let seedGroup = 0;
+        Object.keys(seedPairs).forEach(seedKey => {
+          const seedStart = +seedKey;
+          const seedRange = seedPairs[seedKey];
+          const seedEnd = seedStart + seedRange;
+          console.log(++seedGroup, seedStart, seedRange, seedEnd);
+          
+          for (let seed = seedStart; seed <= seedEnd; seed++) {
+            const last = routes.reduce((seedPos, routeList) => {
+              const newRoute = routeList.find(route => seedPos >= route.sourceStart && seedPos <= route.sourceEnd);
+              const newPos = newRoute ? (seedPos - newRoute.sourceStart) + newRoute.dest : seedPos;
+              return newPos;
+            }, seed);
+            
+            smallest = Math.min(smallest, last);
           }
         });
-        console.log(minnest);
-        return minnest;
+        
+        console.log(smallest);
+        // 28580590
+        // 28580590
+        // 28580590
+        // 28580590 is too high
+        // 240320250 is too high
+        return smallest;
       }
     },
     day6: {
