@@ -282,18 +282,150 @@
     },
     day5: {
       part1: (data) => {
-        return data;
+        const almanac = data.trim().split('\n\n');
+        const seeds = almanac[0].split(':')[1].trim().split(' ').map(Number);
+        const maps = almanac.slice(1).map(m => {
+          const lines = m.split('\n');
+          const matchName = /(\w+)-to-(\w+)/;
+          const matched = lines[0].match(matchName);
+          const source = matched[1];
+          const dest = matched[2];
+          const routes = lines.slice(1).map(l => {
+            const nums = l.split(' ').map(Number);
+            return {
+              s1: nums[1],
+              s2: nums[1] + nums[2],
+              d1: nums[0],
+              d2: nums[0] + nums[2],
+              r: nums[2]
+            };
+          });
+          return {
+            source,
+            dest,
+            routes
+          };
+        });
+        console.log(seeds, maps);
+        const paths = seeds.reduce((acc, s) => {
+          acc.push({ seed: s });
+          return acc;
+        }, []);
+        let step = 'seed';
+        maps.forEach(m => {
+          const next = m.dest;
+          paths.forEach(p => {
+            const val = p[step];
+            let isMapped = false;
+            for (let i = 0; i < m.routes.length; i++) {
+              if (val >= m.routes[i].s1 && val <= m.routes[i].s2) {
+                p[next] = (val - m.routes[i].s1) + m.routes[i].d1;
+                isMapped = true;
+                break;
+              }
+            }
+            if (!isMapped) {
+              p[next] = val;
+            }
+          });
+          step = next;
+        });
+        console.log(paths);
+        return Math.min(...paths.map(p => p.location));
       },
       part2: (data) => {
-        return data;
+        const almanac = data.trim().split('\n\n');
+        const seedRanges = almanac[0].split(':')[1].trim().split(' ').map(Number);
+        const seedPairs = {};
+        for (let i = 0; i < seedRanges.length; i += 2) {
+          seedPairs[seedRanges[i]] = seedRanges[i + 1];
+        }
+        const maps = almanac.slice(1).map(m => {
+          const lines = m.split('\n');
+          const matchName = /(\w+)-to-(\w+)/;
+          const matched = lines[0].match(matchName);
+          const sourceName = matched[1];
+          const destName = matched[2];
+          const routes = lines.slice(1).map(l => {
+            const nums = l.split(' ').map(Number);
+            return {
+              sourceStart: nums[1],
+              sourceEnd: nums[1] + nums[2],
+              dest: nums[0]
+            };
+          });
+          return {
+            sourceName,
+            destName,
+            routes
+          };
+        });
+        const routes = maps.map(m => m.routes);
+        console.log(Object.keys(seedPairs).length, routes);
+
+        let smallest = Infinity;
+        let seedGroup = 0;
+        Object.keys(seedPairs).forEach(seedKey => {
+          const seedStart = +seedKey;
+          const seedRange = seedPairs[seedKey];
+          const seedEnd = seedStart + seedRange;
+          console.log(++seedGroup, seedStart, seedRange, seedEnd);
+
+          for (let seed = seedStart; seed <= seedEnd; seed++) {
+            const last = routes.reduce((seedPos, routeList) => {
+              const newRoute = routeList.find(route => seedPos >= route.sourceStart && seedPos <= route.sourceEnd);
+              const newPos = newRoute ? (seedPos - newRoute.sourceStart) + newRoute.dest : seedPos;
+              return newPos;
+            }, seed);
+
+            smallest = Math.min(smallest, last);
+          }
+        });
+
+        console.log(smallest);
+        // 28580590
+        // 28580590
+        // 28580590
+        // 28580590 is too high
+        // 240320250 is too high
+        return smallest;
       }
     },
     day6: {
       part1: (data) => {
-        return data;
+        const input = data.trim().split('\n').map(l => l.split(':')[1].trim().split(/\s+/).map(Number));
+        const times = input[0];
+        const dists = input[1];
+        console.log(times, dists);
+        const actual = {};
+        for (let t = 0; t < times.length; t++) {
+          const time = times[t];
+          const dist = dists[t];
+          actual[t] = [];
+          for (let b = 0; b <= time; b++) {
+            const race = b * (time - b);
+            if (race > dist) {
+              actual[t].push(race);
+            }
+          }
+        }
+        console.log(actual);
+        return Object.values(actual).reduce((acc, a) => acc * a.length, 1);
       },
       part2: (data) => {
-        return data;
+        const input = data.trim().split('\n').map(l => l.split(':')[1].trim().split(/\s+/).join('')).map(Number);
+        const time = input[0];
+        const dist = input[1];
+        console.log(time, dist);
+        let wins = 0;
+        for (let b = 0; b <= time; b++) {
+          const race = b * (time - b);
+          if (race > dist) {
+            wins++;
+          }
+        }
+        console.log(wins);
+        return wins;
       }
     },
     day7: {
@@ -407,20 +539,20 @@
       }
     },
     day22: {
-      part1: () => {},
-      part2: () => {}
+      part1: (d) => { return d; },
+      part2: (d) => { return d; }
     },
     day23: {
-      part1: () => {},
-      part2: () => {}
+      part1: (d) => { return d; },
+      part2: (d) => { return d; }
     },
     day24: {
-      part1: () => {},
-      part2: () => {}
+      part1: (d) => { return d; },
+      part2: (d) => { return d; }
     },
     day25: {
-      part1: () => {},
-      part2: () => {}
+      part1: (d) => { return d; },
+      part2: (d) => { return d; }
     }
   };
 
