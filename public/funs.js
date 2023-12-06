@@ -393,7 +393,24 @@
     },
     day6: {
       part1: (data) => {
-        return data;
+        const input = data.trim().split('\n').map(l => l.split(':')[1].trim().split(/\s+/).map(Number));
+        const times = input[0];
+        const dists = input[1];
+        console.log(times, dists);
+        const actual = {};
+        for (let t = 0; t < times.length; t++) {
+          const time = times[t];
+          const dist = dists[t];
+          actual[t] = [];
+          for (let b = 0; b <= time; b++) {
+            const race = b * (time - b);
+            if (race > dist) {
+              actual[t].push(race);
+            }
+          }
+        }
+        console.log(actual);
+        return Object.values(actual).reduce((acc, a) => acc * a.length, 1);
       },
       part2: (data) => {
         return data;
