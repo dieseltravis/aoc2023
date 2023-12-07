@@ -508,7 +508,104 @@
         return answer;
       },
       part2: (data) => {
-        return data;
+        const cards = 'J23456789TQKA'.split('');
+        const cardLength = cards.length;
+        const cardVal = c => {
+          return cards.indexOf(c) + 1;
+        };
+        const score2 = h => {
+          const val = {
+            five: 0,
+            four: 0,
+            full: 0,
+            three: 0,
+            twopair: 0,
+            pair: 0,
+            high: 0
+          };
+          const cs = cards.slice(1);
+          const csl = cs.length;
+          for (let i = 5; i > 0; i--) {
+            if (i === 1) {
+              val.high = 1;
+            } else {
+              for (let j = 0; j < csl; j++) {
+                const c1 = cs[j];
+                const matched = h.filter(c2 => c1 === c2 || c2 === 'J');
+                const count = matched.length;
+                if (count === i) {
+                  if (count === 5) {
+                    val.five = 1;
+                    i = 0;
+                    j = csl;
+                  } else if (count === 4) {
+                    val.four = 1;
+                    val.high = 1;
+                    i = 0;
+                    j = csl;
+                  } else if (count === 3) {
+                    val.three = 1;
+                    h = h.join('').replace('J', '').split('');
+                  } else if (count === 2) {
+                    val.pair += 1;
+                    h = h.join('').replace('J', '').split('');
+                  }
+                }
+              }
+            }
+          }
+          if (val.three == 1 && val.pair == 1) {
+            val.full = 1;
+            val.three = 0;
+            val.pair = 0;
+          } else if (val.pair == 2) {
+            val.twopair = 1;
+            val.pair = 0;
+          }
+          return Object.values(val);
+        };
+        const input = data.trim().split('\n').map(l => {
+          const line = l.split(' ');
+          const o = {
+            raw: line[0],
+            hand: line[0].split(''),
+            bid: +line[1]
+          };
+          o.score = score2(o.hand);
+          o.vals = o.hand.reduce((a, v) => {
+            a.push(cardVal(v));
+            return a;
+          }, []);
+          return o;
+        });
+        const sorted = input.slice().sort((a, b) => {
+          for (let i = 0; i < 7; i++) {
+            const as = a.score[i];
+            const bs = b.score[i];
+            if (as < bs) {
+              return -1;
+            } else if (as > bs) {
+              return 1;
+            } else if (as > 0 && bs > 0) {
+              for (let j = 0; j < 5; j++) {
+                const ac = a.vals[j];
+                const bc = b.vals[j];
+                if (ac < bc) {
+                  return -1;
+                } else if (ac > bc) {
+                  return 1;
+                }
+              }
+            }
+          }
+        });
+        const answer = sorted.reduce((a, v, i) => a + (v.bid * (i + 1)), 0);
+        console.log(sorted, answer);
+        // 251794152 is wrong
+        // 251681150 is too low
+        // 250726533 is too low
+        // 251982524 is too high
+        return answer;
       }
     },
     day8: {
