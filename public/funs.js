@@ -425,6 +425,78 @@
     },
     day7: {
       part1: (data) => {
+        const cards = '23456789TJQKA'.split('');
+        const cardLength = cards.length;
+        const input = data.trim().split('\n').map(l => {
+          const line = l.split(' ');
+          return {
+            hand: line[0].split(''),
+            bet: +line[1]
+          };
+        });
+        const cardVal = c => {
+          return cards.indexOf(c) + 1;
+        };
+        const score = h => {
+          const val = {
+            five: [],
+            four: [],
+            full: [],
+            three: [],
+            twopair: [],
+            pair: [],
+            high: []
+          };
+          if (h.every(val => val === h[0])) {
+            val.five.push(h[0]);
+          } else {
+            cards.slice().reverse().forEach(c1 => {
+              const count = h.filter(c2 => c1 === c2).length;
+              if (count === 4) {
+                val.four.push(c1);
+              } else if (count === 3) {
+                val.three.push(c1);
+              } else if (count === 2) {
+                val.pair.push(c1);
+              } else if (count === 1) {
+                val.high.push(c1);
+              }
+            });
+            if (val.three.length == 1 && val.pair.length == 1) {
+              val.full = [val.three[0], val.pair[0]];
+              val.three = [];
+              val.pair = [];
+            } else if (val.pair.length == 2) {
+              val.twopair = [val.pair[0], val.pair[1]];
+              val.pair = [];
+            }
+          }
+          return val;
+        };
+        const scoreVal = s => {
+          const val = [];
+          val.push(s.five.length ? cardVal(s.five[0]) : 0);
+          val.push(s.four.length ? cardVal(s.four[0]) : 0);
+          val.push(s.full.length ? (cardVal(s.full[0]) * cardLength) + cardVal(s.full[1]) : 0);
+          val.push(s.three.length ? cardVal(s.three[0]) : 0);
+          val.push(s.twopair.length ? (cardVal(s.twopair[0]) * cardLength) + cardVal(s.twopair[1]) : 0);
+          val.push(s.pair.length ? cardVal(s.pair[0]) : 0);
+          if (s.high.length) {
+            let highScore = 0;
+            for (let i = 0, l = s.high.length; l--; i++) {
+              highScore += cardVal(s.high[l]) * (13 ** i);
+            }
+            val.push(highScore);
+          } else {
+            val.push(0);
+          }
+          return val;
+        };
+        input.forEach(i => {
+          i.score = score(i.hand);
+          i.scoreVal = scoreVal(i.score);
+        });
+        console.log(cards, input);
         return data;
       },
       part2: (data) => {
