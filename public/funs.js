@@ -426,7 +426,6 @@
     day7: {
       part1: (data) => {
         const cards = '23456789TJQKA'.split('');
-        const cardLength = cards.length;
         const cardVal = c => {
           return cards.indexOf(c) + 1;
         };
@@ -455,11 +454,11 @@
                 val.high = 1;
               }
             });
-            if (val.three == 1 && val.pair == 1) {
+            if (val.three === 1 && val.pair === 1) {
               val.full = 1;
               val.three = 0;
               val.pair = 0;
-            } else if (val.pair == 2) {
+            } else if (val.pair === 2) {
               val.twopair = 1;
               val.pair = 0;
             }
@@ -500,6 +499,7 @@
               }
             }
           }
+          return 0;
         });
         const answer = sorted.reduce((a, v, i) => a + (v.bid * (i + 1)), 0);
         console.log(input, sorted, answer);
@@ -509,7 +509,6 @@
       },
       part2: (data) => {
         const cards = 'J23456789TQKA'.split('');
-        const cardLength = cards.length;
         const cardVal = c => {
           return cards.indexOf(c) + 1;
         };
@@ -554,11 +553,11 @@
               }
             }
           }
-          if (val.three == 1 && val.pair == 1) {
+          if (val.three === 1 && val.pair === 1) {
             val.full = 1;
             val.three = 0;
             val.pair = 0;
-          } else if (val.pair == 2) {
+          } else if (val.pair === 2) {
             val.twopair = 1;
             val.pair = 0;
           }
@@ -598,6 +597,7 @@
               }
             }
           }
+          return 0;
         });
         const answer = sorted.reduce((a, v, i) => a + (v.bid * (i + 1)), 0);
         console.log(sorted, answer);
