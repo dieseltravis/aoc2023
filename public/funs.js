@@ -350,7 +350,7 @@
             const nums = l.split(' ').map(Number);
             return {
               sourceStart: nums[1],
-              sourceEnd: nums[1] + nums[2],
+              sourceEnd: nums[1] + nums[2] - 1,
               dest: nums[0]
             };
           });
@@ -371,7 +371,7 @@
           const seedEnd = seedStart + seedRange;
           console.log(++seedGroup, seedStart, seedRange, seedEnd);
 
-          for (let seed = seedStart; seed <= seedEnd; seed++) {
+          for (let seed = seedStart; seed < seedEnd; seed++) {
             const last = routes.reduce((seedPos, routeList) => {
               const newRoute = routeList.find(route => seedPos >= route.sourceStart && seedPos <= route.sourceEnd);
               const newPos = newRoute ? (seedPos - newRoute.sourceStart) + newRoute.dest : seedPos;
@@ -383,11 +383,6 @@
         });
 
         console.log(smallest);
-        // 28580590
-        // 28580590
-        // 28580590
-        // 28580590 is too high
-        // 240320250 is too high
         return smallest;
       }
     },
