@@ -427,77 +427,85 @@
       part1: (data) => {
         const cards = '23456789TJQKA'.split('');
         const cardLength = cards.length;
-        const input = data.trim().split('\n').map(l => {
-          const line = l.split(' ');
-          return {
-            hand: line[0].split(''),
-            bet: +line[1]
-          };
-        });
         const cardVal = c => {
           return cards.indexOf(c) + 1;
         };
-        const score = h => {
+        const score2 = h => {
           const val = {
-            five: [],
-            four: [],
-            full: [],
-            three: [],
-            twopair: [],
-            pair: [],
-            high: []
+            five: 0,
+            four: 0,
+            full: 0,
+            three: 0,
+            twopair: 0,
+            pair: 0,
+            high: 0
           };
           if (h.every(val => val === h[0])) {
-            val.five.push(h[0]);
+            val.five = 1;
           } else {
             cards.slice().reverse().forEach(c1 => {
               const count = h.filter(c2 => c1 === c2).length;
               if (count === 4) {
-                val.four.push(c1);
+                val.four = 1;
               } else if (count === 3) {
-                val.three.push(c1);
+                val.three = 1;
               } else if (count === 2) {
-                val.pair.push(c1);
+                val.pair += 1;
               } else if (count === 1) {
-                val.high.push(c1);
+                val.high = 1;
               }
             });
-            if (val.three.length == 1 && val.pair.length == 1) {
-              val.full = [val.three[0], val.pair[0]];
-              val.three = [];
-              val.pair = [];
-            } else if (val.pair.length == 2) {
-              val.twopair = [val.pair[0], val.pair[1]];
-              val.pair = [];
+            if (val.three == 1 && val.pair == 1) {
+              val.full = 1;
+              val.three = 0;
+              val.pair = 0;
+            } else if (val.pair == 2) {
+              val.twopair = 1;
+              val.pair = 0;
             }
           }
-          return val;
+          return Object.values(val);
         };
-        const scoreVal = s => {
-          const val = [];
-          val.push(s.five.length ? cardVal(s.five[0]) : 0);
-          val.push(s.four.length ? cardVal(s.four[0]) : 0);
-          val.push(s.full.length ? (cardVal(s.full[0]) * cardLength) + cardVal(s.full[1]) : 0);
-          val.push(s.three.length ? cardVal(s.three[0]) : 0);
-          val.push(s.twopair.length ? (cardVal(s.twopair[0]) * cardLength) + cardVal(s.twopair[1]) : 0);
-          val.push(s.pair.length ? cardVal(s.pair[0]) : 0);
-          if (s.high.length) {
-            let highScore = 0;
-            for (let i = 0, l = s.high.length; l--; i++) {
-              highScore += cardVal(s.high[l]) * (13 ** i);
-            }
-            val.push(highScore);
-          } else {
-            val.push(0);
-          }
-          return val;
-        };
-        input.forEach(i => {
-          i.score = score(i.hand);
-          i.scoreVal = scoreVal(i.score);
+        const input = data.trim().split('\n').map(l => {
+          const line = l.split(' ');
+          const o = {
+            raw: line[0],
+            hand: line[0].split(''),
+            bid: +line[1]
+          };
+          o.score = score2(o.hand);
+          o.vals = o.hand.reduce((a, v) => {
+            a.push(cardVal(v));
+            return a;
+          }, []);
+          return o;
         });
-        console.log(cards, input);
-        return data;
+        const sorted = input.slice().sort((a, b) => {
+          for (let i = 0; i < 7; i++) {
+            const as = a.score[i];
+            const bs = b.score[i];
+            if (as < bs) {
+              return -1;
+            } else if (as > bs) {
+              return 1;
+            } else if (as > 0 && bs > 0) {
+              for (let j = 0; j < 5; j++) {
+                const ac = a.vals[j];
+                const bc = b.vals[j];
+                if (ac < bc) {
+                  return -1;
+                } else if (ac > bc) {
+                  return 1;
+                }
+              }
+            }
+          }
+        });
+        const answer = sorted.reduce((a, v, i) => a + (v.bid * (i + 1)), 0);
+        console.log(input, sorted, answer);
+        // 250946742
+        // 251308771 too high
+        return answer;
       },
       part2: (data) => {
         return data;
