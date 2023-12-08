@@ -525,30 +525,28 @@
           const cs = cards.slice(1);
           const csl = cs.length;
           for (let i = 5; i > 0; i--) {
-            if (i === 1) {
-              val.high = 1;
-            } else {
-              for (let j = 0; j < csl; j++) {
-                const c1 = cs[j];
-                const matched = h.filter(c2 => c1 === c2 || c2 === 'J');
-                const count = matched.length;
-                if (count === i) {
-                  if (count === 5) {
-                    val.five = 1;
-                    i = 0;
-                    j = csl;
-                  } else if (count === 4) {
-                    val.four = 1;
-                    val.high = 1;
-                    i = 0;
-                    j = csl;
-                  } else if (count === 3) {
-                    val.three = 1;
-                    h = h.join('').replace('J', '').split('');
-                  } else if (count === 2) {
-                    val.pair += 1;
-                    h = h.join('').replace('J', '').split('');
-                  }
+            for (let j = 0; j < csl; j++) {
+              const c1 = cs[j];
+              const matched = h.filter(c2 => c1 === c2 || c2 === 'J');
+              const count = matched.length;
+              if (count === i) {
+                if (count === 5) {
+                  val.five = 1;
+                  i = 0;
+                  j = csl;
+                } else if (count === 4) {
+                  val.four = 1;
+                  val.high = 1;
+                  i = 0;
+                  j = csl;
+                } else if (count === 3) {
+                  val.three = 1;
+                  h = h.join('').replace('J', c1).split('');
+                } else if (count === 2) {
+                  val.pair += 1;
+                  h = h.join('').replace('J', c1).split('');
+                } else if (count === 1) {
+                  val.high = 1;
                 }
               }
             }
@@ -601,6 +599,7 @@
         });
         const answer = sorted.reduce((a, v, i) => a + (v.bid * (i + 1)), 0);
         console.log(sorted, answer);
+        // 251910588 is wrong
         // 251794152 is wrong
         // 251681150 is too low
         // 250726533 is too low
@@ -610,7 +609,31 @@
     },
     day8: {
       part1: (data) => {
-        return data;
+        const input = data.trim().split('\n\n');
+        const directions = input[0].trim().split('');
+        const map = input[1].trim().split('\n').reduce((m, line) => {
+          m[line.substring(0, 3)] = {
+            L: line.substring(7, 10),
+            R: line.substring(12, 15)
+          };
+          return m;
+        }, {});
+        console.log(directions, map);
+        const len = directions.length;
+        let node = 'AAA';
+        let i = 0;
+        let c = 0;
+        let safety = 100000;
+        while (node !== 'ZZZ' && safety-- > 0) {
+          i = i % len;
+          const d = directions[i];
+          node = map[node][d];
+          //console.log(c, i, d, node);
+          i++;
+          c++;
+        }
+        console.log(safety, c);
+        return c;
       },
       part2: (data) => {
         return data;
@@ -723,8 +746,8 @@
       part2: (d) => { return d; }
     },
     day25: {
-      part1: (d) => { return d; },
-      part2: (d) => { return d; }
+      part1: d => d,
+      part2: d => d
     }
   };
 

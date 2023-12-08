@@ -17,8 +17,8 @@ also on github: [dieseltravis/aoc2023](https://github.com/dieseltravis/aoc2023)
 4. [day four](https://branch-three-oviraptor.glitch.me/day/04)
 5. [day five](https://branch-three-oviraptor.glitch.me/day/05)
 6. [day six](https://branch-three-oviraptor.glitch.me/day/06)
-<!--
 7. [day seven](https://branch-three-oviraptor.glitch.me/day/07)
+<!--
 8. [day eight](https://branch-three-oviraptor.glitch.me/day/08)
 9. [day nine](https://branch-three-oviraptor.glitch.me/day/09)
 10. [day ten](https://branch-three-oviraptor.glitch.me/day/10)
