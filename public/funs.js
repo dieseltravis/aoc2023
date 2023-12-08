@@ -628,7 +628,7 @@
           i = i % len;
           const d = directions[i];
           node = map[node][d];
-          //console.log(c, i, d, node);
+          // console.log(c, i, d, node);
           i++;
           c++;
         }
@@ -636,7 +636,37 @@
         return c;
       },
       part2: (data) => {
-        return data;
+        const input = data.trim().split('\n\n');
+        const directions = input[0].trim().split('');
+        const map = input[1].trim().split('\n').reduce((m, line) => {
+          m[line.substring(0, 3)] = {
+            L: line.substring(7, 10),
+            R: line.substring(12, 15)
+          };
+          return m;
+        }, {});
+        let nodes = Object.keys(map).filter(m => m[2] === 'A');
+        console.log(nodes, directions, map);
+        const zzz = n => n[2] === 'Z';
+        const dlen = directions.length;
+        const nlen = nodes.length;
+        let i = 0;
+        let c = 0;
+        let safety = 1000000000;
+        while (!nodes.every(zzz) && safety-- > 0) {
+          i = i % dlen;
+          const d = directions[i];
+          for (let l = nlen; l--;) {
+            let node = nodes[l];
+            node = map[node][d];
+            nodes[l] = node;
+          }
+          // console.log(c, i, d, node);
+          i++;
+          c++;
+        }
+        console.log(safety, c);
+        return c;
       }
     },
     day9: {
