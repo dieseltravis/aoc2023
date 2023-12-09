@@ -1,6 +1,6 @@
 {
   "name": "branch-three-oviraptor",
-  "version": "2023.12.08",
+  "version": "2023.12.09",
   "description": "Travis's Advent of Code 2023",
   "author": "Travis Hardiman",
   "homepage": "https://branch-three-oviraptor.glitch.me/",
@@ -34,8 +34,8 @@
   ],
   "browserslist": [
     "defaults",
-    "not IE 11",
-    "supports es6-module",
+    "node > 14",
+    "fully supports es6-module",
     "maintained node versions"
   ]
 }
