@@ -636,8 +636,8 @@
         return c;
       },
       part2: (data) => {
-        const gcd = (a, b) => !b ? a : gcd(b, a % b);
-        const lcm = (a, b) => (a * b) / gcd(a, b);
+        // const gcd = (a, b) => !b ? a : gcd(b, a % b);
+        // const lcm = (a, b) => (a * b) / gcd(a, b);
         const input = data.trim().split('\n\n');
         const directions = input[0].trim().split('');
         const map = input[1].trim().split('\n').reduce((m, line) => {
@@ -690,7 +690,7 @@
             cycle++;
           } while (!agg[cycle].every(allEq) && safety--);
           if (safety <= 0) {
-            console.warn("safety.");
+            console.warn('safety.');
           }
           // console.log(agg);
           const sum = agg.reduce((acc, set) => acc + set[set.length - 1], 0);
@@ -716,7 +716,7 @@
             cycle++;
           } while (!agg[cycle].every(allEq) && safety--);
           if (safety <= 0) {
-            console.warn("safety.");
+            console.warn('safety.');
           }
           // console.log(agg);
           const sub = agg.reverse().reduce((acc, set) => -acc + set[0], 0);
