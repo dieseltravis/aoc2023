@@ -699,7 +699,32 @@
         console.log(extra);
         return extra.reduce((sum, val) => sum + val, 0);
       },
-      part2: d => d
+      part2: (data) => {
+        const input = data.trim().split('\n').map(l => l.split(' ').map(Number));
+        const allEq = (val, _i, arr) => val === arr[0];
+        console.log(input);
+        const extra = [];
+        input.forEach(row => {
+          const agg = [row.slice()];
+          let cycle = 0;
+          let safety = 100;
+          do {
+            agg[cycle + 1] = [];
+            for (let l = agg[cycle].length - 1; l > 0; l--) {
+              agg[cycle + 1].unshift(agg[cycle][l] - agg[cycle][l - 1]);
+            }
+            cycle++;
+          } while (!agg[cycle].every(allEq) && safety--);
+          if (safety <= 0) {
+            console.warn("safety.");
+          }
+          // console.log(agg);
+          const sub = agg.reverse().reduce((acc, set) => -acc + set[0], 0);
+          extra.push(sub);
+        });
+        console.log(extra);
+        return extra.reduce((sum, val) => sum + val, 0);
+      }
     },
     day10: {
       part1: d => d,
