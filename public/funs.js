@@ -636,6 +636,8 @@
         return c;
       },
       part2: (data) => {
+        const gcd = (a, b) => !b ? a : gcd(b, a % b);
+        const lcm = (a, b) => (a * b) / gcd(a, b);
         const input = data.trim().split('\n\n');
         const directions = input[0].trim().split('');
         const map = input[1].trim().split('\n').reduce((m, line) => {
@@ -646,13 +648,14 @@
           return m;
         }, {});
         const nodes = Object.keys(map).filter(m => m[2] === 'A');
-        console.log(nodes, directions, map);
         const zzz = n => n[2] === 'Z';
         const dlen = directions.length;
         const nlen = nodes.length;
+        const starts = nodes.slice();
+        console.log(nodes, directions, map, starts);
+        let safety = 10000000000;
         let i = 0;
         let c = 0;
-        let safety = 10000000000;
         while (!nodes.every(zzz) && safety-- > 0) {
           i = i % dlen;
           const d = directions[i];
@@ -671,109 +674,92 @@
     },
     day9: {
       part1: (data) => {
-        return data;
+        const input = data.trim().split('\n').map(l => l.split(' ').map(Number));
+        const allEq = (val, _i, arr) => val === arr[0];
+        console.log(input);
+        const extra = [];
+        input.forEach(row => {
+          const agg = [row.slice()];
+          let cycle = 0;
+          let safety = 100;
+          do {
+            agg[cycle + 1] = [];
+            for (let l = agg[cycle].length - 1; l > 0; l--) {
+              agg[cycle + 1].unshift(agg[cycle][l] - agg[cycle][l - 1]);
+            }
+            cycle++;
+          } while (!agg[cycle].every(allEq) && safety--);
+          if (safety <= 0) {
+            console.warn("safety.");
+          }
+          // console.log(agg);
+          const sum = agg.reduce((acc, set) => acc + set[set.length - 1], 0);
+          extra.push(sum);
+        });
+        console.log(extra);
+        return extra.reduce((sum, val) => sum + val, 0);
       },
-      part2: (data) => {
-        return data;
-      }
+      part2: d => d
     },
     day10: {
-      part1: (data) => {
-        return data;
-      },
-      part2: (data) => {
-        return data;
-      }
+      part1: d => d,
+      part2: d => d
     },
     day11: {
-      part1: (data) => {
-        return data;
-      },
-      part2: (data) => {
-        return data;
-      }
+      part1: d => d,
+      part2: d => d
     },
     day12: {
-      part1: (data) => {
-        return data;
-      },
-      part2: (data) => {
-        return data;
-      }
+      part1: d => d,
+      part2: d => d
     },
     day13: {
-      part1: (data) => {
-        return data;
-      },
-      part2: (data) => {
-        return data;
-      }
+      part1: d => d,
+      part2: d => d
     },
     day14: {
-      part1: (data) => {
-        return data;
-      },
-      part2: (data) => {
-        return data;
-      }
+      part1: d => d,
+      part2: d => d
     },
     day15: {
-      part1: (data) => {
-        return data;
-      },
-      part2: (data) => {
-        return data;
-      }
+      part1: d => d,
+      part2: d => d
     },
     day16: {
-      part1: (data) => {
-        return data;
-      },
-      part2: () => {}
+      part1: d => d,
+      part2: d => d
     },
     day17: {
-      part1: (data) => {
-        return data;
-      },
-      part2: () => {}
+      part1: d => d,
+      part2: d => d
     },
     day18: {
-      part1: (data) => {
-        return data;
-      },
-      part2: () => {}
+      part1: d => d,
+      part2: d => d
     },
     day19: {
-      part1: (data) => {
-        return data;
-      },
-      part2: () => {}
+      part1: d => d,
+      part2: d => d
     },
     day20: {
-      part1: (data) => {
-        return data;
-      },
-      part2: () => {}
+      part1: d => d,
+      part2: d => d
     },
     day21: {
-      part1: (data) => {
-        return data;
-      },
-      part2: (data) => {
-        return data;
-      }
+      part1: d => d,
+      part2: d => d
     },
     day22: {
-      part1: (d) => { return d; },
-      part2: (d) => { return d; }
+      part1: d => d,
+      part2: d => d
     },
     day23: {
-      part1: (d) => { return d; },
-      part2: (d) => { return d; }
+      part1: d => d,
+      part2: d => d
     },
     day24: {
-      part1: (d) => { return d; },
-      part2: (d) => { return d; }
+      part1: d => d,
+      part2: d => d
     },
     day25: {
       part1: d => d,
