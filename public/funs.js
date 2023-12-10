@@ -755,25 +755,30 @@
         const route = {};
         const maxY = input.length;
         const maxX = input[0].length;
+        const maxLoop = maxY * maxX;
+        // use a loop instead
         const go = (dir, y, x, len) => {
-          if (dir === 'N') {
-            y--;
-          } else if (dir === 'E') {
-            x++;
-          } else if (dir === 'S') {
-            y++;
-          } else if (dir === 'W') {
-            x--;
-          }
-          // console.log(dir, 'y', y, 'x', x);
-          if (y < 0 || y >= maxY || x < 0 || x >= maxX) {
-            return;
-          }
-          const char = input[y][x];
-          // console.log('char', char);
-          if (char === '.' || char === 'S') {
-            return;
-          } else {
+          let i = 0;
+          while (i++ < maxLoop) {
+            if (dir === 'N') {
+              y--;
+            } else if (dir === 'E') {
+              x++;
+            } else if (dir === 'S') {
+              y++;
+            } else if (dir === 'W') {
+              x--;
+            }
+            // console.log(dir, 'y', y, 'x', x);
+            if (y < 0 || y >= maxY || x < 0 || x >= maxX) {
+              return;
+            }
+            const char = input[y][x];
+            // console.log('char', char);
+            if (char === '.' || char === 'S') {
+              return;
+            }
+
             const pipe = map[char];
             const from = fromDir[dir];
             // console.log('pipe', pipe);
@@ -785,17 +790,22 @@
             len++;
             const val = route[y + ':' + x] || Infinity;
             route[y + ':' + x] = Math.min(val, len);
-            go(next, y, x, len);
+            // Uncaught InternalError: too much recursion
+            // return go(next, y, x, len);
+            dir = next;
           }
         };
         // start
         route[startY + ':' + startX] = 0;
+        console.log('look N', startY, startX);
         go('N', startY, startX, 0);
+        console.log('look E');
         go('E', startY, startX, 0);
+        console.log('look S');
         go('S', startY, startX, 0);
+        console.log('look W');
         go('W', startY, startX, 0);
         console.log(route);
-        // Uncaught InternalError: too much recursion
         return Math.max(...Object.values(route));
       },
       part2: (data) => {
