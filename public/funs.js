@@ -509,9 +509,7 @@
       },
       part2: (data) => {
         const cards = 'J23456789TQKA'.split('');
-        const cardVal = c => {
-          return cards.indexOf(c) + 1;
-        };
+        const cardVal = c => cards.indexOf(c) + 1;
         const score2 = h => {
           const val = {
             five: 0,
@@ -727,8 +725,82 @@
       }
     },
     day10: {
-      part1: d => d,
-      part2: d => d
+      part1: (data) => {
+        const map = {
+          'S': ['N', 'E', 'S', 'W'],
+          '|': ['N', 'S'],
+          '-': ['E', 'W'],
+          'L': ['N', 'E'],
+          'J': ['N', 'W'],
+          '7': ['S', 'W'],
+          'F': ['E', 'S'],
+          '.': []
+        };
+        const fromDir = {
+          N: 'S',
+          E: 'W',
+          S: 'N',
+          W: 'E'
+        };
+        let startY = -1;
+        let startX = -1;
+        const input = data.trim().split('\n').map((l, y) => {
+          const s = l.indexOf('S');
+          if (s > -1) {
+            startY = y;
+            startX = s;
+          }
+          return l.split('');
+        });
+        const route = {};
+        const maxY = input.length;
+        const maxX = input[0].length;
+        const go = (dir, y, x, len) => {
+          if (dir === 'N') {
+            y--;
+          } else if (dir === 'E') {
+            x++;
+          } else if (dir === 'S') {
+            y++;
+          } else if (dir === 'W') {
+            x--;
+          }
+          // console.log(dir, 'y', y, 'x', x);
+          if (y < 0 || y >= maxY || x < 0 || x >= maxX) {
+            return;
+          }
+          const char = input[y][x];
+          // console.log('char', char);
+          if (char === '.' || char === 'S') {
+            return;
+          } else {
+            const pipe = map[char];
+            const from = fromDir[dir];
+            // console.log('pipe', pipe);
+            if (!pipe.includes(from)) {
+              // bad pipe
+              return;
+            }
+            const next = pipe.find(c => c !== from);
+            len++;
+            const val = route[y + ':' + x] || Infinity;
+            route[y + ':' + x] = Math.min(val, len);
+            go(next, y, x, len);
+          }
+        };
+        // start
+        route[startY + ':' + startX] = 0;
+        go('N', startY, startX, 0);
+        go('E', startY, startX, 0);
+        go('S', startY, startX, 0);
+        go('W', startY, startX, 0);
+        console.log(route);
+        // Uncaught InternalError: too much recursion
+        return Math.max(...Object.values(route));
+      },
+      part2: (data) => {
+        return data;
+      }
     },
     day11: {
       part1: d => d,
