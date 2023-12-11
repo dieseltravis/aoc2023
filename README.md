@@ -41,8 +41,8 @@ also on github: [dieseltravis/aoc2023](https://github.com/dieseltravis/aoc2023)
 
 ## previous years:
 
-[Glitch playlist of all years](https://glitch.com/@travishardiman/advent-of-code)
-[Github list of all projects](https://github.com/stars/dieseltravis/lists/advent-of-code)
+[🎏 Glitch playlist of all years](https://glitch.com/@travishardiman/advent-of-code)
+[:octocat: Github list of all projects](https://github.com/stars/dieseltravis/lists/advent-of-code)
 
 ### 2022
 
