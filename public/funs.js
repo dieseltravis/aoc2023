@@ -809,7 +809,107 @@
         return Math.max(...Object.values(route));
       },
       part2: (data) => {
-        return data;
+        const map = {
+          'S': ['N', 'E', 'S', 'W'],
+          '|': ['N', 'S'],
+          '-': ['E', 'W'],
+          'L': ['N', 'E'],
+          'J': ['N', 'W'],
+          '7': ['S', 'W'],
+          'F': ['E', 'S'],
+          '.': []
+        };
+        const fromDir = {
+          N: 'S',
+          E: 'W',
+          S: 'N',
+          W: 'E'
+        };
+        let startY = -1;
+        let startX = -1;
+        const dirts = [];
+        const input = data.trim().split('\n').map((l, y) => {
+          const s = l.indexOf('S');
+          if (s > -1) {
+            startY = y;
+            startX = s;
+          }
+          return l.split('');
+        });
+        const shape = [];
+        const maxY = input.length;
+        const maxX = input[0].length;
+        const maxLoop = maxY * maxX;
+        // use a loop instead
+        const go = (dir, y, x) => {
+          let i = 0;
+          while (i++ < maxLoop) {
+            if (dir === 'N') {
+              y--;
+            } else if (dir === 'E') {
+              x++;
+            } else if (dir === 'S') {
+              y++;
+            } else if (dir === 'W') {
+              x--;
+            }
+            if (y < 0 || y >= maxY || x < 0 || x >= maxX) {
+              return;
+            }
+            const char = input[y][x];
+            if (char === '.' || char === 'S') {
+              return;
+            }
+
+            const pipe = map[char];
+            const from = fromDir[dir];
+            if (!pipe.includes(from)) {
+              // bad pipe
+              return;
+            }
+            const next = pipe.find(c => c !== from);
+            if (!shape.find(s => s[0] === y && s[1] === x)) {
+              shape.push([y, x]);
+            }
+            dir = next;
+          }
+        };
+        // start
+        shape.push([startY, startX]);
+        go('N', startY, startX);
+        go('E', startY, startX);
+        go('S', startY, startX);
+        go('W', startY, startX);
+        const inner = [];
+        const pointInPolygon = function (polygon, point) {
+          // A point is in a polygon if a line from the point to infinity crosses the polygon an odd number of times
+          let odd = false;
+          // For each edge (In this case for each point of the polygon and the previous one)
+          for (let i = 0, j = polygon.length - 1; i < polygon.length; i++) {
+            // If a line from the point into infinity crosses this edge
+            if (((polygon[i][1] > point[1]) !== (polygon[j][1] > point[1])) // One point needs to be above, one below our y coordinate
+              // ...and the edge doesn't cross our Y corrdinate before our x coordinate (but between our x coordinate and infinity)
+              && (point[0] < ((polygon[j][0] - polygon[i][0]) * (point[1] - polygon[i][1]) / (polygon[j][1] - polygon[i][1]) + polygon[i][0]))) {
+              // Invert odd
+              odd = !odd;
+            }
+            j = i;
+          }
+          // If the number of crossings was odd, the point is in the polygon
+          return odd;
+        };
+        for (let y = maxY - 1; y--;) {
+          for (let x = maxX - 1; x--;) {
+            if (!shape.some(s => s[0] === y && s[1] === x)) {
+              dirts.push([y, x]);
+              if (pointInPolygon(shape, [y, x])) {
+                inner.push([y, x]);
+              }
+            }
+          }
+        }
+        console.log(dirts, shape, inner);
+        return inner.length;
       }
     },
     day11: {
