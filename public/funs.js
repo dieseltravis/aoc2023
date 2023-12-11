@@ -637,8 +637,8 @@
         return c;
       },
       part2: (data) => {
-        // const gcd = (a, b) => !b ? a : gcd(b, a % b);
-        // const lcm = (a, b) => (a * b) / gcd(a, b);
+        const gcd = (a, b) => !b ? a : gcd(b, a % b);
+        const lcm = (a, b) => (a * b) / gcd(a, b);
         const input = data.trim().split('\n\n');
         const directions = input[0].trim().split('');
         const map = input[1].trim().split('\n').reduce((m, line) => {
@@ -654,23 +654,32 @@
         const nlen = nodes.length;
         const starts = nodes.slice();
         console.log(nodes, directions, map, starts);
-        let safety = 10000000000;
+        let safety = 100000;
         let i = 0;
-        let c = 0;
-        while (!nodes.every(zzz) && safety-- > 0) {
+        let c = 1;
+        const found = [];
+        const lowest = [];
+        while (lowest.length < nlen && safety-- > 0) {
           i = i % dlen;
           const d = directions[i];
           for (let l = nlen; l--;) {
-            let node = nodes[l];
-            node = map[node][d];
-            nodes[l] = node;
+            if (!found.includes(l)) {
+              let node = nodes[l];
+              node = map[node][d];
+              nodes[l] = node;
+              if (zzz(node)) {
+                found.push(l);
+                lowest.push(c);
+              }
+            }
           }
           // console.log(c, i, d, node);
           i++;
           c++;
         }
-        console.log(safety, c);
-        return c;
+        const multiple = lowest.reduce((acc, l) => lcm(acc, l), 1);
+        console.log(safety, c, lowest, multiple);
+        return multiple;
       }
     },
     day9: {
@@ -916,7 +925,11 @@
       }
     },
     day11: {
-      part1: d => d,
+      part1: (data) => {
+        const input = data.trim().split('\n');
+        console.log(input);
+        return 0;
+      },
       part2: d => d
     },
     day12: {
