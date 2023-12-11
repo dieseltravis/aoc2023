@@ -983,7 +983,60 @@
         console.log(sum);
         return sum;
       },
-      part2: d => d
+      part2: (data) => {
+        const dotRows = [];
+        const dotCols = [];
+        const allEmpty = c => c === '.';
+        const input = data.trim().split('\n').map((l, i) => {
+          const row = l.split('');
+          if (row.every(allEmpty)) {
+            dotRows.push(i);
+          }
+          return row;
+        });
+        for (let l = input[0].length; l--;) {
+          if (input.map(r => r[l]).every(allEmpty)) {
+            dotCols.push(l);
+          }
+        }
+        console.log(dotRows, dotCols);
+        const manhattan = (y1, x1, y2, x2) => Math.abs(x2 - x1) + Math.abs(y2 - y1);
+        const points = input.reduce((acc, row, y) => {
+          row.forEach((c, x) => {
+            if (c === '#') {
+              acc.push([y, x]);
+            }
+          });
+          return acc;
+        }, []);
+        console.log(points);
+        const pairs = [];
+        const expandBy = 1000000 - 1;
+        const inRange = (i, v1, v2) => {
+          if (v1 < v2) {
+            return i > v1 && i < v2;
+          } else if (v1 > v2) {
+            return i > v2 && i < v1;
+          } else {
+            return false;
+          }
+        };
+        points.forEach((p1, i1) => {
+          points.forEach((p2, i2) => {
+            if (i1 !== i2 && !pairs.some(pp => pp.keys.includes(i1) && pp.keys.includes(i2))) {
+              const expanse = BigInt(expandBy * (dotRows.filter(r => inRange(r, p1[0], p2[0])).length + dotCols.filter(c => inRange(c, p1[1], p2[1])).length));
+              pairs.push({
+                keys: [i1, i2],
+                distance: BigInt(manhattan(p1[0], p1[1], p2[0], p2[1])) + expanse
+              });
+            }
+          });
+        });
+        console.log(pairs);
+        const sum = pairs.reduce((acc, pp) => acc + pp.distance, BigInt(0));
+        console.log(sum);
+        return sum;
+      }
     },
     day12: {
       part1: d => d,
