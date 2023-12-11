@@ -530,19 +530,21 @@
               if (count === i) {
                 if (count === 5) {
                   val.five = 1;
+                  h = h.join('').replace(/J/g, c1).split('');
                   i = 0;
                   j = csl;
                 } else if (count === 4) {
                   val.four = 1;
                   val.high = 1;
+                  h = h.join('').replace(/J/g, c1).split('');
                   i = 0;
                   j = csl;
                 } else if (count === 3) {
                   val.three = 1;
-                  h = h.join('').replace('J', c1).split('');
+                  h = h.join('').replace(/J/g, c1).split('');
                 } else if (count === 2) {
                   val.pair += 1;
-                  h = h.join('').replace('J', c1).split('');
+                  h = h.join('').replace(/J/g, c1).split('');
                 } else if (count === 1) {
                   val.high = 1;
                 }
@@ -597,6 +599,7 @@
         });
         const answer = sorted.reduce((a, v, i) => a + (v.bid * (i + 1)), 0);
         console.log(sorted, answer);
+        // 251824095?
         // 251910588 is wrong
         // 251794152 is wrong
         // 251681150 is too low
