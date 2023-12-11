@@ -926,9 +926,62 @@
     },
     day11: {
       part1: (data) => {
-        const input = data.trim().split('\n');
-        console.log(input);
-        return 0;
+        const dotRows = [];
+        const dotCols = [];
+        const allEmpty = c => c === '.';
+        const input = data.trim().split('\n').map((l, i) => {
+          const row = l.split('');
+          if (row.every(allEmpty)) {
+            dotRows.push(i);
+          }
+          return row;
+        });
+        for (let l = input[0].length; l--;) {
+          if (input.map(r => r[l]).every(allEmpty)) {
+            dotCols.push(l);
+          }
+        }
+        console.log(dotRows, dotCols);
+        const expanded = [];
+        for (let l = input.length; l--;) {
+          const newRow = [];
+          for (let ll = input[l].length; ll--;) {
+            newRow.unshift(input[l][ll]);
+            if (dotCols.includes(ll)) {
+              newRow.unshift('.');
+            }
+          }
+          expanded.unshift(newRow);
+          if (dotRows.includes(l)) {
+            expanded.unshift(newRow.slice());
+          }
+        }
+        console.log(expanded);
+        const manhattan = (y1, x1, y2, x2) => Math.abs(x2 - x1) + Math.abs(y2 - y1);
+        const points = expanded.reduce((acc, row, y) => {
+          row.forEach((c, x) => {
+            if (c === '#') {
+              acc.push([y, x]);
+            }
+          });
+          return acc;
+        }, []);
+        console.log(points);
+        const pairs = [];
+        points.forEach((p1, i1) => {
+          points.forEach((p2, i2) => {
+            if (i1 !== i2 && !pairs.some(pp => pp.keys.includes(i1) && pp.keys.includes(i2))) {
+              pairs.push({
+                keys: [i1, i2],
+                distance: manhattan(p1[0], p1[1], p2[0], p2[1])
+              });
+            }
+          });
+        });
+        console.log(pairs);
+        const sum = pairs.reduce((acc, pp) => acc + pp.distance, 0);
+        console.log(sum);
+        return sum;
       },
       part2: d => d
     },
