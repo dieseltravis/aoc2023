@@ -1131,7 +1131,7 @@
         let ip = 0;
         const validSum = input.reduce((sum, springs, i) => {
           if (i % ix === 0) {
-            console.log(ip + '% ' + (new Date).toISOString());
+            console.log(ip + '% ' + (new Date()).toISOString());
             ip++;
           }
           for (let l = springs.max; l--;) {
