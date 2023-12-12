@@ -1110,28 +1110,16 @@
         const isValid = (text, lens) => [...text.matchAll(onlySpring)].map(m => m[0].length).join(',') === lens;
         const input = data.trim().split('\n').map(line => {
           const parts = line.trim().split(' ');
-          const springMap = parts[0];
-          const potential = [...springMap.matchAll(matchSpots)].map(m => {
-            const txt = m[0];
-            return {
-              matched: txt,
-              start: m.index,
-              length: txt.length,
-              isFull: isFullSpring.test(txt)
-            };
-          });
+          const springMap = parts[0].repeat(5);
           const qAt = [...springMap.matchAll(eachQ)].map(m => m.index);
           const count = qAt.length;
-          const lens = parts[1];
-          const sizes = lens.split(',').map(Number);
+          const lens = (',' + parts[1]).repeat(5).slice(1);
           return {
             qAt,
             count,
             max: (2 ** count),
             springMap,
-            potential,
-            lens,
-            sizes
+            lens
           };
         });
         console.log(input);
