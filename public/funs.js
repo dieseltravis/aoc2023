@@ -1102,15 +1102,17 @@
         return validSum;
       },
       part2: (data) => {
-        const isFullSpring = /^#+$/;
-        const matchSpots = /[?#]+/g;
         const eachQ = /\?/g;
         const onlySpring = /#+/g;
         const options = ['.', '#'];
-        const isValid = (text, lens) => [...text.matchAll(onlySpring)].map(m => m[0].length).join(',') === lens;
+        const isValid = (text, lens, lenslen) => {
+          const matches = [...text.matchAll(onlySpring)];
+          if (matches.length !== lenslen) return false;
+          return matches.map(m => m[0].length).join(',') === lens;
+        }
         const input = data.trim().split('\n').map(line => {
           const parts = line.trim().split(' ');
-          const springMap = parts[0].repeat(5);
+          const springMap = ('?' + parts[0]).repeat(5).slice(1);
           const qAt = [...springMap.matchAll(eachQ)].map(m => m.index);
           const count = qAt.length;
           const lens = (',' + parts[1]).repeat(5).slice(1);
@@ -1119,7 +1121,8 @@
             count,
             max: (2 ** count),
             springMap,
-            lens
+            lens,
+            lenslen: lens.split(',').length
           };
         });
         console.log(input);
@@ -1141,8 +1144,9 @@
               }
               newMap = begin + mid + end;
             }
-            // console.log(newMap);
-            if (isValid(newMap, springs.lens)) {
+            // const newlens = newMap.match(onlySpring);
+            // console.log(newMap, newlens.length );
+            if (isValid(newMap, springs.lens, springs.lenslen)) {
               sum++;
             }
           }
