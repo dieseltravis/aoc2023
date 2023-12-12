@@ -1109,7 +1109,7 @@
           const matches = [...text.matchAll(onlySpring)];
           if (matches.length !== lenslen) return false;
           return matches.map(m => m[0].length).join(',') === lens;
-        }
+        };
         const input = data.trim().split('\n').map(line => {
           const parts = line.trim().split(' ');
           const springMap = ('?' + parts[0]).repeat(5).slice(1);
@@ -1126,7 +1126,14 @@
           };
         });
         console.log(input);
-        const validSum = input.reduce((sum, springs) => {
+        // progress counters
+        const ix = input.length / 100;
+        let ip = 0;
+        const validSum = input.reduce((sum, springs, i) => {
+          if (i % ix === 0) {
+            console.log(ip + '% ' + (new Date).toISOString());
+            ip++;
+          }
           for (let l = springs.max; l--;) {
             const chars = ('0'.repeat(springs.count) + l.toString(2)).slice(-springs.count).split('').map(Number).map(m => options[m]);
             // console.log(chars);
