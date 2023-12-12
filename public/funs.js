@@ -1058,7 +1058,7 @@
               isFull: isFullSpring.test(txt)
             };
           });
-          const qAt = [...springMap.matchAll(/\?/g)].map(m => m.index)
+          const qAt = [...springMap.matchAll(eachQ)].map(m => m.index);
           const count = qAt.length;
           const lens = parts[1];
           const sizes = lens.split(',').map(Number);
@@ -1066,7 +1066,6 @@
             qAt,
             count,
             max: (2 ** count),
-            //counter: (new Array(count)).fill(0),
             springMap,
             potential,
             lens,
@@ -1075,10 +1074,9 @@
         });
         console.log(input);
         const validSum = input.reduce((sum, springs) => {
-          //const c = (new Array(count)).fill(0);
           for (let l = springs.max; l--;) {
             const chars = ('0'.repeat(springs.count) + l.toString(2)).slice(-springs.count).split('').map(Number).map(m => options[m]);
-            //console.log(chars);
+            // console.log(chars);
             let newMap = springs.springMap;
             for (let q = 0; q < springs.count; q++) {
               let begin = '';
@@ -1093,7 +1091,7 @@
               }
               newMap = begin + mid + end;
             }
-            //console.log(newMap);
+            // console.log(newMap);
             if (isValid(newMap, springs.lens)) {
               sum++;
             }
