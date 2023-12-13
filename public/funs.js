@@ -1103,14 +1103,6 @@
       },
       part2: (data) => {
         const dots = /\.+/g;
-        const eachQ = /\?/g;
-        const onlySpring = /#+/g;
-        const options = ['.', '#'];
-        const isValid = (text, lens, lenslen) => {
-          const matches = [...text.matchAll(onlySpring)];
-          if (matches.length !== lenslen) return false;
-          return matches.map(m => m[0].length).join(',') === lens;
-        };
         // count each chunk recursively
         const found = {};
         const rCount = (chunk, counts) => {
@@ -1143,59 +1135,19 @@
         };
         const input = data.trim().split('\n').map(line => {
           const parts = line.trim().split(' ');
+          // remove redundant dots
           const oldMap = parts[0].replace(dots, '.');
           const springMap = ('?' + oldMap).repeat(5).slice(1);
-          const qAt = [...springMap.matchAll(eachQ)].map(m => m.index);
-          const count = qAt.length;
           const lens = (',' + parts[1]).repeat(5).slice(1);
           const nums = lens.split(',').map(Number);
           return {
-            qAt,
-            count,
-            max: (2 ** count),
             springMap,
-            lens,
             nums,
             lenslen: nums.length,
             combos: rCount(springMap, nums.slice())
           };
         });
         console.log(input);
-        // progress counters
-        // const ix = input.length / 100;
-        // let ip = 0;
-        /*
-        const validSum = input.reduce((sum, springs, i) => {
-          if (i % ix === 0) {
-            console.log(ip + '% ' + (new Date()).toISOString());
-            ip++;
-          }
-          for (let l = springs.max; l--;) {
-            const chars = ('0'.repeat(springs.count) + l.toString(2)).slice(-springs.count).split('').map(Number).map(m => options[m]);
-            // console.log(chars);
-            let newMap = springs.springMap;
-            for (let q = 0; q < springs.count; q++) {
-              let begin = '';
-              const qi = springs.qAt[q];
-              if (qi > 0) {
-                begin = newMap.slice(0, qi);
-              }
-              const mid = chars[q];
-              let end = '';
-              if (qi < springs.springMap.length - 1) {
-                end = newMap.slice(qi + 1);
-              }
-              newMap = begin + mid + end;
-            }
-            // const newlens = newMap.match(onlySpring);
-            // console.log(newMap, newlens.length );
-            if (isValid(newMap, springs.lens, springs.lenslen)) {
-              sum++;
-            }
-          }
-          return sum;
-        }, 0);
-        */
         const validSum = input.reduce((acc, row) => acc + row.combos, 0);
         console.log(validSum);
         return validSum;
