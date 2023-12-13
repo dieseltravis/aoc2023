@@ -1039,12 +1039,123 @@
       }
     },
     day12: {
-      part1: d => d,
-      part2: d => d
+      part1: (data) => {
+        const isFullSpring = /^#+$/;
+        const matchSpots = /[?#]+/g;
+        const eachQ = /\?/g;
+        const onlySpring = /#+/g;
+        const options = ['.', '#'];
+        const isValid = (text, lens) => [...text.matchAll(onlySpring)].map(m => m[0].length).join(',') === lens;
+        const input = data.trim().split('\n').map(line => {
+          const parts = line.trim().split(' ');
+          const springMap = parts[0];
+          const potential = [...springMap.matchAll(matchSpots)].map(m => {
+            const txt = m[0];
+            return {
+              matched: txt,
+              start: m.index,
+              length: txt.length,
+              isFull: isFullSpring.test(txt)
+            };
+          });
+          const qAt = [...springMap.matchAll(eachQ)].map(m => m.index);
+          const count = qAt.length;
+          const lens = parts[1];
+          const sizes = lens.split(',').map(Number);
+          return {
+            qAt,
+            count,
+            max: (2 ** count),
+            springMap,
+            potential,
+            lens,
+            sizes
+          };
+        });
+        console.log(input);
+        const validSum = input.reduce((sum, springs) => {
+          for (let l = springs.max; l--;) {
+            const chars = ('0'.repeat(springs.count) + l.toString(2)).slice(-springs.count).split('').map(Number).map(m => options[m]);
+            // console.log(chars);
+            let newMap = springs.springMap;
+            for (let q = 0; q < springs.count; q++) {
+              let begin = '';
+              const qi = springs.qAt[q];
+              if (qi > 0) {
+                begin = newMap.slice(0, qi);
+              }
+              const mid = chars[q];
+              let end = '';
+              if (qi < springs.springMap.length - 1) {
+                end = newMap.slice(qi + 1);
+              }
+              newMap = begin + mid + end;
+            }
+            // console.log(newMap);
+            if (isValid(newMap, springs.lens)) {
+              sum++;
+            }
+          }
+          return sum;
+        }, 0);
+        console.log(validSum);
+        return validSum;
+      },
+      part2: (data) => {
+        const dots = /\.+/g;
+        // count each chunk recursively
+        const found = {};
+        const rCount = (chunk, counts) => {
+          const key = chunk + counts.join(',');
+          if (key in found) {
+            return found[key];
+          } else {
+            const noCounts = (counts.length === 0);
+            if (chunk === '') {
+              return noCounts ? 1 : 0;
+            } else if (noCounts) {
+              return (chunk.includes('#')) ? 0 : 1;
+            } else {
+              let num = 0;
+              if ('.?'.includes(chunk[0])) {
+                num += rCount(chunk.slice(1), counts.slice());
+              }
+              if ('#?'.includes(chunk[0])) {
+                const chunkLen = chunk.length;
+                if (counts[0] <= chunkLen &&
+                    !chunk.slice(0, counts[0]).includes('.') &&
+                   (counts[0] === chunkLen || chunk[counts[0]] !== '#')) {
+                  num += rCount(chunk.slice(counts[0] + 1), counts.slice(1));
+                }
+              }
+              found[key] = num;
+              return num;
+            }
+          }
+        };
+        const input = data.trim().split('\n').map(line => {
+          const parts = line.trim().split(' ');
+          // remove redundant dots
+          const oldMap = parts[0].replace(dots, '.');
+          const springMap = ('?' + oldMap).repeat(5).slice(1);
+          const lens = (',' + parts[1]).repeat(5).slice(1);
+          const nums = lens.split(',').map(Number);
+          return {
+            springMap,
+            nums,
+            lenslen: nums.length,
+            combos: rCount(springMap, nums.slice())
+          };
+        });
+        console.log(input);
+        const validSum = input.reduce((acc, row) => acc + row.combos, 0);
+        console.log(validSum);
+        return validSum;
+      }
     },
     day13: {
-      part1: d => d,
-      part2: d => d
+      part1: (data) => { return data; },
+      part2: (data) => { return data; }
     },
     day14: {
       part1: d => d,
