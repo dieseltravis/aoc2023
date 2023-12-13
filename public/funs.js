@@ -1102,6 +1102,7 @@
         return validSum;
       },
       part2: (data) => {
+        const dots = /\.+/g;
         const eachQ = /\?/g;
         const onlySpring = /#+/g;
         const options = ['.', '#'];
@@ -1110,25 +1111,60 @@
           if (matches.length !== lenslen) return false;
           return matches.map(m => m[0].length).join(',') === lens;
         };
+        // count each chunk recursively
+        const found = {};
+        const rCount = (chunk, counts) => {
+          const key = chunk + counts.join(',');
+          if (key in found) {
+            return found[key];
+          } else {
+            const noCounts = (counts.length === 0);
+            if (chunk === '') {
+              return noCounts ? 1 : 0;
+            } else if (noCounts) {
+              return (chunk.includes('#')) ? 0 : 1;
+            } else {
+              let num = 0;
+              if ('.?'.includes(chunk[0])) {
+                num += rCount(chunk.slice(1), counts.slice());
+              }
+              if ('#?'.includes(chunk[0])) {
+                const chunkLen = chunk.length;
+                if (counts[0] <= chunkLen &&
+                    !chunk.slice(0, counts[0]).includes('.') &&
+                   (counts[0] === chunkLen || chunk[counts[0]] !== '#')) {
+                  num += rCount(chunk.slice(counts[0] + 1), counts.slice(1));
+                }
+              }
+              found[key] = num;
+              return num;
+            }
+          }
+        };
         const input = data.trim().split('\n').map(line => {
           const parts = line.trim().split(' ');
-          const springMap = ('?' + parts[0]).repeat(5).slice(1);
+          const oldMap = parts[0].replace(dots, '.');
+          const springMap = ('?' + oldMap).repeat(5).slice(1);
           const qAt = [...springMap.matchAll(eachQ)].map(m => m.index);
           const count = qAt.length;
           const lens = (',' + parts[1]).repeat(5).slice(1);
+          const nums = lens.split(',').map(Number);
           return {
             qAt,
             count,
             max: (2 ** count),
             springMap,
             lens,
-            lenslen: lens.split(',').length
+            nums,
+            lenslen: nums.length,
+            combos: rCount(springMap, nums.slice())
           };
         });
         console.log(input);
         // progress counters
-        const ix = input.length / 100;
-        let ip = 0;
+        // const ix = input.length / 100;
+        // let ip = 0;
+        /*
         const validSum = input.reduce((sum, springs, i) => {
           if (i % ix === 0) {
             console.log(ip + '% ' + (new Date()).toISOString());
@@ -1159,6 +1195,8 @@
           }
           return sum;
         }, 0);
+        */
+        const validSum = input.reduce((acc, row) => acc + row.combos, 0);
         console.log(validSum);
         return validSum;
       }
