@@ -1232,7 +1232,7 @@
         });
         console.log(input);
         const result = input.reduce((sum, block, i) => {
-          // console.log(i, sum);
+          console.log(i, sum);
           const obj = fold(block);
           if ('x' in obj) {
             sum += obj.x;
