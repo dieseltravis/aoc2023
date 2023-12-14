@@ -1203,7 +1203,6 @@
         const bits = s => '0b' + s.split('').map(c => c === '#').map(Number).join('');
         const diff = (b1, b2) => (BigInt(b1) - BigInt(b2)).toString(2).replace(/[-0]+/g, '');
         const fold = (block) => {
-
           const xmax = block[0].length;
           // reflect x
           for (let x = 1; x < xmax; x++) {
@@ -1225,7 +1224,7 @@
             if (diff(tops, bottoms) === '1') {
               return { y };
             }
-          }        
+          }
         };
         const input = data.trim().split('\n\n').map(b => {
           const chars = b.split('\n').map(r => r.split(''));
@@ -1233,7 +1232,7 @@
         });
         console.log(input);
         const result = input.reduce((sum, block, i) => {
-          console.log(i, sum);
+          // console.log(i, sum);
           const obj = fold(block);
           if ('x' in obj) {
             sum += obj.x;
