@@ -1306,6 +1306,7 @@
       },
       part2: (data) => {
         const cycles = 1000000000;
+        // const cycles = 3;
         const input = data.trim().split('\n').map(l => {
           return l.split('').map(c => {
             return {
@@ -1322,11 +1323,12 @@
             c.load = ymax - y;
           });
         });
+        const render = () => input.map(r => r.map(c => c.isRound ? 'O' : c.isCube ? '#' : '.').join('')).join('\n');
         console.log(input.slice());
         // progress
         const pc = cycles / 100;
         let p = 0;
-        let lastGrid = input.map(r => r.map(c => c.isRound ? 'O' : '.').join('')).join('\n');
+        let lastGrid = render();
         console.log('first grid:\n' + lastGrid);
         for (let i = 0; i < cycles; i++) {
           // N
@@ -1352,52 +1354,7 @@
               }
             }
           }
-          // E
-          for (let y = 0; y < ymax; y++) {
-            for (let x = xmax; x--;) {
-              if (input[y][x].isRound) {
-                let newX = x;
-                let lastX = x;
-                while (newX < xmax - 2) {
-                  newX = newX + 1;
-                  if (input[y][newX].isEmpty) {
-                    lastX = newX;
-                  } else {
-                    break;
-                  }
-                }
-                if (lastX !== x) {
-                  input[y][x].isRound = false;
-                  input[y][x].isEmpty = true;
-                  input[y][lastX].isRound = true;
-                  input[y][lastX].isEmpty = false;
-                }
-              }
-            }
-          }
-          // S
-          for (let x = 0; x < xmax; x++) {
-            for (let y = ymax; y--;) {
-              if (input[y][x].isRound) {
-                let newY = y;
-                let lastY = y;
-                while (newY < ymax - 2) {
-                  newY = newY + 1;
-                  if (input[newY][x].isEmpty) {
-                    lastY = newY;
-                  } else {
-                    break;
-                  }
-                }
-                if (lastY !== y) {
-                  input[y][x].isRound = false;
-                  input[y][x].isEmpty = true;
-                  input[lastY][x].isRound = true;
-                  input[lastY][x].isEmpty = false;
-                }
-              }
-            }
-          }
+          // console.log('N\n' + render());
           // W
           for (let y = 0; y < ymax; y++) {
             for (let x = 0; x < xmax; x++) {
@@ -1421,8 +1378,58 @@
               }
             }
           }
+          // console.log('W\n' + render());
+          // S
+          for (let x = 0; x < xmax; x++) {
+            for (let y = ymax; y--;) {
+              if (input[y][x].isRound) {
+                let newY = y;
+                let lastY = y;
+                while (newY < ymax - 1) {
+                  newY = newY + 1;
+                  if (input[newY][x].isEmpty) {
+                    lastY = newY;
+                  } else {
+                    break;
+                  }
+                }
+                if (lastY !== y) {
+                  input[y][x].isRound = false;
+                  input[y][x].isEmpty = true;
+                  input[lastY][x].isRound = true;
+                  input[lastY][x].isEmpty = false;
+                }
+              }
+            }
+          }
+          // console.log('S\n' + render());
+          // E
+          for (let y = 0; y < ymax; y++) {
+            for (let x = xmax; x--;) {
+              if (input[y][x].isRound) {
+                let newX = x;
+                let lastX = x;
+                while (newX < xmax - 1) {
+                  newX = newX + 1;
+                  if (input[y][newX].isEmpty) {
+                    lastX = newX;
+                  } else {
+                    break;
+                  }
+                }
+                if (lastX !== x) {
+                  input[y][x].isRound = false;
+                  input[y][x].isEmpty = true;
+                  input[y][lastX].isRound = true;
+                  input[y][lastX].isEmpty = false;
+                }
+              }
+            }
+          }
+          // console.log('E\n' + render());
+
           // test:
-          const newGrid = input.map(r => r.map(c => c.isRound ? 'O' : '.').join('')).join('\n');
+          const newGrid = render();
           if (lastGrid === newGrid) {
             console.log('grid repeating', i, '\n' + newGrid);
             break;
@@ -1432,6 +1439,7 @@
             console.log(p + '% ' + (new Date()).toISOString());
             p++;
           }
+          console.log('last grid:\n' + lastGrid);
         }
         const load = input.reduce((acc, row) => {
           return acc + row.reduce((acc2, c) => {
