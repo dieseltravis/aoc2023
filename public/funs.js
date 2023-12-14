@@ -1154,8 +1154,98 @@
       }
     },
     day13: {
-      part1: (data) => { return data; },
-      part2: (data) => { return data; }
+      part1: (data) => {
+        const fold = (block) => {
+          const ymax = block.length;
+          const xmax = block[0].length;
+          // reflect x
+          for (let x = 1; x < xmax; x++) {
+            // take first half and compare it to reverse of second half
+            const len = Math.min(x, xmax - x);
+            const lefts = block.map(l => l.slice(0, x).slice(-len).join('')).join('\n');
+            const rights = block.map(r => r.slice(x, x + len).reverse().join('')).join('\n');
+            if (lefts === rights) {
+              return { x };
+            }
+          }
+          // reflect y
+          for (let y = 1; y < ymax; y++) {
+            // take top half and compare it to reverse of bottom half
+            const len = Math.min(y, ymax - y);
+            const tops = block.slice(0, y).slice(-len).map(t => t.join('')).join('\n');
+            const bottoms = block.slice(y, y + len).reverse().map(b => b.join('')).join('\n');
+            if (tops === bottoms) {
+              return { y };
+            }
+          }
+        };
+        const input = data.trim().split('\n\n').map(b => {
+          const chars = b.split('\n').map(r => r.split(''));
+          return chars;
+        });
+        console.log(input);
+        const result = input.reduce((sum, block, i) => {
+          console.log(i, sum);
+          const obj = fold(block);
+          if ('x' in obj) {
+            sum += obj.x;
+          }
+          if ('y' in obj) {
+            sum += obj.y * 100;
+          }
+          return sum;
+        }, 0);
+        console.log(result);
+        // 19301 too low
+        return result;
+      },
+      part2: (data) => {
+        const bits = s => '0b' + s.split('').map(c => c === '#').map(Number).join('');
+        const diff = (b1, b2) => (BigInt(b1) - BigInt(b2)).toString(2).replace(/[-0]+/g, '');
+        const fold = (block) => {
+          const xmax = block[0].length;
+          // reflect x
+          for (let x = 1; x < xmax; x++) {
+            // take first half and compare it to reverse of second half
+            const len = Math.min(x, xmax - x);
+            const lefts = bits(block.map(l => l.slice(0, x).slice(-len).join('')).join(''));
+            const rights = bits(block.map(r => r.slice(x, x + len).reverse().join('')).join(''));
+            if (diff(lefts, rights) === '1') {
+              return { x };
+            }
+          }
+          const ymax = block.length;
+          // reflect y
+          for (let y = 1; y < ymax; y++) {
+            // take top half and compare it to reverse of bottom half
+            const len = Math.min(y, ymax - y);
+            const tops = bits(block.slice(0, y).slice(-len).map(t => t.join('')).join(''));
+            const bottoms = bits(block.slice(y, y + len).reverse().map(b => b.join('')).join(''));
+            if (diff(tops, bottoms) === '1') {
+              return { y };
+            }
+          }
+        };
+        const input = data.trim().split('\n\n').map(b => {
+          const chars = b.split('\n').map(r => r.split(''));
+          return chars;
+        });
+        console.log(input);
+        const result = input.reduce((sum, block, i) => {
+          console.log(i, sum);
+          const obj = fold(block);
+          if ('x' in obj) {
+            sum += obj.x;
+          }
+          if ('y' in obj) {
+            sum += obj.y * 100;
+          }
+          return sum;
+        }, 0);
+        console.log(result);
+        // 35583 too high
+        return result;
+      }
     },
     day14: {
       part1: d => d,
