@@ -1248,7 +1248,62 @@
       }
     },
     day14: {
-      part1: d => d,
+      part1: (data) => {
+        const input = data.trim().split('\n').map(l => {
+          return l.split('').map(c => {
+            return {
+              // c,
+              isEmpty: c === '.',
+              isCube: c === '#',
+              isRound: c === 'O'
+            };
+          });
+        });
+        const ymax = input.length;
+        const xmax = input[0].length;
+        input.forEach((r, y) => {
+          r.forEach(c => {
+            c.load = ymax - y;
+          });
+        });
+        console.log(input.slice());
+        const rounds = [];
+        for (let x = 0; x < xmax; x++) {
+          for (let y = 0; y < ymax; y++) {
+            if (input[y][x].isRound) {
+              // look up
+              if (y > 0) {
+                let lastPos = { y, x };
+                for (let newY = y; newY--;) {
+                  const newSpot = input[newY][x];
+                  if (newSpot.isEmpty) {
+                    lastPos.y = newY;
+                  } else {
+                    break;
+                  }
+                }
+                if (lastPos.y !== y) {
+                  input[y][x].isRound = false;
+                  input[y][x].isEmpty = true;
+                  input[lastPos.y][x].isRound = true;
+                  input[lastPos.y][x].isEmpty = false;
+                }
+              }
+            }
+          }
+        }
+        console.log(rounds);
+        const load = input.reduce((acc, row) => {
+          return acc + row.reduce((acc2, c) => {
+            if (c.isRound) {
+              acc2 += c.load;
+            }
+            return acc2;
+          }, 0);
+        }, 0);
+        console.log(load);
+        return load;
+      },
       part2: d => d
     },
     day15: {
