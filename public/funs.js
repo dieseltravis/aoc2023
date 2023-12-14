@@ -1201,19 +1201,9 @@
       },
       part2: (data) => {
         const bits = s => '0b' + s.split('').map(c => c === '#').map(Number).join('');
-        const diff = (b1, b2) => (BigInt(b1) - BigInt(b2)).toString(2).replace(/[\-0]/g, '');
+        const diff = (b1, b2) => (BigInt(b1) - BigInt(b2)).toString(2).replace(/[-0]+/g, '');
         const fold = (block) => {
-          const ymax = block.length;
-          // reflect y
-          for (let y = 1; y < ymax; y++) {
-            // take top half and compare it to reverse of bottom half
-            const len = Math.min(y, ymax - y);
-            const tops = bits(block.slice(0, y).slice(-len).map(t => t.join('')).join(''));
-            const bottoms = bits(block.slice(y, y + len).reverse().map(b => b.join('')).join(''));
-            if (diff(tops, bottoms) === '1') {
-              return { y };
-            }
-          }
+
           const xmax = block[0].length;
           // reflect x
           for (let x = 1; x < xmax; x++) {
@@ -1225,6 +1215,17 @@
               return { x };
             }
           }
+          const ymax = block.length;
+          // reflect y
+          for (let y = 1; y < ymax; y++) {
+            // take top half and compare it to reverse of bottom half
+            const len = Math.min(y, ymax - y);
+            const tops = bits(block.slice(0, y).slice(-len).map(t => t.join('')).join(''));
+            const bottoms = bits(block.slice(y, y + len).reverse().map(b => b.join('')).join(''));
+            if (diff(tops, bottoms) === '1') {
+              return { y };
+            }
+          }        
         };
         const input = data.trim().split('\n\n').map(b => {
           const chars = b.split('\n').map(r => r.split(''));
