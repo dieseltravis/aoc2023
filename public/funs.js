@@ -1273,7 +1273,7 @@
             if (input[y][x].isRound) {
               // look up
               if (y > 0) {
-                let lastPos = { y, x };
+                const lastPos = { y, x };
                 for (let newY = y; newY--;) {
                   const newSpot = input[newY][x];
                   if (newSpot.isEmpty) {
@@ -1421,7 +1421,7 @@
               }
             }
           }
-          // test: 
+          // test:
           const newGrid = input.map(r => r.map(c => c.isRound ? 'O' : '.').join('')).join('\n');
           if (lastGrid === newGrid) {
             console.log('grid repeating', i, '\n' + newGrid);
@@ -1432,7 +1432,7 @@
             console.log(p + '% ' + (new Date()).toISOString());
             p++;
           }
-        }        
+        }
         const load = input.reduce((acc, row) => {
           return acc + row.reduce((acc2, c) => {
             if (c.isRound) {
