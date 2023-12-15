@@ -1463,7 +1463,7 @@
           v %= 256;
           return v;
         };
-        console.log("HASH", "HASH".split('').reduce(hash, 0));
+        console.log('HASH', 'HASH'.split('').reduce(hash, 0));
         const result = input.reduce((sum, cmd) => sum + cmd.reduce(hash, 0), 0);
         console.log(result);
         return result;
