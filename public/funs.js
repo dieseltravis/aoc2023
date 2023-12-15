@@ -1463,12 +1463,59 @@
           v %= 256;
           return v;
         };
-        console.log('HASH', 'HASH'.split('').reduce(hash, 0));
         const result = input.reduce((sum, cmd) => sum + cmd.reduce(hash, 0), 0);
         console.log(result);
         return result;
       },
-      part2: d => d
+      part2: (data) => {
+        const boxes = [...new Array(256)].map(_ => []);
+        const hash = (v, c) => {
+          const asc = c.charCodeAt(0);
+          v += asc;
+          v *= 17;
+          v %= 256;
+          return v;
+        };
+        const rxcmd = /^(\w+)([-=])(\d?)$/
+        const input = data.trim().replace(/\n/g, '').split(',').map(cmd => {
+          const matched = cmd.match(rxcmd);
+          const parsed = {
+            label: matched[1],
+            op: matched[2],
+            focal: 0
+          };
+          parsed.hash = parsed.label.split('').reduce(hash, 0);
+          if (parsed.op === '=') {
+            parsed.focal = +matched[3];
+          }
+          return parsed;
+        });
+        console.log(input);
+        input.forEach(cmd => {
+          const i = cmd.hash;
+          if (cmd.op === '-') {
+            const index = boxes[i].findIndex(box => box[0] === cmd.label);
+            if (index > -1) {
+              boxes[i].splice(index, 1);
+            }
+          } else if (cmd.op === '=') {
+            let found = 0;
+            boxes[i].forEach(box => {
+              if (box[0] === cmd.label) {
+                box[1] = cmd.focal;
+                found++;
+              }
+            });
+            if (found === 0) {
+              boxes[i].push([cmd.label, cmd.focal])
+            }
+          }
+        });
+        console.log(boxes);
+        const result = boxes.reduce((sum, box, bi) => sum + box.reduce((bsum, slot, si) => bsum + ((bi + 1) * (si + 1) * slot[1]), 0), 0);
+        console.log(result);
+        return result;
+      }
     },
     day16: {
       part1: d => d,
