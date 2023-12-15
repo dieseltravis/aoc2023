@@ -1428,7 +1428,7 @@
           }
           // console.log('E\n' + render());
 
-          // test:
+          // test (this doesn't seem to work):
           const newGrid = render();
           if (lastGrid === newGrid) {
             console.log('grid repeating', i, '\n' + newGrid);
@@ -1468,7 +1468,7 @@
         return result;
       },
       part2: (data) => {
-        const boxes = [...new Array(256)].map(_ => []);
+        const boxes = [...new Array(256)].map(() => []);
         const hash = (v, c) => {
           const asc = c.charCodeAt(0);
           v += asc;
