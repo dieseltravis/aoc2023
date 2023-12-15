@@ -1476,7 +1476,7 @@
           v %= 256;
           return v;
         };
-        const rxcmd = /^(\w+)([-=])(\d?)$/
+        const rxcmd = /^(\w+)([-=])(\d?)$/;
         const input = data.trim().replace(/\n/g, '').split(',').map(cmd => {
           const matched = cmd.match(rxcmd);
           const parsed = {
@@ -1507,7 +1507,7 @@
               }
             });
             if (found === 0) {
-              boxes[i].push([cmd.label, cmd.focal])
+              boxes[i].push([cmd.label, cmd.focal]);
             }
           }
         });
