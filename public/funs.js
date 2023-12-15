@@ -1439,7 +1439,7 @@
             console.log(p + '% ' + (new Date()).toISOString());
             p++;
           }
-          console.log('last grid:\n' + lastGrid);
+          // console.log('last grid:\n' + lastGrid);
         }
         const load = input.reduce((acc, row) => {
           return acc + row.reduce((acc2, c) => {
@@ -1454,7 +1454,20 @@
       }
     },
     day15: {
-      part1: d => d,
+      part1: (data) => {
+        const input = data.trim().replace(/\n/g, '').split(',').map(cmd => cmd.split(''));
+        const hash = (v, c) => {
+          const asc = c.charCodeAt(0);
+          v += asc;
+          v *= 17;
+          v %= 256;
+          return v;
+        };
+        console.log("HASH", "HASH".split('').reduce(hash, 0));
+        const result = input.reduce((sum, cmd) => sum + cmd.reduce(hash, 0), 0);
+        console.log(result);
+        return result;
+      },
       part2: d => d
     },
     day16: {
