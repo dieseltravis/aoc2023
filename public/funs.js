@@ -1448,15 +1448,15 @@
           lastGrid = newGrid;
           */
           const newLoad = getLoad();
-          if (lastLoad === newLoad) {
-            //console.log('grid repeating', i, '\n' + newLoad);
-            //break;
-          }
+          // if (lastLoad === newLoad) {
+            // console.log('grid repeating', i, '\n' + newLoad);
+            // break;
+          // }
           lastLoad = newLoad;
           if (i % pc === 0) {
             console.log(p + '% ' + (new Date()).toISOString());
             console.log(lastLoad);
-            console.log(render());
+            // console.log(render());
             p++;
           }
           // console.log('last grid:\n' + lastGrid);
