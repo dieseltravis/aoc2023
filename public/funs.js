@@ -1518,8 +1518,165 @@
       }
     },
     day16: {
-      part1: d => d,
-      part2: d => d
+      part1: (data) => {
+        const mirrors = {
+          '.': (dy, dx) => [[dy, dx]],
+          '/': (dy, dx) => [[-dx, -dy]],
+          '\\': (dy, dx) => [[dx, dy]],
+          '|': (dy, dx) => {
+            const beams = [];
+            if (dx === 0) {
+              beams.push([dy, dx]);
+            } else {
+              beams.push([-dx, dy]);
+              beams.push([dx, dy]);
+            }
+            return beams;
+          },
+          '-': (dy, dx) => {
+            const beams = [];
+            if (dy === 0) {
+              beams.push([dy, dx]);
+            } else {
+              beams.push([dx, -dy]);
+              beams.push([dx, dy]);
+            }
+            return beams;
+          }
+        };
+        const input = data.trim().split('\n').map(l => l.split(''));
+        const ymax = input.length;
+        const xmax = input[0].length;
+        console.log(input, ymax, xmax);
+        const tileDirs = { '0,0,0,1': 1 };
+        const tiles = { '0,0': 1 };
+        let beams = [{ y: 0, x: 0, dy: 0, dx: 1 }];
+        let safety = 1000;
+        let lastDirs = 0;
+        let lastEnergy = 0;
+        while (safety-- > 0 && beams.length > 0) {
+          const newBeams = [];
+          for (let l = beams.length; l--;) {
+            const beam = beams[l];
+            beam.y += beam.dy;
+            beam.x += beam.dx;
+            if (beam.y >= 0 && beam.x >= 0 && beam.y < ymax && beam.x < xmax) {
+              tileDirs[beam.y + ',' + beam.x + ',' + beam.dy + ',' + beam.dx] = 1;
+              tiles[beam.y + ',' + beam.x] = 1;
+              const mirror = mirrors[input[beam.y][beam.x]];
+              const newDeltas = mirror(beam.dy, beam.dx);
+              newBeams.push(...newDeltas.map(dd => {
+                return {
+                  y: beam.y,
+                  x: beam.x,
+                  dy: dd[0],
+                  dx: dd[1]
+                };
+              }));
+            }
+          }
+          beams = newBeams;
+          const dirs = Object.values(tileDirs).length;
+          const energy = Object.values(tiles).length;
+          if (dirs === lastDirs) {
+            break;
+          }
+          lastEnergy = energy;
+          lastDirs = dirs;
+        }
+        if (safety <= 0) {
+          console.warn('safety.');
+        }
+        const result = lastEnergy;
+        console.log(result);
+        return result;
+      },
+      part2: (data) => {
+        const mirrors = {
+          '.': (dy, dx) => [[dy, dx]],
+          '/': (dy, dx) => [[-dx, -dy]],
+          '\\': (dy, dx) => [[dx, dy]],
+          '|': (dy, dx) => {
+            const beams = [];
+            if (dx === 0) {
+              beams.push([dy, dx]);
+            } else {
+              beams.push([-dx, dy]);
+              beams.push([dx, dy]);
+            }
+            return beams;
+          },
+          '-': (dy, dx) => {
+            const beams = [];
+            if (dy === 0) {
+              beams.push([dy, dx]);
+            } else {
+              beams.push([dx, -dy]);
+              beams.push([dx, dy]);
+            }
+            return beams;
+          }
+        };
+        const input = data.trim().split('\n').map(l => l.split(''));
+        const ymax = input.length;
+        const xmax = input[0].length;
+        const starters = [];
+        for (let x = xmax; x--;) {
+          starters.push({ y: 0, x, dy: 1, dx: 0 });
+          starters.push({ y: ymax - 1, x, dy: -1, dx: 0 });
+        }
+        for (let y = ymax; y--;) {
+          starters.push({ y, x: 0, dy: 0, dx: 1 });
+          starters.push({ y, x: xmax - 1, dy: 0, dx: -1 });
+        }
+        console.log(input, ymax, xmax, starters);
+        let max = 0;
+        // progress
+        const startLen = starters.length;
+        starters.forEach((start, i) => {
+          const tileDirs = {};
+          tileDirs[start.y + ',' + start.x + ',' + start.dy + ',' + start.dx] = 1;
+          const tiles = {};
+          tiles[start.y + ',' + start.x] = 1;
+          let beams = [start];
+          let lastDirs = 0;
+          let lastEnergy = 0;
+          while (beams.length > 0) {
+            const newBeams = [];
+            for (let l = beams.length; l--;) {
+              const beam = beams[l];
+              beam.y += beam.dy;
+              beam.x += beam.dx;
+              if (beam.y >= 0 && beam.x >= 0 && beam.y < ymax && beam.x < xmax) {
+                tileDirs[beam.y + ',' + beam.x + ',' + beam.dy + ',' + beam.dx] = 1;
+                tiles[beam.y + ',' + beam.x] = 1;
+                const mirror = mirrors[input[beam.y][beam.x]];
+                const newDeltas = mirror(beam.dy, beam.dx);
+                newBeams.push(...newDeltas.map(dd => {
+                  return {
+                    y: beam.y,
+                    x: beam.x,
+                    dy: dd[0],
+                    dx: dd[1]
+                  };
+                }));
+              }
+            }
+            beams = newBeams;
+            const dirs = Object.values(tileDirs).length;
+            const energy = Object.values(tiles).length;
+            if (dirs === lastDirs) {
+              break;
+            }
+            lastEnergy = energy;
+            lastDirs = dirs;
+          }
+          max = Math.max(lastEnergy, max);
+          console.log((i + 1) + ' of ' + startLen + ' ' + (new Date()).toISOString(), max);
+        });
+        console.log(max);
+        return max;
+      }
     },
     day17: {
       part1: d => d,
