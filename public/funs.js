@@ -1306,7 +1306,7 @@
       },
       part2: (data) => {
         const cycles = 1000000000;
-        //const cycles = 1;
+        // const cycles = 1;
         const input = data.trim().split('\n').map(l => {
           return l.trim().split('').map(c => {
             return {
@@ -1336,9 +1336,9 @@
         // progress
         const pc = cycles / 100;
         let p = 0;
-        let lastGrid = render();
+        // let lastGrid = render();
         let lastLoad = getLoad();
-        console.log('first grid:\n' + lastGrid);
+        // console.log('first grid:\n' + lastGrid);
         console.log('first load:\n' + lastLoad);
         for (let i = 0; i < cycles; i++) {
           // N
@@ -1449,8 +1449,8 @@
           */
           const newLoad = getLoad();
           // if (lastLoad === newLoad) {
-            // console.log('grid repeating', i, '\n' + newLoad);
-            // break;
+          //   console.log('grid repeating', i, '\n' + newLoad);
+          //   break;
           // }
           lastLoad = newLoad;
           if (i % pc === 0) {
