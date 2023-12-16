@@ -1324,22 +1324,32 @@
           });
         });
         const render = () => input.map(r => r.map(c => c.isRound ? 'O' : c.isCube ? '#' : '.').join('')).join('\n');
+        const getLoad = () => input.reduce((acc, row) => {
+          return acc + row.reduce((acc2, c) => {
+            if (c.isRound) {
+              acc2 += c.load;
+            }
+            return acc2;
+          }, 0);
+        }, 0);
         console.log(input.slice());
         // progress
         const pc = cycles / 100;
         let p = 0;
         let lastGrid = render();
+        let lastLoad = getLoad();
         console.log('first grid:\n' + lastGrid);
+        console.log('first load:\n' + lastLoad);
         for (let i = 0; i < cycles; i++) {
           // N
           for (let x = 0; x < xmax; x++) {
             for (let y = 0; y < ymax; y++) {
-              if (input[y][x].isRound) {
+              if (input[y] && input[y][x] && input[y][x].isRound) {
                 let newY = y;
                 let lastY = y;
                 while (newY > 0) {
                   newY = newY - 1;
-                  if (input[newY][x].isEmpty) {
+                  if (input[newY] && input[newY][x] && input[newY][x].isEmpty) {
                     lastY = newY;
                   } else {
                     break;
@@ -1358,12 +1368,12 @@
           // W
           for (let y = 0; y < ymax; y++) {
             for (let x = 0; x < xmax; x++) {
-              if (input[y][x].isRound) {
+              if (input[y] && input[y][x] && input[y][x].isRound) {
                 let newX = x;
                 let lastX = x;
                 while (newX > 0) {
                   newX = newX - 1;
-                  if (input[y][newX].isEmpty) {
+                  if (input[y] && input[y][newX] && input[y][newX].isEmpty) {
                     lastX = newX;
                   } else {
                     break;
@@ -1382,12 +1392,12 @@
           // S
           for (let x = 0; x < xmax; x++) {
             for (let y = ymax; y--;) {
-              if (input[y][x].isRound) {
+              if (input[y] && input[y][x] && input[y][x].isRound) {
                 let newY = y;
                 let lastY = y;
                 while (newY < ymax - 1) {
                   newY = newY + 1;
-                  if (input[newY][x].isEmpty) {
+                  if (input[newY] && input[newY][x] && input[newY][x].isEmpty) {
                     lastY = newY;
                   } else {
                     break;
@@ -1406,12 +1416,12 @@
           // E
           for (let y = 0; y < ymax; y++) {
             for (let x = xmax; x--;) {
-              if (input[y][x].isRound) {
+              if (input[y] && input[y][x] && input[y][x].isRound) {
                 let newX = x;
                 let lastX = x;
                 while (newX < xmax - 1) {
                   newX = newX + 1;
-                  if (input[y][newX].isEmpty) {
+                  if (input[y] && input[y][newX] && input[y][newX].isEmpty) {
                     lastX = newX;
                   } else {
                     break;
@@ -1429,26 +1439,28 @@
           // console.log('E\n' + render());
 
           // test (this doesn't seem to work):
+          /*
           const newGrid = render();
           if (lastGrid === newGrid) {
             console.log('grid repeating', i, '\n' + newGrid);
             break;
           }
           lastGrid = newGrid;
+          */
+          const newLoad = getLoad();
+          if (lastLoad === newLoad) {
+            console.log('grid repeating', i, '\n' + newLoad);
+            //break;
+          }
+          lastLoad = newLoad;
           if (i % pc === 0) {
             console.log(p + '% ' + (new Date()).toISOString());
+            console.log(lastLoad, '\n', render());
             p++;
           }
           // console.log('last grid:\n' + lastGrid);
         }
-        const load = input.reduce((acc, row) => {
-          return acc + row.reduce((acc2, c) => {
-            if (c.isRound) {
-              acc2 += c.load;
-            }
-            return acc2;
-          }, 0);
-        }, 0);
+        const load = getLoad();
         console.log(load);
         return load;
       }
@@ -1675,6 +1687,8 @@
           console.log((i + 1) + ' of ' + startLen + ' ' + (new Date()).toISOString(), max);
         });
         console.log(max);
+        // 7965 too low
+        // 8079 too low
         return max;
       }
     },
