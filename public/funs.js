@@ -1306,9 +1306,9 @@
       },
       part2: (data) => {
         const cycles = 1000000000;
-        // const cycles = 3;
+        //const cycles = 1;
         const input = data.trim().split('\n').map(l => {
-          return l.split('').map(c => {
+          return l.trim().split('').map(c => {
             return {
               isEmpty: c === '.',
               isCube: c === '#',
@@ -1344,12 +1344,12 @@
           // N
           for (let x = 0; x < xmax; x++) {
             for (let y = 0; y < ymax; y++) {
-              if (input[y] && input[y][x] && input[y][x].isRound) {
+              if (input[y][x].isRound) {
                 let newY = y;
                 let lastY = y;
                 while (newY > 0) {
                   newY = newY - 1;
-                  if (input[newY] && input[newY][x] && input[newY][x].isEmpty) {
+                  if (input[newY][x].isEmpty) {
                     lastY = newY;
                   } else {
                     break;
@@ -1364,16 +1364,16 @@
               }
             }
           }
-          // console.log('N\n' + render());
+          // console.log(getLoad(), 'N\n' + render());
           // W
           for (let y = 0; y < ymax; y++) {
             for (let x = 0; x < xmax; x++) {
-              if (input[y] && input[y][x] && input[y][x].isRound) {
+              if (input[y][x].isRound) {
                 let newX = x;
                 let lastX = x;
                 while (newX > 0) {
                   newX = newX - 1;
-                  if (input[y] && input[y][newX] && input[y][newX].isEmpty) {
+                  if (input[y][newX].isEmpty) {
                     lastX = newX;
                   } else {
                     break;
@@ -1392,12 +1392,12 @@
           // S
           for (let x = 0; x < xmax; x++) {
             for (let y = ymax; y--;) {
-              if (input[y] && input[y][x] && input[y][x].isRound) {
+              if (input[y][x].isRound) {
                 let newY = y;
                 let lastY = y;
                 while (newY < ymax - 1) {
                   newY = newY + 1;
-                  if (input[newY] && input[newY][x] && input[newY][x].isEmpty) {
+                  if (input[newY][x].isEmpty) {
                     lastY = newY;
                   } else {
                     break;
@@ -1416,12 +1416,12 @@
           // E
           for (let y = 0; y < ymax; y++) {
             for (let x = xmax; x--;) {
-              if (input[y] && input[y][x] && input[y][x].isRound) {
+              if (input[y][x].isRound) {
                 let newX = x;
                 let lastX = x;
                 while (newX < xmax - 1) {
                   newX = newX + 1;
-                  if (input[y] && input[y][newX] && input[y][newX].isEmpty) {
+                  if (input[y][newX].isEmpty) {
                     lastX = newX;
                   } else {
                     break;
@@ -1449,19 +1449,20 @@
           */
           const newLoad = getLoad();
           if (lastLoad === newLoad) {
-            console.log('grid repeating', i, '\n' + newLoad);
+            //console.log('grid repeating', i, '\n' + newLoad);
             //break;
           }
           lastLoad = newLoad;
           if (i % pc === 0) {
             console.log(p + '% ' + (new Date()).toISOString());
-            console.log(lastLoad, '\n', render());
+            console.log(lastLoad);
+            console.log(render());
             p++;
           }
           // console.log('last grid:\n' + lastGrid);
         }
         const load = getLoad();
-        console.log(load);
+        console.log('last:\n' + render() + '\nload:', load);
         return load;
       }
     },
