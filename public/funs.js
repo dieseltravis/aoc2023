@@ -1622,12 +1622,12 @@
         const xmax = input[0].length;
         const starters = [];
         for (let x = xmax; x--;) {
-          starters.push({ y: 0,        x: x, dy:  1, dx: 0 });
-          starters.push({ y: ymax - 1, x: x, dy: -1, dx: 0 });
+          starters.push({ y: 0, x, dy: 1, dx: 0 });
+          starters.push({ y: ymax - 1, x, dy: -1, dx: 0 });
         }
         for (let y = ymax; y--;) {
-          starters.push({ y: y, x: 0,        dy: 0, dx:  1 });
-          starters.push({ y: y, x: xmax - 1, dy: 0, dx: -1 });
+          starters.push({ y, x: 0, dy: 0, dx: 1 });
+          starters.push({ y, x: xmax - 1, dy: 0, dx: -1 });
         }
         console.log(input, ymax, xmax, starters);
         let max = 0;
