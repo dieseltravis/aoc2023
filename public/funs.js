@@ -1631,7 +1631,9 @@
         }
         console.log(input, ymax, xmax, starters);
         let max = 0;
-        starters.forEach(start => {
+        // progress
+        const startLen = starters.length;
+        starters.forEach((start, i) => {
           const tileDirs = {};
           tileDirs[start.y + ',' + start.x + ',' + start.dy + ',' + start.dx] = 1;
           const tiles = {};
@@ -1670,6 +1672,7 @@
             lastDirs = dirs;
           }
           max = Math.max(lastEnergy, max);
+          console.log((i + 1) + ' of ' + startLen + ' ' + (new Date()).toISOString(), max);
         });
         console.log(max);
         return max;
