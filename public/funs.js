@@ -1306,7 +1306,7 @@
       },
       part2: (data) => {
         const cycles = 1000000000;
-        let input = data.trim().split('\n').map(l => {
+        const input = data.trim().split('\n').map(l => {
           return l.trim().split('').map(c => {
             return {
               isEmpty: c === '.',
@@ -1331,8 +1331,6 @@
             return acc2;
           }, 0);
         }, 0);
-        let lastLoad = getLoad(input);
-        console.log('first load:\n' + lastLoad);
         const lookup = {};
         let id = 0;
         const idtokey = {};
@@ -1353,10 +1351,10 @@
             const pidx = pattern.indexOf(keytoid[key]);
             // take the remaining less one, remainder of number of items in array that repeat, offset by index
             const presult = ((prem - 1) % (plen - pidx)) + pidx;
-            console.log(pattern, 'prem', prem, 'plen', plen, 'pidx', pidx, 'plen - pidx', plen - pidx), 'presult', presult;
+            console.log(pattern, 'prem', prem, 'plen', plen, 'pidx', pidx, 'plen - pidx', plen - pidx, 'presult', presult);
             console.log(Object.values(loads));
             const pkey = idtokey[presult];
-            const result = loads[idtokey[presult]];
+            const result = loads[pkey];
             console.log(result);
             return result;
           } else {
