@@ -1695,7 +1695,40 @@
       }
     },
     day17: {
-      part1: d => d,
+      part1: (data) => {
+        const grid = data.trim().split('\n').map(row => row.split('').map(Number));
+        console.log(grid);
+        const dirs = [[-1, 0], [0, 1], [1, 0], [0, -1]];
+        const ymax = grid.length;
+        const xmax = grid[0].length;
+        const inRange = (p, max) => p >= 0 && p < max;
+        const inY = y => inRange(y, ymax);
+        const inX = x => inRange(x, xmax);
+        const breadth = grid.map((row, y) => row.map((point, x) => {
+          dirs.forEach((dir, i) => {
+            // look N, E, S, W
+            const ynew = y + dir[0];
+            if (inY(y)) {
+              const xnew = x + dir[1];
+              if (inX(x)) {
+                // no this isn't it
+              }
+            }
+          });
+        }));
+        const path = [];
+        // 😩
+        const start = { y: 0, x: 0 };
+        // const manh = (p1, p2) => Math.abs(p2.x - p1.x) + Math.abs(p2.y - p1.y);
+        const sum = pathArr => pathArr.reduce((acc, p) => acc + grid[p.y][p.x], 0);
+        const look = (p, prevp) => {
+          const around = [];
+          
+        }; 
+        const result = sum(path);
+        console.log(result);
+        return result;
+      },
       part2: d => d
     },
     day18: {
