@@ -1711,11 +1711,11 @@
         const inRange = (p, max) => p >= 0 && p < max;
         const inY = y => inRange(y, ymax);
         const inX = x => inRange(x, xmax);
-        const isLastDirValid = (last3, dir) => !last3.every(d => d === dir);
+        // const isLastDirValid = (last3, dir) => !last3.every(d => d === dir);
         const points = grid.map((row, y) => row.map((point, x) => {
           const neighbors = [];
           // look N, E, S, W
-          dirs.forEach((dir, i) => {
+          dirs.forEach(dir => {
             const ynew = y + dir.f[0];
             if (inY(ynew)) {
               const xnew = x + dir.f[1];
@@ -1738,14 +1738,16 @@
         }));
         console.log(points);
         const path = [];
+        const sum = pathArr => pathArr.reduce((acc, p) => acc + grid[p.y][p.x], 0);
+        /*
         const start = { y: 0, x: 0 };
         const end = { y: ymax - 1, x: xmax - 1 };
         // const manh = (p1, p2) => Math.abs(p2.x - p1.x) + Math.abs(p2.y - p1.y);
-        const sum = pathArr => pathArr.reduce((acc, p) => acc + grid[p.y][p.x], 0);
         const look = (p, prevp) => {
           const around = [];
           // TODO: finish this
         };
+        */
         const result = sum(path);
         console.log(result);
         return result;
@@ -1770,7 +1772,7 @@
         const p = { y: 0, x: 0 };
         const dict = {};
         const poly = [];
-        const dug = input.reduce((acc, instr, i) => {
+        const dug = input.reduce((acc, instr) => {
           for (let i = instr.a; i--;) {
             p.y += d[instr.d][0];
             p.x += d[instr.d][1];
