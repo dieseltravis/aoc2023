@@ -1715,7 +1715,7 @@
         const points = grid.map((row, y) => row.map((point, x) => {
           const neighbors = [];
           // look N, E, S, W
-          dirs.forEach((dir, i) => {
+          dirs.forEach((dir, _i) => {
             const ynew = y + dir.f[0];
             if (inY(ynew)) {
               const xnew = x + dir.f[1];
@@ -1772,7 +1772,7 @@
         const p = { y: 0, x: 0 };
         const dict = {};
         const poly = [];
-        const dug = input.reduce((acc, instr, i) => {
+        const dug = input.reduce((acc, instr) => {
           for (let i = instr.a; i--;) {
             p.y += d[instr.d][0];
             p.x += d[instr.d][1];
