@@ -1738,14 +1738,16 @@
         }));
         console.log(points);
         const path = [];
+        const sum = pathArr => pathArr.reduce((acc, p) => acc + grid[p.y][p.x], 0);
+        /*
         const start = { y: 0, x: 0 };
         const end = { y: ymax - 1, x: xmax - 1 };
         // const manh = (p1, p2) => Math.abs(p2.x - p1.x) + Math.abs(p2.y - p1.y);
-        const sum = pathArr => pathArr.reduce((acc, p) => acc + grid[p.y][p.x], 0);
         const look = (p, prevp) => {
           const around = [];
           // TODO: finish this
         };
+        */
         const result = sum(path);
         console.log(result);
         return result;
