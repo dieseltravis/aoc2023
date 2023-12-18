@@ -1715,7 +1715,7 @@
         const points = grid.map((row, y) => row.map((point, x) => {
           const neighbors = [];
           // look N, E, S, W
-          dirs.forEach((dir, _i) => {
+          dirs.forEach(dir => {
             const ynew = y + dir.f[0];
             if (inY(ynew)) {
               const xnew = x + dir.f[1];
