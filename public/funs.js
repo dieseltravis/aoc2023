@@ -1839,7 +1839,99 @@
         };
         return render(dug);
       },
-      part2: d => d
+      part2: (data) => {
+        // R 6 (#70c710)
+        const dirs = ['R', 'D', 'L', 'U'];
+        const input = data.trim().split('\n').map(cmd => {
+          const dig = cmd.trim().split(' ');
+          return {
+            d: dirs[+dig[2].slice(-2, -1)],
+            a: parseInt(dig[2].slice(2, -2), 16)
+          };
+        });
+        console.log(input);
+        const d = { U: [-1, 0], R: [0, 1], D: [1, 0], L: [0, -1] };
+        const p = { y: 0, x: 0 };
+        //const dict = {};
+        const poly = [];
+        //const range = { ymin: Infinity, xmin: Infinity, ymax: -Infinity, xmax: -Infinity };
+        const inputLen = input.length;
+        const inputPc = inputLen / 100;
+        let ipc = 0;
+        let edgeSum = 0;
+        input.forEach((instr, i) => {
+          if (i % inputPc === 0) {
+            console.log(ipc++ + '% of ' + inputLen + ' ' + (new Date()).toISOString());
+          }
+          for (let i = instr.a; i--;) {
+            p.y += d[instr.d][0];
+            p.x += d[instr.d][1];
+            edgeSum++;
+            //dict[p.y + ',' + p.x] = 1;
+          }
+          poly.push([p.y, p.x]);
+          //range.ymin = Math.min(range.ymin, p.y);
+          //range.xmin = Math.min(range.xmin, p.x);
+          //range.ymax = Math.max(range.ymax, p.y);
+          //range.xmax = Math.max(range.xmax, p.x);
+        });
+        /*
+        console.log(range);
+        const pip = (polygon, point) => {
+          let odd = false;
+          for (let i = 0, j = polygon.length - 1; i < polygon.length; i++) {
+            if (((polygon[i][1] > point[1]) !== (polygon[j][1] > point[1])) &&
+              (point[0] < ((polygon[j][0] - polygon[i][0]) * (point[1] - polygon[i][1]) / (polygon[j][1] - polygon[i][1]) + polygon[i][0]))) {
+              odd = !odd;
+            }
+            j = i;
+          }
+          return odd;
+        };
+        */
+        let sum = 0;
+        // A = 1/2* Sum((x[i+1] + x[i]) * ([y[i+1] - y[i]))
+        const getArea = () => {
+          const points = poly.length;
+          //const chunk = points / 100;
+          //let ppc = 0;
+          //let pc = 0;
+          return poly.reduce((area, pt, i) => {
+            //if (i > ppc) {
+            //  console.log((pc++) + '% of ' + points + ' ' + (new Date()).toISOString());
+            //  ppc += chunk;
+            //}
+            const next = poly[(i + 1) % points];
+            //return area + BigInt(next[1] + pt[1]) * BigInt(next[0] - pt[0]);
+            const addX = pt[1];
+            const addY = next[0];
+            const subX = next[1];
+            const subY = pt[0];
+            area += ((addX * addY) / 2);
+            area -= ((subX * subY) / 2);
+            return area;
+          }, (0)); // / BigInt(2);
+        };
+        sum = getArea();
+        /*
+        //const yMaxPc = range.ymax / 100;
+        //let ypc = 0;
+        for (let y = range.ymin; y <= range.ymax; y++) {
+          if (y % yMaxPc === 0) {
+            console.log(ypc++ + '% of ' + range.ymax + ' ' + (new Date()).toISOString());
+          }
+          for (let x = range.xmin; x <= range.xmax; x++) {
+            if (dict[y + ',' + x] || pip(poly, [y, x])) {
+              sum++;
+            }
+          }
+        }
+        */
+        console.log(edgeSum, sum);
+        let total = (edgeSum / 2) + sum + 1;
+        // 952404941483 too low
+        return total;
+      }
     },
     day19: {
       part1: d => d,

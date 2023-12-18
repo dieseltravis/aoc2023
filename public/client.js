@@ -16,6 +16,7 @@ const process = function (funs, day, part) {
 
   const onevent = function (/* ev */) {
     html.classList.add('wait');
+    html.classList.add('wait-part-' + part);
     // put function in a timeout so that it doesn't block UI thread
     setTimeout(function () {
       console.info('starting...', new Date());
@@ -26,6 +27,7 @@ const process = function (funs, day, part) {
 
       console.timeEnd(timer);
       html.classList.remove('wait');
+      html.classList.remove('wait-part-' + part);
     }, 21);
   };
 
