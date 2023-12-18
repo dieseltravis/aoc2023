@@ -1711,7 +1711,7 @@
         const inRange = (p, max) => p >= 0 && p < max;
         const inY = y => inRange(y, ymax);
         const inX = x => inRange(x, xmax);
-        const isLastDirValid = (last3, dir) => !last3.every(d => d === dir);
+        // const isLastDirValid = (last3, dir) => !last3.every(d => d === dir);
         const points = grid.map((row, y) => row.map((point, x) => {
           const neighbors = [];
           // look N, E, S, W
