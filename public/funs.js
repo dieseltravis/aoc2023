@@ -1695,12 +1695,196 @@
       }
     },
     day17: {
-      part1: d => d,
+      part1: (data) => {
+        // 😩
+        const grid = data.trim().split('\n').map(row => row.split('').map(Number));
+        console.log(grid);
+        const dirs = [
+          { d: 'N', f: [-1, 0] },
+          { d: 'E', f: [0, 1] },
+          { d: 'S', f: [1, 0] },
+          { d: 'W', f: [0, -1] }
+        ];
+        // there is a max of 3 in a row in any direction
+        const ymax = grid.length;
+        const xmax = grid[0].length;
+        const inRange = (p, max) => p >= 0 && p < max;
+        const inY = y => inRange(y, ymax);
+        const inX = x => inRange(x, xmax);
+        const isLastDirValid = (last3, dir) => !last3.every(d => d === dir);
+        const points = grid.map((row, y) => row.map((point, x) => {
+          const neighbors = [];
+          // look N, E, S, W
+          dirs.forEach((dir, i) => {
+            const ynew = y + dir.f[0];
+            if (inY(ynew)) {
+              const xnew = x + dir.f[1];
+              if (inX(xnew)) {
+                neighbors.push({
+                  y: ynew,
+                  x: xnew,
+                  from: dir.d,
+                  val: grid[ynew][xnew]
+                });
+              }
+            }
+          });
+          return {
+            y,
+            x,
+            value: point,
+            neighbors
+          };
+        }));
+        console.log(points);
+        const path = [];
+        const start = { y: 0, x: 0 };
+        const end = { y: ymax - 1, x: xmax - 1 };
+        // const manh = (p1, p2) => Math.abs(p2.x - p1.x) + Math.abs(p2.y - p1.y);
+        const sum = pathArr => pathArr.reduce((acc, p) => acc + grid[p.y][p.x], 0);
+        const look = (p, prevp) => {
+          const around = [];
+          // TODO: finish this
+        };
+        const result = sum(path);
+        console.log(result);
+        return result;
+      },
       part2: d => d
     },
     day18: {
-      part1: d => d,
-      part2: d => d
+      part1: (data) => {
+        // R 6 (#70c710)
+        const input = data.trim().split('\n').map(cmd => {
+          const dig = cmd.trim().split(' ');
+          const instruct = {
+            d: dig[0],
+            a: dig[1],
+            c: dig[2].slice(1, -1)
+          };
+          instruct.s = 'color:' + instruct.c;
+          return instruct;
+        });
+        console.log(input);
+        const d = { U: [-1, 0], R: [0, 1], D: [1, 0], L: [0, -1] };
+        const p = { y: 0, x: 0 };
+        const dict = {};
+        const poly = [];
+        const dug = input.reduce((acc, instr, i) => {
+          for (let i = instr.a; i--;) {
+            p.y += d[instr.d][0];
+            p.x += d[instr.d][1];
+            poly.push([p.y, p.x]);
+            acc.push({ y: p.y, x: p.x, c: instr.c, s: instr.s });
+            dict[p.y + ',' + p.x] = instr.s;
+          }
+          return acc;
+        }, []);
+        console.log(dug);
+        const pip = (polygon, point) => {
+          // A point is in a polygon if a line from the point to infinity crosses the polygon an odd number of times
+          let odd = false;
+          // For each edge (In this case for each point of the polygon and the previous one)
+          for (let i = 0, j = polygon.length - 1; i < polygon.length; i++) {
+            // If a line from the point into infinity crosses this edge
+            if (((polygon[i][1] > point[1]) !== (polygon[j][1] > point[1])) && // One point needs to be above, one below our y coordinate
+              // ...and the edge doesn't cross our Y corrdinate before our x coordinate (but between our x coordinate and infinity)
+              (point[0] < ((polygon[j][0] - polygon[i][0]) * (point[1] - polygon[i][1]) / (polygon[j][1] - polygon[i][1]) + polygon[i][0]))) {
+              // Invert odd
+              odd = !odd;
+            }
+            j = i;
+          }
+          // If the number of crossings was odd, the point is in the polygon
+          return odd;
+        };
+        const render = (d) => {
+          const range = d.reduce((r, i) => {
+            r.ymin = Math.min(r.ymin, i.y);
+            r.xmin = Math.min(r.xmin, i.x);
+            r.ymax = Math.max(r.ymax, i.y);
+            r.xmax = Math.max(r.xmax, i.x);
+            return r;
+          }, { ymin: Infinity, xmin: Infinity, ymax: -Infinity, xmax: -Infinity });
+          console.log(range);
+          let yy = 0;
+          let sum = 0;
+          for (let y = range.ymin - 1; y <= range.ymax + 1; y++) {
+            let text = (yy++) + '\t';
+            const colors = [];
+            for (let x = range.xmin - 1; x <= range.xmax + 1; x++) {
+              const found = dict[y + ',' + x];
+              if (found) {
+                colors.push(found);
+                text += '%c#';
+                sum++;
+              } else {
+                const inside = pip(poly, [y, x]);
+                if (inside) {
+                  text += '%cL';
+                  colors.push('color:#F00');
+                  sum++;
+                } else {
+                  text += '%c.';
+                  colors.push('color:#000');
+                }
+              }
+            }
+            console.log(text, ...colors);
+          }
+          console.log(sum);
+          return sum;
+        };
+        return render(dug);
+      },
+      part2: (data) => {
+        const dirs = ['R', 'D', 'L', 'U'];
+        const input = data.trim().split('\n').map(cmd => {
+          const dig = cmd.trim().split(' ');
+          return {
+            d: dirs[+dig[2].slice(-2, -1)],
+            a: parseInt(dig[2].slice(2, -2), 16)
+          };
+        });
+        console.log(input);
+        const d = { U: [-1, 0], R: [0, 1], D: [1, 0], L: [0, -1] };
+        const p = { y: 0, x: 0 };
+        const poly = [];
+        const inputLen = input.length;
+        const inputPc = inputLen / 100;
+        let ipc = 0;
+        let edgeSum = 0;
+        input.forEach((instr, i) => {
+          if (i % inputPc === 0) {
+            console.log(ipc++ + '% of ' + inputLen + ' ' + (new Date()).toISOString());
+          }
+          for (let i = instr.a; i--;) {
+            p.y += d[instr.d][0];
+            p.x += d[instr.d][1];
+            edgeSum++;
+          }
+          poly.push([p.y, p.x]);
+        });
+        let sum = 0;
+        // A = 1/2 * Sum((x[i+1] + x[i]) * ([y[i+1] - y[i]))
+        const getArea = () => {
+          const points = poly.length;
+          return poly.reduce((area, pt, i) => {
+            const next = poly[(i + 1) % points];
+            const addX = pt[1];
+            const addY = next[0];
+            const subX = next[1];
+            const subY = pt[0];
+            area += ((addX * addY) / 2);
+            area -= ((subX * subY) / 2);
+            return area;
+          }, 0);
+        };
+        sum = getArea();
+        console.log(edgeSum, sum);
+        const total = (edgeSum / 2) + sum + 1;
+        return total;
+      }
     },
     day19: {
       part1: d => d,
