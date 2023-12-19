@@ -1989,7 +1989,85 @@
       }
     },
     day19: {
-      part1: d => d,
+      part1: (data) => {
+        const input = data.trim().split('\n\n').map(b => b.trim());
+        const A = [];
+        const R = [];
+        const xfun = {
+          T: () => true,
+          '<': (o, p, v) => o[p] < v,
+          '>': (o, p, v) => o[p] > v,
+          A: (o) => A.push(o),
+          R: (o) => R.push(o)
+        };
+        const xmas = /([xmas])([<>])(\d+):(\w+)/;
+        const w = input[0].split('\n').map(f => {
+          const ws = f.trim().split('{');
+          const name = ws[0];
+          const funs = ws[1].slice(0, -1).split(',').map(fun => {
+            const matched = fun.match(xmas);
+            const o = {};
+            if (matched) {
+              o.prop = matched[1];
+              o.test = xfun[matched[2]];
+              o.val = +matched[3];
+              o.result = matched[4];
+              o.direct = false;
+            } else if (fun === 'A' || fun === 'R') {
+              o.direct = true;
+              o.result = fun;
+            } else {
+              o.test = xfun.T;
+              o.direct = false;
+              o.result = fun;
+            }
+            return o;
+          });
+          return { name, fun: { funs, len: funs.length } }
+        }).reduce((obj, f) => {
+          obj[f.name] = f.fun;
+          return obj;
+        }, {});
+        const parts = input[1].split('\n').map(p => {
+          return p.trim().slice(1, -1).split(',').reduce((acc, propval) => {
+            const s = propval.split('=');
+            acc[s[0]] = +s[1];
+            return acc;
+          }, {});
+        })
+        console.log(w, parts);
+        const process = (part, wname) => {
+          if (wname === 'A' || wname === 'R') {
+            xfun[wname](part);
+            return false;
+          }
+          const funs = w[wname];
+          for (let f = 0; f < funs.len; f++) {
+            const fun = funs.funs[f];
+            if (fun.direct) {
+              xfun[fun.result](part);
+              return false;
+            }
+            if (fun.test(part, fun.prop, fun.val)) {
+              return process(part, fun.result);
+            }
+          }
+        };
+        let ipc = 0;
+        const partLen = parts.length;
+        const chunk = partLen / 100;
+        let nextpc = 0;
+        parts.forEach((p, i) => {
+          if (i >= nextpc) {
+            console.log((i*100/partLen) + '% of ' + partLen + ' ' + (new Date()).toISOString());
+            nextpc += chunk;
+          }
+          process(p, 'in');
+        });
+        const result = A.reduce((sum, p) => sum + p.x + p.m + p.a + p.s, 0);
+        console.log(R, A, result);
+        return result;
+      },
       part2: d => d
     },
     day20: {
