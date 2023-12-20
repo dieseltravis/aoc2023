@@ -1739,15 +1739,115 @@
         console.log(points);
         const path = [];
         const sum = pathArr => pathArr.reduce((acc, p) => acc + grid[p.y][p.x], 0);
-        /*
-        const start = { y: 0, x: 0 };
-        const end = { y: ymax - 1, x: xmax - 1 };
-        // const manh = (p1, p2) => Math.abs(p2.x - p1.x) + Math.abs(p2.y - p1.y);
-        const look = (p, prevp) => {
-          const around = [];
-          // TODO: finish this
+        // modified from https://github.com/tcort/dijkstrajs/blob/master/dijkstra.js
+        const singleSourceShortestPaths = (graph, s, d) => {
+          // Predecessor map for each node that has been encountered.
+          // node ID => predecessor node ID
+          const predecessors = {};
+
+          // Costs of shortest paths from s to all nodes encountered.
+          // node ID => cost
+          const costs = {};
+          costs[s] = 0;
+
+          // Costs of shortest paths from s to all nodes encountered; differs from
+          // `costs` in that it provides easy access to the node that currently has
+          // the known shortest path from s.
+          // XXX: Do we actually need both `costs` and `open`?
+          const open = []; // qmake();
+          qpush(open, s, 0);
+
+          while (!qempty(open)) {
+            // In the nodes remaining in graph that have a known cost from s,
+            // find the node, u, that currently has the shortest path from s.
+            const closest = qpop(open);
+            const u = closest.value;
+            const costOfSToU = closest.cost;
+
+            // Get nodes adjacent to u...
+            const adjacentNodes = graph[u] || {};
+
+            // ...and explore the edges that connect u to those nodes, updating
+            // the cost of the shortest paths to any or all of those nodes as
+            // necessary. v is the node across the current edge from u.
+            for (const v in adjacentNodes) {
+              if (Object.hasOwn(adjacentNodes, v)) {
+                // Get the cost of the edge running from u to v.
+                const costOfE = adjacentNodes[v];
+
+                // Cost of s to u plus the cost of u to v across e--this is *a*
+                // cost from s to v that may or may not be less than the current
+                // known cost to v.
+                const costOfSToUPlusCostOfE = costOfSToU + costOfE;
+
+                // If we haven't visited v yet OR if the current known cost from s to
+                // v is greater than the new cost we just found (cost of s to u plus
+                // cost of u to v across e), update v's cost in the cost list and
+                // update v's predecessor in the predecessor list (it's now u).
+                const costOfSToV = costs[v];
+                const firstVisit = !costs[v];
+                if (firstVisit || costOfSToV > costOfSToUPlusCostOfE) {
+                  costs[v] = costOfSToUPlusCostOfE;
+                  open.push(v, costOfSToUPlusCostOfE);
+                  predecessors[v] = u;
+                }
+              }
+            }
+          }
+
+          if (!d || !costs[d]) {
+            console.error('Could not find a path from ', s, ' to ', d, '.');
+          }
+
+          return predecessors;
         };
-        */
+
+        const extractShortestPathFromPredecessorList = (predecessors, d) => {
+          const nodes = [];
+          let u = d;
+          // let predecessor;
+          while (u) {
+            nodes.push(u);
+            // predecessor = predecessors[u];
+            u = predecessors[u];
+          }
+          nodes.reverse();
+          return nodes;
+        };
+
+        const findPath = (graph, s, d) => {
+          const predecessors = singleSourceShortestPaths(graph, s, d);
+          return extractShortestPathFromPredecessorList(predecessors, d);
+        };
+        console.info(findPath);
+
+        const qsorter = (a, b) => {
+          return a.cost - b.cost;
+        };
+
+        // Add a new item to the queue and ensure the highest priority element
+        // is at the front of the queue.
+        const qpush = (q, value, cost) => {
+          const item = { value, cost };
+          q.push(item);
+          q.sort(qsorter);
+        };
+
+        // Return the highest priority element in the queue.
+        const qpop = (q) => {
+          return q.shift();
+        };
+
+        const qempty = (q) => {
+          return q.length === 0;
+        };
+        // const start = { y: 0, x: 0 };
+        // const end = { y: ymax - 1, x: xmax - 1 };
+        // const manh = (p1, p2) => Math.abs(p2.x - p1.x) + Math.abs(p2.y - p1.y);
+        // const look = (p, prevp) => {
+        //  const around = [];
+        //  // TODO: finish this
+        // };
         const result = sum(path);
         console.log(result);
         return result;
@@ -1889,8 +1989,113 @@
       }
     },
     day19: {
-      part1: d => d,
-      part2: d => d
+      part1: (data) => {
+        const input = data.trim().split('\n\n').map(b => b.trim());
+        const A = [];
+        const R = [];
+        const xfun = {
+          T: () => true,
+          '<': (o, p, v) => o[p] < v,
+          '>': (o, p, v) => o[p] > v,
+          A: (o) => A.push(o),
+          R: (o) => R.push(o)
+        };
+        const xmas = /([xmas])([<>])(\d+):(\w+)/;
+        const w = input[0].split('\n').map(f => {
+          const ws = f.trim().split('{');
+          const name = ws[0];
+          const funs = ws[1].slice(0, -1).split(',').map(fun => {
+            const matched = fun.match(xmas);
+            const o = {};
+            if (matched) {
+              o.prop = matched[1];
+              o.test = xfun[matched[2]];
+              o.val = +matched[3];
+              o.result = matched[4];
+              o.direct = false;
+            } else if (fun === 'A' || fun === 'R') {
+              o.direct = true;
+              o.result = fun;
+            } else {
+              o.test = xfun.T;
+              o.direct = false;
+              o.result = fun;
+            }
+            return o;
+          });
+          return { name, fun: { funs, len: funs.length } };
+        }).reduce((obj, f) => {
+          obj[f.name] = f.fun;
+          return obj;
+        }, {});
+        const parts = input[1].split('\n').map(p => {
+          return p.trim().slice(1, -1).split(',').reduce((acc, propval) => {
+            const s = propval.split('=');
+            acc[s[0]] = +s[1];
+            return acc;
+          }, {});
+        });
+        console.log(w, parts);
+        const process = (part, wname) => {
+          if (wname === 'A' || wname === 'R') {
+            xfun[wname](part);
+            return false;
+          }
+          const funs = w[wname];
+          for (let f = 0; f < funs.len; f++) {
+            const fun = funs.funs[f];
+            if (fun.direct) {
+              xfun[fun.result](part);
+              return false;
+            }
+            if (fun.test(part, fun.prop, fun.val)) {
+              return process(part, fun.result);
+            }
+          }
+        };
+        const partLen = parts.length;
+        const chunk = partLen / 100;
+        let nextpc = 0;
+        parts.forEach((p, i) => {
+          if (i >= nextpc) {
+            console.log((i * 100 / partLen) + '% of ' + partLen + ' ' + (new Date()).toISOString());
+            nextpc += chunk;
+          }
+          process(p, 'in');
+        });
+        const result = A.reduce((sum, p) => sum + p.x + p.m + p.a + p.s, 0);
+        console.log(R, A, result);
+        return result;
+      },
+      part2: (data) => {
+        const lt = {
+          x: [],
+          m: [],
+          a: [],
+          s: []
+        };
+        const gt = {
+          x: [],
+          m: [],
+          a: [],
+          s: []
+        };
+        const xmas = /([xmas])([<>])(\d+):(\w+)/;
+        const input = data.trim().split('\n\n').map(b => b.trim())[0].split('\n').map(w => {
+          return w.trim().split('{')[1].slice(0, -1).split(',').map(fun => {
+            const matched = fun.match(xmas);
+            if (matched) {
+              if (matched[2] === '<') {
+                lt[matched[1]].push(+matched[3]);
+              } else if (matched[2] === '>') {
+                gt[matched[1]].push(+matched[3]);
+              }
+            }
+            return matched;
+          });
+        });
+        console.log(input, lt, gt);
+      }
     },
     day20: {
       part1: d => d,
