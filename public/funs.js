@@ -2023,7 +2023,7 @@
             }
             return o;
           });
-          return { name, fun: { funs, len: funs.length } }
+          return { name, fun: { funs, len: funs.length } };
         }).reduce((obj, f) => {
           obj[f.name] = f.fun;
           return obj;
@@ -2034,7 +2034,7 @@
             acc[s[0]] = +s[1];
             return acc;
           }, {});
-        })
+        });
         console.log(w, parts);
         const process = (part, wname) => {
           if (wname === 'A' || wname === 'R') {
@@ -2053,13 +2053,12 @@
             }
           }
         };
-        let ipc = 0;
         const partLen = parts.length;
         const chunk = partLen / 100;
         let nextpc = 0;
         parts.forEach((p, i) => {
           if (i >= nextpc) {
-            console.log((i*100/partLen) + '% of ' + partLen + ' ' + (new Date()).toISOString());
+            console.log((i * 100 / partLen) + '% of ' + partLen + ' ' + (new Date()).toISOString());
             nextpc += chunk;
           }
           process(p, 'in');
@@ -2068,7 +2067,35 @@
         console.log(R, A, result);
         return result;
       },
-      part2: d => d
+      part2: (data) => {
+        const lt = {
+          x: [],
+          m: [],
+          a: [],
+          s: []
+        };
+        const gt = {
+          x: [],
+          m: [],
+          a: [],
+          s: []
+        };
+        const xmas = /([xmas])([<>])(\d+):(\w+)/;
+        const input = data.trim().split('\n\n').map(b => b.trim())[0].split('\n').map(w => {
+          return w.trim().split('{')[1].slice(0, -1).split(',').map(fun => {
+            const matched = fun.match(xmas);
+            if (matched) {
+              if (matched[2] === '<') {
+                lt[matched[1]].push(+matched[3]);
+              } else if (matched[2] === '>') {
+                gt[matched[1]].push(+matched[3]);
+              }
+            }
+            return matched;
+          });
+        });
+        console.log(input, lt, gt);
+      }
     },
     day20: {
       part1: d => d,
