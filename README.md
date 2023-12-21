@@ -30,9 +30,9 @@ also on github: [dieseltravis/aoc2023](https://github.com/dieseltravis/aoc2023)
 17. [day seventeen](https://branch-three-oviraptor.glitch.me/day/17) WIP, paths not found yet
 18. [day eighteen](https://branch-three-oviraptor.glitch.me/day/18)
 19. [day nineteen](https://branch-three-oviraptor.glitch.me/day/19) part 2 isn't complete
+20. [day twenty](https://branch-three-oviraptor.glitch.me/day/20) WIP
+21. [day twentyone](https://branch-three-oviraptor.glitch.me/day/21) part 2 is too slow, needs ptimization
 <!-- 
-20. [day twenty](https://branch-three-oviraptor.glitch.me/day/20)
-21. [day twentyone](https://branch-three-oviraptor.glitch.me/day/21)
 22. [day twentytwo](https://branch-three-oviraptor.glitch.me/day/22)
 23. [day twentythree](https://branch-three-oviraptor.glitch.me/day/23)
 24. [day twentyfour](https://branch-three-oviraptor.glitch.me/day/24)

@@ -2130,8 +2130,8 @@
           m: [[1, 4000]],
           a: [[1, 4000]],
           s: [[1, 4000]]
-        }
-        console.log(A);
+        };
+        console.log(A, process, parts);
         return A;
       }
     },
@@ -2140,7 +2140,7 @@
         const mods = {};
         const mod = {
           '%': (mod, pulse) => {
-            const out = pulse;
+            let out = pulse;
             if (mod.state) {
               out = !mod.last;
             } else {
@@ -2152,7 +2152,7 @@
             return out;
           },
           '&': (mod, pulse, from) => {
-            const out = true;
+            let out = true;
             if (!mod.from[from]) {
               mod.from[from] = {
                 last: false
@@ -2167,8 +2167,8 @@
         };
         const input = data.trim().split('\n').map(m => {
           const line = m.split(' -> ').map(f => f.trim());
-          let type = line[0].slice(0, 1);
-          let name = line[0].slice(1);
+          const type = line[0].slice(0, 1);
+          const name = line[0].slice(1);
           const dest = line[1].split(', ');
           return {
             type,
@@ -2181,7 +2181,7 @@
           return acc;
         }, {});
         const queue = input.roadcast.dest;
-        console.log(input, queue);
+        console.log(mod, mods, input, queue);
         const button = (pulse) => {
           queue.forEach(i => {
             const item = input[i];
@@ -2209,6 +2209,7 @@
         });
         const ymax = input.length;
         const xmax = input[0].length;
+        /*
         const render = (s) => {
           let out = '';
           for (let y = 0; y < ymax; y++) {
@@ -2229,6 +2230,7 @@
           }
           return out;
         };
+        */
         let steps = new Set([sy + ',' + sx]);
         console.log(input);
         for (let s = stepCount; s--;) {
@@ -2261,7 +2263,7 @@
             }
           }
           steps = newSteps;
-          //console.log(s, '\n' + render(steps));
+          // console.log(s, '\n' + render(steps));
         }
         console.log(steps);
         return steps.size;
@@ -2301,14 +2303,13 @@
           const oldSteps = Array.from(steps);
           for (let f = oldSteps.length; f--;) {
             const fs = oldSteps[f].split(',').map(Number);
-            // console.log(fs);
             const fy = fs[0];
             const tfy = box(fy, ymax);
             const fx = fs[1];
             const tfx = box(fx, xmax);
             // N
             const nfy = fy - 1;
-            let tnfy = box(nfy, ymax);
+            const tnfy = box(nfy, ymax);
             if (input[tnfy][tfx]) {
               newSteps.add(nfy + ',' + fx);
             }
