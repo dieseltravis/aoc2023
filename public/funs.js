@@ -2266,7 +2266,76 @@
         console.log(steps);
         return steps.size;
       },
-      part2: d => d
+      part2: (data) => {
+        const stepCount = 26501365;
+        let sy = -1;
+        let sx = -1;
+        const input = data.trim().split('\n').map((line, y) => {
+          const items = line.trim().split('');
+          const s = items.indexOf('S');
+          if (s >= 0) {
+            sy = y;
+            sx = s;
+          }
+          return items.map(i => (i === '.' || i === 'S'));
+        });
+        const ymax = input.length;
+        const xmax = input[0].length;
+        let steps = new Set([sy + ',' + sx]);
+        console.log(input);
+        const box = (n, nmax) => {
+          let tn = n % nmax;
+          if (tn < 0) {
+            tn += nmax;
+          }
+          return tn;
+        };
+        const chunk = stepCount / 100;
+        let nextpc = 0;
+        for (let i = 0; i < stepCount; i++) {
+          if (i >= nextpc) {
+            console.log((i * 100 / stepCount) + '% of ' + stepCount + ' ' + (new Date()).toISOString());
+            nextpc += chunk;
+          }
+          const newSteps = new Set();
+          const oldSteps = Array.from(steps);
+          for (let f = oldSteps.length; f--;) {
+            const fs = oldSteps[f].split(',').map(Number);
+            // console.log(fs);
+            const fy = fs[0];
+            const tfy = box(fy, ymax);
+            const fx = fs[1];
+            const tfx = box(fx, xmax);
+            // N
+            const nfy = fy - 1;
+            let tnfy = box(nfy, ymax);
+            if (input[tnfy][tfx]) {
+              newSteps.add(nfy + ',' + fx);
+            }
+            // E
+            const efx = fx + 1;
+            const tefx = box(efx, xmax);
+            if (input[tfy][tefx]) {
+              newSteps.add(fy + ',' + efx);
+            }
+            // S
+            const sfy = fy + 1;
+            const tsfy = box(sfy, ymax);
+            if (input[tsfy][tfx]) {
+              newSteps.add(sfy + ',' + fx);
+            }
+            // W
+            const wfx = fx - 1;
+            const twfx = box(wfx, xmax);
+            if (input[tfy][twfx]) {
+              newSteps.add(fy + ',' + wfx);
+            }
+          }
+          steps = newSteps;
+        }
+        console.log(steps.size);
+        return steps.size;
+      }
     },
     day22: {
       part1: d => d,
