@@ -2068,42 +2068,275 @@
         return result;
       },
       part2: (data) => {
-        const lt = {
-          x: [],
-          m: [],
-          a: [],
-          s: []
-        };
-        const gt = {
-          x: [],
-          m: [],
-          a: [],
-          s: []
+        const input = data.trim().split('\n\n').map(b => b.trim());
+        const A = 0;
+        const xfun = {
+          T: () => true,
+          '<': (o, p, v) => o[p] < v,
+          '>': (o, p, v) => o[p] > v
         };
         const xmas = /([xmas])([<>])(\d+):(\w+)/;
-        const input = data.trim().split('\n\n').map(b => b.trim())[0].split('\n').map(w => {
-          return w.trim().split('{')[1].slice(0, -1).split(',').map(fun => {
+        const w = input[0].split('\n').map(f => {
+          const ws = f.trim().split('{');
+          const name = ws[0];
+          const funs = ws[1].slice(0, -1).split(',').map(fun => {
             const matched = fun.match(xmas);
+            const o = {};
             if (matched) {
-              if (matched[2] === '<') {
-                lt[matched[1]].push(+matched[3]);
-              } else if (matched[2] === '>') {
-                gt[matched[1]].push(+matched[3]);
-              }
+              o.prop = matched[1];
+              o.split = matched[2];
+              o.test = xfun[o.split];
+              o.val = +matched[3];
+              o.result = matched[4];
+              o.direct = false;
+            } else if (fun === 'A' || fun === 'R') {
+              o.direct = true;
+              o.result = fun;
+            } else {
+              o.test = xfun.T;
+              o.direct = false;
+              o.result = fun;
             }
-            return matched;
+            return o;
           });
-        });
-        console.log(input, lt, gt);
+          return { name, fun: { funs, len: funs.length } };
+        }).reduce((obj, f) => {
+          obj[f.name] = f.fun;
+          return obj;
+        }, {});
+        const process = (part, wname) => {
+          const funs = w[wname];
+          for (let f = 0; f < funs.len; f++) {
+            const fun = funs.funs[f];
+            if (fun.direct) {
+              xfun[fun.result](part);
+              return false;
+            }
+            if (fun.test(part, fun.prop, fun.val)) {
+              if (fun.result === 'R') {
+                // remove range
+              } else if (fun.result === 'A') {
+                // add difference of range to A
+                // A += upper - lower + 1
+                // remove range
+              }
+              return process(part, fun.result);
+            }
+          }
+        };
+        // only track ranges
+        const parts = {
+          x: [[1, 4000]],
+          m: [[1, 4000]],
+          a: [[1, 4000]],
+          s: [[1, 4000]]
+        };
+        console.log(A, process, parts);
+        return A;
       }
     },
     day20: {
-      part1: d => d,
+      part1: (data) => {
+        const mods = {};
+        const mod = {
+          '%': (mod, pulse) => {
+            let out = pulse;
+            if (mod.state) {
+              out = !mod.last;
+            } else {
+              if (!pulse) {
+                mod.state = true;
+              }
+            }
+            mod.last = out;
+            return out;
+          },
+          '&': (mod, pulse, from) => {
+            let out = true;
+            if (!mod.from[from]) {
+              mod.from[from] = {
+                last: false
+              };
+            }
+            mod.from[from].last = pulse;
+            if (Object.values(mod.from).every(m => m.last)) {
+              out = false;
+            }
+            return out;
+          }
+        };
+        const input = data.trim().split('\n').map(m => {
+          const line = m.split(' -> ').map(f => f.trim());
+          const type = line[0].slice(0, 1);
+          const name = line[0].slice(1);
+          const dest = line[1].split(', ');
+          return {
+            type,
+            name,
+            dest,
+            lastMod: ''
+          };
+        }).reduce((acc, item) => {
+          acc[item.name] = item;
+          return acc;
+        }, {});
+        const queue = input.roadcast.dest;
+        console.log(mod, mods, input, queue);
+        const button = (pulse) => {
+          queue.forEach(i => {
+            const item = input[i];
+            mod[item.type](item, pulse, 'roadcast');
+          });
+        };
+        // TODO
+        button(false);
+      },
       part2: d => d
     },
     day21: {
-      part1: d => d,
-      part2: d => d
+      part1: (data) => {
+        const stepCount = 64;
+        let sy = -1;
+        let sx = -1;
+        const input = data.trim().split('\n').map((line, y) => {
+          const items = line.trim().split('');
+          const s = items.indexOf('S');
+          if (s >= 0) {
+            sy = y;
+            sx = s;
+          }
+          return items.map(i => (i === '.' || i === 'S'));
+        });
+        const ymax = input.length;
+        const xmax = input[0].length;
+        /*
+        const render = (s) => {
+          let out = '';
+          for (let y = 0; y < ymax; y++) {
+            for (let x = 0; x < xmax; x++) {
+              if (input[y][x]) {
+                if (s.has(y + ',' + x)) {
+                  out += 'O';
+                } else if (y === sy && x === sx) {
+                  out += 'S';
+                } else {
+                  out += '.';
+                }
+              } else {
+                out += '#';
+              }
+            }
+            out += '\n';
+          }
+          return out;
+        };
+        */
+        let steps = new Set([sy + ',' + sx]);
+        console.log(input);
+        for (let s = stepCount; s--;) {
+          const newSteps = new Set();
+          const oldSteps = Array.from(steps);
+          for (let f = oldSteps.length; f--;) {
+            const fs = oldSteps[f].split(',').map(Number);
+            // console.log(fs);
+            const fy = fs[0];
+            const fx = fs[1];
+            // N
+            const nfy = fy - 1;
+            if (nfy >= 0 && input[nfy][fx]) {
+              newSteps.add(nfy + ',' + fx);
+            }
+            // E
+            const efx = fx + 1;
+            if (efx < xmax && input[fy][efx]) {
+              newSteps.add(fy + ',' + efx);
+            }
+            // S
+            const sfy = fy + 1;
+            if (sfy < ymax && input[sfy][fx]) {
+              newSteps.add(sfy + ',' + fx);
+            }
+            // W
+            const wfx = fx - 1;
+            if (wfx >= 0 && input[fy][wfx]) {
+              newSteps.add(fy + ',' + wfx);
+            }
+          }
+          steps = newSteps;
+          // console.log(s, '\n' + render(steps));
+        }
+        console.log(steps);
+        return steps.size;
+      },
+      part2: (data) => {
+        const stepCount = 26501365;
+        let sy = -1;
+        let sx = -1;
+        const input = data.trim().split('\n').map((line, y) => {
+          const items = line.trim().split('');
+          const s = items.indexOf('S');
+          if (s >= 0) {
+            sy = y;
+            sx = s;
+          }
+          return items.map(i => (i === '.' || i === 'S'));
+        });
+        const ymax = input.length;
+        const xmax = input[0].length;
+        let steps = new Set([sy + ',' + sx]);
+        console.log(input);
+        const box = (n, nmax) => {
+          let tn = n % nmax;
+          if (tn < 0) {
+            tn += nmax;
+          }
+          return tn;
+        };
+        const chunk = stepCount / 100;
+        let nextpc = 0;
+        for (let i = 0; i < stepCount; i++) {
+          if (i >= nextpc) {
+            console.log((i * 100 / stepCount) + '% of ' + stepCount + ' ' + (new Date()).toISOString());
+            nextpc += chunk;
+          }
+          const newSteps = new Set();
+          const oldSteps = Array.from(steps);
+          for (let f = oldSteps.length; f--;) {
+            const fs = oldSteps[f].split(',').map(Number);
+            const fy = fs[0];
+            const tfy = box(fy, ymax);
+            const fx = fs[1];
+            const tfx = box(fx, xmax);
+            // N
+            const nfy = fy - 1;
+            const tnfy = box(nfy, ymax);
+            if (input[tnfy][tfx]) {
+              newSteps.add(nfy + ',' + fx);
+            }
+            // E
+            const efx = fx + 1;
+            const tefx = box(efx, xmax);
+            if (input[tfy][tefx]) {
+              newSteps.add(fy + ',' + efx);
+            }
+            // S
+            const sfy = fy + 1;
+            const tsfy = box(sfy, ymax);
+            if (input[tsfy][tfx]) {
+              newSteps.add(sfy + ',' + fx);
+            }
+            // W
+            const wfx = fx - 1;
+            const twfx = box(wfx, xmax);
+            if (input[tfy][twfx]) {
+              newSteps.add(fy + ',' + wfx);
+            }
+          }
+          steps = newSteps;
+        }
+        console.log(steps.size);
+        return steps.size;
+      }
     },
     day22: {
       part1: d => d,
