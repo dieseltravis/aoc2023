@@ -2269,7 +2269,7 @@
         return steps.size;
       },
       part2: (data) => {
-        const stepCount = 26501365;
+        const stepCount = 100;
         let sy = -1;
         let sx = -1;
         const input = data.trim().split('\n').map((line, y) => {
@@ -2292,8 +2292,11 @@
           }
           return tn;
         };
+        let lastsize = steps.size;
+        let lastdiff = steps.size - lastsize;
         const chunk = stepCount / 100;
         let nextpc = 0;
+        // todo: find repeating pattern
         for (let i = 0; i < stepCount; i++) {
           if (i >= nextpc) {
             console.log((i * 100 / stepCount) + '% of ' + stepCount + ' ' + (new Date()).toISOString());
@@ -2333,13 +2336,59 @@
             }
           }
           steps = newSteps;
+          console.log(steps.size, lastsize, steps.size - lastsize, lastdiff, (steps.size - lastsize) - lastdiff);
+          lastdiff = steps.size - lastsize;
+          lastsize = steps.size;
         }
         console.log(steps.size);
         return steps.size;
       }
     },
     day22: {
-      part1: d => d,
+      part1: (data) => {
+        let xmin = Infinity;
+        let xmax = -Infinity;
+        let ymin = Infinity;
+        let ymax = -Infinity;
+        const input = data.trim().split('\n').map(line => {
+          const shape = line.trim().split('~').map(half => half.split(',').map(Number));
+          xmin = Math.min(xmin, shape[0][0], shape[1][0]);
+          xmax = Math.max(xmax, shape[0][0], shape[1][0]);
+          ymin = Math.min(ymin, shape[0][1], shape[1][1]);
+          ymax = Math.max(ymax, shape[0][1], shape[1][1]);
+          return shape;
+        }).sort((a, b) => {
+          const az = Math.min(a[0][2], a[1][2]);
+          const bz = Math.min(b[0][2], b[1][2]);
+          return az - bz;
+        });
+        console.log(input, xmin, xmax, ymin, ymax);
+        // floor
+        let zmin = [];
+        for (let y = ymax + 1; y--;) {
+          const xy = [];
+          for (let x = xmax + 1; x--;) {
+            xy.push(1);
+          }
+          zmin.push(xy);
+        }
+        console.log(zmin);
+        // gravity
+        input.forEach((shape) => {
+          for (let y = ymax + 1; y--;) {
+            if ((y - shape[0][1]) * (y - shape[1][1]) <= 0) {
+              for (let x = xmax + 1; x--;) {
+                if ((x - shape[0][0]) * (x - shape[1][0]) <= 0) {
+                  // todo: move z by the difference oz zmin and current z
+                  const dz;
+                  shape[0][2] = zmin[shape[0][1]];
+                  shape[1][2] = zmin[shape[1][1]];
+                }
+              }
+            }
+          }
+        });
+      },
       part2: d => d
     },
     day23: {
