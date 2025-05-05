@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "connect-timeout": "^1.9.0",
-    "eslint": "^9.25.1",
+    "eslint": "^9.26.0",
     "express": "^5.1.0",
     "express-rate-limit": "^7.5.0",
     "semistandard": "^17.0.0",
