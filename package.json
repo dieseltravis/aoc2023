@@ -15,7 +15,7 @@
   "dependencies": {
     "connect-timeout": "^1.9.1",
     "express": "^5.1.0",
-    "express-rate-limit": "^8.0.1",
+    "express-rate-limit": "^8.1.0",
     "semistandard": "^17.0.0",
     "standard-engine": "^15.1.0",
     "jshint": "^2.13.6"
