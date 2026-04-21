@@ -1,23 +1,21 @@
 {
   "name": "branch-three-oviraptor",
-  "version": "2023.12.01",
+  "version": "2023.12.21",
   "description": "Travis's Advent of Code 2023",
   "author": "Travis Hardiman",
   "homepage": "https://branch-three-oviraptor.glitch.me/",
   "main": "server.js",
   "scripts": {
-    "test": "node --check server.js && semistandard && eslint server.js public/*.js",
+    "test": "node --check server.js && semistandard",
     "start": "node server.js"
   },
   "engines": {
     "node": "^14.21.3 || >=16.0.0 || >=18.0.0"
   },
   "dependencies": {
-    "connect-timeout": "^1.9.0",
-    "eslint": "^10.2.1",
+    "connect-timeout": "^1.9.1",
     "express": "^5.2.1",
     "express-rate-limit": "^8.3.2",
-    "jshint": "^2.13.6",
     "semistandard": "^17.0.0",
     "standard-engine": "^15.1.0"
   },
@@ -34,8 +32,8 @@
   ],
   "browserslist": [
     "defaults",
-    "not IE 11",
-    "supports es6-module",
+    "node > 14",
+    "fully supports es6-module",
     "maintained node versions"
   ]
 }

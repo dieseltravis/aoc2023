@@ -8,9 +8,10 @@
     <meta name="theme-color" content="#373fff">
     <link rel="stylesheet" href="/style.css">
     <style type='text/css'>
-      ol,li {display:block;margin:0 0 2em 0;padding:0;width:100%;list-style:none;font-size:12px;text-transform:capitalize;}
-      li li {font-size:11px;}
-      b {display:block;background:#99F;font-size:10px;line-height:21px;text-align:right;padding-right:0.5em;margin:2px 0;border-right:solid 1px #77D;border-bottom:solid 1px #77D; height: 22px; white-space: nowrap; padding-left: 0.5em; }
+      ol,li {display:block;margin:0;padding:0;width:100%;list-style:none;font-size:12px;text-transform:capitalize;}
+      ol ol {margin: 0;padding:0 0 0 1em;}
+      li li {font-size:11px; margin: 0 0 0.5em 0;}
+      b {display:block;background:#99F;font-size:10px;line-height:17px;text-align:right;padding-right:0.5em;margin:2px 0;border-right:solid 1px #77D;border-bottom:solid 1px #77D; height: 16px; white-space: nowrap; padding-left: 0.5em; }
       b+b {background:#F99;border-color:#D77;}
       b+b+b {background:#9F9;border-color:#7D7;}
     </style>

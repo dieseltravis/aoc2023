@@ -24,7 +24,7 @@
     </header>
 
     <main>
-      <h2>
+      <h2 class="part1">
         part 1
       </h2>
       <form method="POST" action="/day{{day}}part1">
@@ -37,7 +37,7 @@
       
       <hr />
       
-      <h2>
+      <h2 class="part2">
         part 2
       </h2>
       <form method="POST" action="/day{{day}}part2">

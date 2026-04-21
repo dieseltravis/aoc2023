@@ -11,6 +11,14 @@ html.wait * {
   cursor: wait !important;
 }
 
+html.wait-part-1 h2.part1:after,
+html.wait-part-2 h2.part2:after{
+  display: inline-block;
+  content: 'processing...';
+  font-weight: normal;
+  font-size: 0.75rem;
+}
+
 nav {
   display: flex;
   flex: 1;
