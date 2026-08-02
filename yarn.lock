@@ -333,7 +333,7 @@ concat-map@0.0.1:
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
   integrity sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==
 
-connect-timeout@^1.9.1:
+connect-timeout@>=1.9.1:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/connect-timeout/-/connect-timeout-1.9.1.tgz#2d371c5c0e33ac5fb2bb2fc83636ac9245fbdd62"
   integrity sha512-kDcadOXwOu+EEVs31iOu0TOg1yyRTqSNfyJaHYm5Z4K/hEIi9HJXSOWP9d+WQr/wff7wQJRh/HX63vK1+wBErw==
@@ -852,7 +852,7 @@ etag@^1.8.1:
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
   integrity sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==
 
-express-rate-limit@^8.6.1:
+express-rate-limit@>=8.6.1:
   version "8.6.1"
   resolved "https://registry.yarnpkg.com/express-rate-limit/-/express-rate-limit-8.6.1.tgz#e0977ec8075346e207d788383362ada7c08324ae"
   integrity sha512-0D493aP61w0TJ2A0wy27riRsO7FMQ7FK+KUHOKCSfPvYo0R55aiC6emCVgFUeShH0fq0ICPVzNcgoS+BsbXQCA==
@@ -860,7 +860,7 @@ express-rate-limit@^8.6.1:
     debug "^4.4.3"
     ip-address "^10.2.0"
 
-express@^5.2.1:
+express@>=5.2.1:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/express/-/express-5.2.1.tgz#8f21d15b6d327f92b4794ecf8cb08a72f956ac04"
   integrity sha512-hIS4idWWai69NezIdRt2xFVofaF4j+6INOpJlVOLDO8zXGpUVEVzIYk12UUi2JzjEzWL3IOAxcTubgz9Po0yXw==
@@ -2021,7 +2021,7 @@ safe-regex-test@^1.1.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-semistandard@^17.0.0:
+semistandard@>=17.0.0:
   version "17.0.0"
   resolved "https://registry.yarnpkg.com/semistandard/-/semistandard-17.0.0.tgz#38886e816705b8365461ba10b1508e5230b331e8"
   integrity sha512-FnZ77h6LpCjIl0S2kf8utBjBxuFfiV+6DbnFDEJuxWP91el+Syp6P/T54KCJbczmQx9vIy/cXpSOuPzofnrUKA==
@@ -2177,7 +2177,7 @@ side-channel@^1.1.1:
     side-channel-map "^1.0.1"
     side-channel-weakmap "^1.0.2"
 
-standard-engine@^15.0.0, standard-engine@^15.1.0:
+standard-engine@>=15.1.0, standard-engine@^15.0.0:
   version "15.1.0"
   resolved "https://registry.yarnpkg.com/standard-engine/-/standard-engine-15.1.0.tgz#717409a002edd13cd57f6554fdd3464d9a22a774"
   integrity sha512-VHysfoyxFu/ukT+9v49d4BRXIokFRZuH3z1VRxzFArZdjSCFpro6rEIU3ji7e4AoAtuSfKBkiOmsrDqKW5ZSRw==

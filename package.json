@@ -10,14 +10,14 @@
     "start": "node server.js"
   },
   "engines": {
-    "node": "^14.21.3 || >=16.0.0 || >=18.0.0"
+    "node": ">=18.0.0"
   },
   "dependencies": {
-    "connect-timeout": "^1.9.1",
-    "express": "^5.2.1",
-    "express-rate-limit": "^8.6.1",
-    "semistandard": "^17.0.0",
-    "standard-engine": "^15.1.0"
+    "connect-timeout": ">=1.9.1",
+    "express": ">=5.2.1",
+    "express-rate-limit": ">=8.6.1",
+    "semistandard": ">=17.0.0",
+    "standard-engine": ">=15.1.0"
   },
   "repository": {
     "url": "https://glitch.com/edit/#!/branch-three-oviraptor"
